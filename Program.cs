@@ -15,7 +15,7 @@ namespace Elaborate
         {
             CreateHostBuilder(args).Build().Run();
         }
-
+        //Test 3
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
