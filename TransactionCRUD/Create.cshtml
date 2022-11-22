@@ -1,0 +1,49 @@
+﻿@page
+@model Elaborate.Pages.TransactionCRUD.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Transaction</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Transaction.date" class="control-label"></label>
+                <input asp-for="Transaction.date" class="form-control" />
+                <span asp-validation-for="Transaction.date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Transaction.value" class="control-label"></label>
+                <input asp-for="Transaction.value" class="form-control" />
+                <span asp-validation-for="Transaction.value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Transaction.title" class="control-label"></label>
+                <input asp-for="Transaction.title" class="form-control" />
+                <span asp-validation-for="Transaction.title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Transaction.comment" class="control-label"></label>
+                <input asp-for="Transaction.comment" class="form-control" />
+                <span asp-validation-for="Transaction.comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
