@@ -1,33 +1,17 @@
 ﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Elaborate.Models
+namespace Elaborate
 {
     public class Transaction
     {
-        [Key]
-        public int Id { get; set; }
+            public int Id { get; set; }
+            public DateAndTime date { get; set; }
+            public float value { get; set; }
+            public string title { get; set; }
+            public string comment { get; set; }
+            public string category { get; set; }
+        //public TransCategoryEnum category { get; set; }
 
-
-        [Display(Name = "Nazwa")]
-        [Required]
-        public DateTime date { get; set; }
-        [Display(Name = "Data")]
-        [Required]
-        public float value { get; set; }
-        [Display(Name = "Tytuł")]
-        [Required]
-        public string title { get; set; }
-        [Display(Name = "Opis")]
-        [Required]
-        public string comment { get; set; }
-        [Display(Name = "Kategoria")]
-        [Required]
-        public TransCategory category { get; set; }
-
+        public Transaction() { }      
     }
 }
