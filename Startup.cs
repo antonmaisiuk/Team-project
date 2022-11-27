@@ -31,6 +31,8 @@ namespace Elaborate
             string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db";
             //services.AddDbContextPool<AccountDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<AccountDbContext>(options => options.UseMySQL(mySqlConnectionString));
+            services.AddDbContext<AccountDbContext>();
+            services.AddScoped<AccountSeeder>();
 
             services.AddControllersWithViews();
 
@@ -44,8 +46,9 @@ namespace Elaborate
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AccountSeeder seeder)
         {
+            seeder.Seed();  //Wywo³anie seedera bo¿ego by Marcin Konopka
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

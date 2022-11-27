@@ -22,13 +22,13 @@ const App = () => {
 
 
   const [transactionsList, setTransactions] = useState<TransactionItem[]>([
-    {title: 'First transaction', category: 'Eat', value: 766.2},
-    {title: 'Second transaction', category: 'Car', value: 1520.2},
-    {title: 'Third transaction', category: 'Shopping', value: 30},
+    //{title: 'First transaction', category: 'Eat', value: 766.2},
+    //{title: 'Second transaction', category: 'Car', value: 1520.2},
+    //{title: 'Third transaction', category: 'Shopping', value: 30},
   ]);
 
   async function populateWeatherData() {
-    const response = await fetch('transactions');
+    const response = await fetch('api/transaction');
     const data = await response.json();
     console.log(data);
     setTransactions(data);
