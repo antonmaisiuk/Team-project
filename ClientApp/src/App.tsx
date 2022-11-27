@@ -29,7 +29,7 @@ const App = () => {
     //{title: 'Third transaction', category: 'Shopping', value: 30},
   ]);
 
-  async function transactionsData() {
+    async function transactionsData() {
     const response = await fetch('api/transaction');
     const data = await response.json();
     setTransactions(data);
