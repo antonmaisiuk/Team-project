@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Tile from "./components/Tile/Tile";
 import {StyledTile, StyledTileTitle} from "./components/Tile/style";
-import {StyledContainer} from "./components/Container/style";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

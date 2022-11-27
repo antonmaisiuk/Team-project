@@ -28,7 +28,7 @@ namespace Elaborate.Controllers
                 {
                     Id = 2,
                     title = "Second transactions",
-                    category = "Car",
+                    category = "ANTon",
                     value = 1500,
                 },
                 new Transaction

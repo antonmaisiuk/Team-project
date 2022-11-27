@@ -7,6 +7,7 @@ export const StyledTransactionsItem = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
   
   padding: 6px 0;
 

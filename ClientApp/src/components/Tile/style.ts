@@ -1,19 +1,34 @@
-import React from 'react';
 import styled from 'styled-components';
-import Tile from "./Tile";
+import {TileInterface, TileType} from "./Tile";
 
-export const StyledTile = styled.div`
+export const StyledTile = styled.div<TileInterface>`
+  //display: grid;
+  //grid-template-rows: 1fr auto;
+  
+  ${props => props.type === TileType.spending_sum && `
+    margin-bottom: 10px;
+    grid-row: 1 / 1 ;
+  `}
+  ${props => props.type === TileType.transactions_list && `
+    // margin-bottom: 10px;
+    grid-row: 1 / 4 ;
+  `}
+  
+  break-inside: avoid;
+
   background-color: white;
   padding: 20px 30px;
+  
   border-radius: 18px;
 
-  width: 45%;
+  
+
   max-width: 652px;
 `;
 
 export const StyledTileTitle = styled.h2`
-  margin: 0;
-  padding: 0;
+  
+  
 
   font-family: "'Inter', sans-serif", sans-serif;
   font-style: normal;
@@ -30,6 +45,9 @@ export const StyledSendingSum = styled.div`
   flex-direction: row;
   justify-content: space-between;
 
+  max-height: 223px;
+  
+
   h2 {
     margin: 30px 0 15px 0;
     font-family: 'Inter', sans-serif;
@@ -42,6 +60,9 @@ export const StyledSendingSum = styled.div`
 export const StyledTransactionsList = styled.div`
   display: flex;
   flex-direction: column;
+  
+  max-height: 300px;
+  overflow-y: scroll;
   
 `;
 
