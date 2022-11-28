@@ -1,4 +1,5 @@
 using Elaborate.Elaborate.Entities;
+using Elaborate.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,8 @@ namespace Elaborate
             //services.AddDbContextPool<AccountDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<AccountDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<AccountDbContext>();
+            services.AddDbContext<TransCategoryDbContext>(options => options.UseMySQL(mySqlConnectionString));
+            services.AddDbContext<TransCategoryDbContext>();
             services.AddScoped<AccountSeeder>();
 
             services.AddControllersWithViews();
