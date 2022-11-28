@@ -10,8 +10,6 @@ namespace Elaborate.Controllers
 {
     
     [Route("api/transaction")]
-    //[ApiController]
-    //[Route("[controller]")]
     public class TransactionController : ControllerBase
     {
         private readonly AccountDbContext _dbContext;
@@ -20,6 +18,7 @@ namespace Elaborate.Controllers
         {
             _dbContext = dbContext;
         }
+        [HttpGet]
         public ActionResult<IEnumerable<Transaction>> GetAll()
         {
             var transactions = _dbContext
@@ -27,6 +26,20 @@ namespace Elaborate.Controllers
                 .ToList();
 
             return Ok(transactions);
+        }
+        [HttpGet("{id}")]
+        public ActionResult<Transaction> Get([FromRoute] int id)
+        {
+            var transaction = _dbContext
+                .Transactions
+                .FirstOrDefault(r => r.Id == id);
+
+            if(transaction is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(transaction);
         }
     }
     
