@@ -1,5 +1,9 @@
 import React, {Dispatch, FC, FormEvent, HTMLAttributes, SetStateAction} from 'react';
-import {StyledCancelButton, StyledForm, StyledPopUpContainer, StyledPopUpContent, StyledSendingForm, StyledSubmitButton } from './style';
+import {StyledCancelButton, StyledForm,
+  StyledFormContent, StyledFormItem,
+  StyledLabel,
+  StyledLine, StyledPopUpContainer, StyledPopUpContent, StyledSendingForm, StyledSubmitButton } from './style';
+import Input, {InputEnum} from "../ui/Input/Input";
 
 export interface PopUpInterface {
   active: boolean,
@@ -46,17 +50,26 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     <StyledPopUpContainer className={active ? "add_container active" : "add_container"} onClick={() => setActive(false)} active={active} setActive={setActive}>
       <StyledPopUpContent className={"add_content"} onClick={e => e.stopPropagation()}>
         <StyledForm onSubmit={e => sendForm(e)}>
-          <fieldset>
-            <input type={"number"} placeholder={"0"} min={0} id={"value"}/>
-          </fieldset>
-          <fieldset>
-            <label htmlFor={"date"}>Date:</label>
-            <input type={"date"} id={"date"}/>
-          </fieldset>
-          <fieldset>
-            <label htmlFor={"comment"}>Comment:</label>
-            <input type={"text"} id={"comment"}/>
-          </fieldset>
+          <StyledFormContent>
+            <StyledFormItem >
+              <Input type={InputEnum.number} placeholder={"0"}  id={"value"}/>
+              <StyledLabel htmlFor={"value"}>$</StyledLabel>
+              {/*<input type={"number"} />*/}
+            </StyledFormItem>
+            <StyledLine/>
+            <StyledFormItem>
+              <label htmlFor={"date"}>Date:</label>
+              <Input type={InputEnum.date} id={"date"}/>
+              {/*<input type={"date"} id={"date"}/>*/}
+            </StyledFormItem>
+            <StyledLine/>
+            <StyledFormItem>
+              <label htmlFor={"comment"}>Comment:</label>
+              <Input type={InputEnum.text} id={"comment"}/>
+              {/*<input type={"text"} id={"comment"}/>*/}
+            </StyledFormItem>
+            <StyledLine/>
+          </StyledFormContent>
 
           <StyledSendingForm>
             <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
