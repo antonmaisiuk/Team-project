@@ -7,8 +7,12 @@ export const StyledContainer = styled.div`
   //flex-wrap: wrap;
   //column-count: 2;
   //column-gap: 34px;
-  padding: 82px 51px 35px 51px;
-  //
+  padding: 82px 0 35px 0;
+  width: 93%;
+  
+  margin: 0 auto;
+  max-width: 1338px;
+  height: calc(100vh - 117px);
   //max-height: calc(100vh - 80px);
 
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');

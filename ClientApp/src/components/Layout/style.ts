@@ -5,6 +5,7 @@ export const StyledLayout = styled.div`
   //justify-content: space-between;
   //flex-wrap: wrap;
   display: grid;
+  
   grid-template-columns: auto auto;
   column-count: 2;
   column-gap: 34px;

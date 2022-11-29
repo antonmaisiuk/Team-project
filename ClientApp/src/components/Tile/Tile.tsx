@@ -3,7 +3,9 @@ import {StyledLine, StyledSendingSum, StyledTile, StyledTileTitle, StyledTransac
 import Select from "react-select/base";
 import {InputActionMeta} from 'react-select';
 import TransactionsItem from "../Transaction/TransactionsItem/TransactionsItem";
-import AddButton from "../ui/Add/Add";
+import AddButton from "../ui/AddButton/AddButton";
+import PopUp from "../PopUp/PopUp";
+import {log} from "util";
 
 
 
@@ -30,6 +32,7 @@ export interface TileInterface{
   type: TileType;
   spend_sum?: number;
   transactionsList?: TransactionItem[];
+
 }
 
 
@@ -38,28 +41,20 @@ const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
   type,
   spend_sum = 0,
   transactionsList = [],
-  className
+  className,
   }) => {
 
   const [selectedOption, setSelectedOption] = useState("November");
+  const [modalIsActive, setModalActive] = useState(false);
 
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setModalActive(true);
+  }
   function add_trans() {
     console.log('LOG');
   }
 
-  // const [transactions, setTransactions] = useState<TransactionItem[]>([]);
-  //
-  // setTransactions(prevTransaction => [
-  //   ...prevTransaction,
-  //   {title: 'First transaction', category: 'Eat', value: 766.2}
-  // ])
-
-  // const transactionsNodes = transactionsList.map(comment => (
-  //   <TransactionsItem title={comment.}>
-  //     {comment.text}
-  //   </TransactionsItem>
-  // ));
-  // @ts-ignore
   return (
     <StyledTile className={className}  type={type}>
       <StyledTileTitle>{title}</StyledTileTitle>
@@ -82,7 +77,8 @@ const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
             })}
 
             </StyledTransactionsList>
-            <AddButton/>
+            <AddButton setActive={setModalActive} />
+            <PopUp active={modalIsActive} setActive={setModalActive}/>
           </>: ''}
     </StyledTile>
 

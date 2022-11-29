@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import AddIcon from "../../../assets/Icons/AddIcon/AddIcon";
+import Popup from "reactjs-popup";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -22,6 +23,18 @@ export const StyledAdd = styled.button`
   
   svg{
     width: 100%;
+  }
+  
+`;
+
+export const StyledPopUp = styled(Popup)`
+  //position: absolute;
+  &-overlay{
+    left: 100%;
+    margin-left: 0;
+    width: 40%;
+    height: 100%;
+    background-color: red;
   }
   
 `;

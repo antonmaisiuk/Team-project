@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {TileInterface, TileType} from "./Tile";
+import Popup from "reactjs-popup";
 
 export const StyledTile = styled.div<TileInterface>`
   //display: grid;
@@ -60,8 +61,9 @@ export const StyledSendingSum = styled.div`
 export const StyledTransactionsList = styled.div`
   display: flex;
   flex-direction: column;
-  
-  max-height: 300px;
+  justify-content: space-between;
+  //padding-right: 15px;
+  max-height: 250px;
   overflow-y: scroll;
   
 `;
@@ -72,6 +74,8 @@ export const StyledLine = styled.span`
   background-color: #C7C7C7;
   
 `;
+
+
 
 
 
