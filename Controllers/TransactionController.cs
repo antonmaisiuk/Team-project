@@ -73,32 +73,34 @@ namespace Elaborate.Controllers
 
             return Created($"/api/transaction/{transaction.Id}", null);
         }
-        /*[HttpGet]
-        public ActionResult<IEnumerable<Transaction>> GetAll()
-        {
-            var transactions = _dbContext
-                .Transactions
-                .ToList();
 
-            var transactionsDtos = _mapper.Map<List<>  //Zaczęto robić mapowanie
 
-            return Ok(transactions);
-        }
+        //[HttpGet]
+        //public ActionResult<IEnumerable<Transaction>> GetAll()
+        //{
+        //    var transactions = _dbContext
+        //        .Transactions
+        //        .ToList();
 
-        [HttpGet("{id}")]
-        public ActionResult<Transaction> Get([FromRoute] int id)
-        {
-            var transaction = _dbContext
-                .Transactions
-                .FirstOrDefault(r => r.Id == id);
+        //    var transactionsDtos = _mapper.Map<List<>  //Zaczęto robić mapowanie
 
-            if (transaction is null)
-            {
-                return NotFound();
-            }
+        //    return Ok(transactions);
+        //}
 
-            return Ok(transaction);
-        }
+        //[HttpGet("{id}")]
+        //public ActionResult<Transaction> Get([FromRoute] int id)
+        //{
+        //    var transaction = _dbContext
+        //        .Transactions
+        //        .FirstOrDefault(r => r.Id == id);
+
+        //    if (transaction is null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(transaction);
+        //}
 
         //[HttpGet("api/transactionsSum")]
         [Route("transactionsSum")]
@@ -109,19 +111,19 @@ namespace Elaborate.Controllers
                 .Sum(t => t.Value);
             //string jsonString = JsonSerializer.Serialize(transactionSum);
             // nie sprawdzam czy istnieje jakikolwiek rekord, najwyżej zwróci 0
-            return Ok(jsonString);
+            return Ok(transactionSum);
         }
 
-        [HttpPost]
-        public ActionResult<IEnumerable<Transaction>> Add(Transaction trans)
-        {
-            if (_dbContext.Database.CanConnect())
-            {
-                _dbContext.Transactions.Add(trans);
-                _dbContext.SaveChanges();
-            }
-            return Ok(trans);
-        }
+        //[HttpPost]
+        //public ActionResult<IEnumerable<Transaction>> Add(Transaction trans)
+        //{
+        //    if (_dbContext.Database.CanConnect())
+        //    {
+        //        _dbContext.Transactions.Add(trans);
+        //        _dbContext.SaveChanges();
+        //    }
+        //    return Ok(trans);
+        //}
 
     }
 

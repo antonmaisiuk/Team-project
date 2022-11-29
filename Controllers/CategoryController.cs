@@ -19,6 +19,7 @@ namespace Elaborate.Controllers
             _dbContext = dbContext;
             _mapper = mapper;
         }
+
         [Route("categories")]
         public ActionResult<IEnumerable<TransCategory>> GetAll()
         {
@@ -29,20 +30,20 @@ namespace Elaborate.Controllers
             return Ok(categories);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<TransCategory> Get([FromRoute] int id)
-        {
-            var categories = _dbContext
-                .TransCategories
-                .FirstOrDefault(r => r.Id == id);
+        //[HttpGet("{id}")]
+        //public ActionResult<TransCategory> Get([FromRoute] int id)
+        //{
+        //    var categories = _dbContext
+        //        .TransCategories
+        //        .FirstOrDefault(r => r.Id == id);
 
-            if (categories is null)
-            {
-                return NotFound();
-            }
+        //    if (categories is null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(categories);
-        }
+        //    return Ok(categories);
+        //}
 
         [HttpPost]
         public ActionResult CreateTransactionCategory([FromBody] TransCategoryDto dto)
@@ -55,15 +56,15 @@ namespace Elaborate.Controllers
             return Created($"/api/TransCategory/{categories.Id}", null);
         }
 
-        [HttpPost]
-        public ActionResult<IEnumerable<TransCategory>> Add(TransCategory transCategory)
-        {
-            if (_dbContext.Database.CanConnect())
-            {
-                _dbContext.TransCategories.Add(transCategory);
-                _dbContext.SaveChanges();
-            }
-            return Ok(transCategory);
-        }
+        //[HttpPost]
+        //public ActionResult<IEnumerable<TransCategory>> Add(TransCategory transCategory)
+        //{
+        //    if (_dbContext.Database.CanConnect())
+        //    {
+        //        _dbContext.TransCategories.Add(transCategory);
+        //        _dbContext.SaveChanges();
+        //    }
+        //    return Ok(transCategory);
+        //}
     }
 }
