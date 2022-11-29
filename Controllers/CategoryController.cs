@@ -1,16 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Elaborate.Elaborate.Entities;
+using Elaborate.Entities;
 
 namespace Elaborate.Controllers
 {
-    public class HomeController : Controller
+    [Route("api/TransCategory")]
+    public class CategoryController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _dbContext;
+
+        public CategoryController(ApplicationDbContext dbContext)
         {
-            return View();
+            _dbContext = dbContext;
+        }
+        [HttpGet]
+        public ActionResult<IEnumerable<TransCategory>> GetAll()
+        {
+            var categories = _dbContext
+                .TransCategories
+                .ToList();
+
+            return Ok(categories);
         }
     }
 }
