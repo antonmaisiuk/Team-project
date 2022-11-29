@@ -1,3 +1,4 @@
+using AutoMapper;
 using Elaborate.Elaborate.Entities;
 using Elaborate.Entities;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,7 @@ namespace Elaborate
             //services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<AccountSeeder>();
+            services.AddAutoMapper(this.GetType().Assembly);
 
             services.AddControllersWithViews();
 
