@@ -18,7 +18,7 @@ namespace Elaborate.Elaborate.Entities
         public string Email { get; set; }
         [Display(Name = "Numer telefonu")]
         [Required]
-        public int Phone { get; set; }
+        public string Phone { get; set; }
         [Display(Name = "Hasło")]
         [Required]
         public string PasswordHash { get; set; }

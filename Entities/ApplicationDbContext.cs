@@ -1,19 +1,18 @@
-﻿using System;
+﻿using Elaborate.Elaborate.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
-namespace Elaborate.Elaborate.Entities
+namespace Elaborate.Entities
 {
-    public class AccountDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public AccountDbContext(DbContextOptions<AccountDbContext> options) : base(options) { } 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
 
-        
+        }
 
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -22,9 +21,9 @@ namespace Elaborate.Elaborate.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>()
-                .Property(r => r.Name)
-                .IsRequired()
-                .HasMaxLength(30);
+              .Property(r => r.Name)
+              .IsRequired()
+              .HasMaxLength(30);
 
             modelBuilder.Entity<Account>()
                 .Property(r => r.Email)
@@ -48,10 +47,6 @@ namespace Elaborate.Elaborate.Entities
             modelBuilder.Entity<Transaction>()
                 .Property(r => r.Value)
                 .IsRequired();
-
-            //modelBuilder.Entity<Transaction>()
-            //    .Property(r => r.Date)
-            //    .IsRequired();
 
             modelBuilder.Entity<TransCategory>()
                 .Property(r => r.Name)

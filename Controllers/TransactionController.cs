@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Elaborate.Elaborate.Entities;
+using Elaborate.Entities;
 
 namespace Elaborate.Controllers
 {
@@ -12,9 +13,9 @@ namespace Elaborate.Controllers
     [Route("api/transaction")]
     public class TransactionController : ControllerBase
     {
-        private readonly AccountDbContext _dbContext;
+        private readonly ApplicationDbContext _dbContext;
 
-        public TransactionController(AccountDbContext dbContext)
+        public TransactionController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

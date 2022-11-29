@@ -4,7 +4,7 @@ using MySql.Data.EntityFrameworkCore.Metadata;
 
 namespace Elaborate.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace Elaborate.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 30, nullable: false),
                     Email = table.Column<string>(maxLength: 50, nullable: false),
-                    Phone = table.Column<int>(nullable: false),
+                    Phone = table.Column<string>(nullable: false),
                     PasswordHash = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -45,12 +45,13 @@ namespace Elaborate.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Date = table.Column<DateTime>(nullable: false),
-                    Value = table.Column<float>(nullable: false),
+                    Value = table.Column<decimal>(nullable: false),
                     Title = table.Column<string>(maxLength: 30, nullable: false),
                     Comment = table.Column<string>(nullable: true),
-                    Category = table.Column<string>(nullable: false),
                     AccountId = table.Column<int>(nullable: false),
-                    TransCategoryId = table.Column<int>(nullable: false)
+                    TransCategoryId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
+                    image = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

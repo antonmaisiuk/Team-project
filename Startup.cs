@@ -30,11 +30,8 @@ namespace Elaborate
         public void ConfigureServices(IServiceCollection services)
         {
             string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db";
-            //services.AddDbContextPool<AccountDbContext>(options => options.UseMySQL(mySqlConnectionString));
-            services.AddDbContext<AccountDbContext>(options => options.UseMySQL(mySqlConnectionString));
-            services.AddDbContext<AccountDbContext>();
-            services.AddDbContext<TransCategoryDbContext>(options => options.UseMySQL(mySqlConnectionString));
-            services.AddDbContext<TransCategoryDbContext>();
+            //services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(mySqlConnectionString));
+            services.AddDbContext<ApplicationDbContext>();
             services.AddScoped<AccountSeeder>();
 
             services.AddControllersWithViews();

@@ -16,16 +16,12 @@ namespace Elaborate.Elaborate.Entities
             public DateTime Date { get; set; }
             [Display(Name = "Wartość Transakcji")]
             [Required]
-            public float Value { get; set; }
+            public decimal Value { get; set; }
             [Display(Name = "Nazwa transakcji")]
             [Required]
             public string Title { get; set; }
             [Display(Name = "Komentarz do Transakcji")]
             public string Comment { get; set; }
-            [Display(Name = "Nazwa Kategorii")]
-            [Required]
-             public string Category { get; set; }
-
             public int AccountId { get; set; }
             public virtual Account Account { get; set; }
             public int TransCategoryId { get; set; }
