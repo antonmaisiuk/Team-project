@@ -96,5 +96,18 @@ namespace Elaborate.Controllers
             // nie sprawdzam czy istnieje jakikolwiek rekord, najwyżej zwróci 0
             return Ok(jsonString);
         }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<Transaction>> Add(Transaction trans)
+        {
+            if (_dbContext.Database.CanConnect())
+            {
+                _dbContext.Transactions.Add(trans);
+                _dbContext.SaveChanges();
+            }
+            return Ok(trans);
+        }
+
     }
+
 }
