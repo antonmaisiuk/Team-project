@@ -42,6 +42,18 @@ namespace Elaborate.Controllers
 
             return Ok(transaction);
         }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<Transaction>> Add(Transaction trans)
+        {
+            if (_dbContext.Database.CanConnect())
+            {
+                _dbContext.Transactions.Add(trans);
+                _dbContext.SaveChanges();
+            }
+            return Ok(trans);
+        }
+
     }
-    
+
 }
