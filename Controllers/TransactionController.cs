@@ -6,11 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Elaborate.Elaborate.Entities;
 using Elaborate.Entities;
+using System.Text.Json;
 
 namespace Elaborate.Controllers
 {
 
-    [Route("api/transaction")]
+    //[Route("api/transaction")]
     public class TransactionController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -19,7 +20,8 @@ namespace Elaborate.Controllers
         {
             _dbContext = dbContext;
         }
-        [HttpGet]
+        //[HttpGet]
+        [Route("transactions")]
         public ActionResult<IEnumerable<Transaction>> GetAll()
         {
             var transactions = _dbContext
@@ -28,6 +30,7 @@ namespace Elaborate.Controllers
 
             return Ok(transactions);
         }
+
         [HttpGet("{id}")]
         public ActionResult<Transaction> Get([FromRoute] int id)
         {
@@ -43,12 +46,14 @@ namespace Elaborate.Controllers
             return Ok(transaction);
         }
 
-        [HttpGet("/transactionsSum")]
+        //[HttpGet("api/transactionsSum")]
+        [Route("transactionsSum")]
         public ActionResult<Transaction> GetSumOfTransactions()
         {
-            var transactionSum = _dbContext
+            decimal transactionSum = _dbContext
                 .Transactions
                 .Sum(t => t.Value);
+            //string jsonString = JsonSerializer.Serialize(transactionSum);
             // nie sprawdzam czy istnieje jakikolwiek rekord, najwyżej zwróci 0
             return Ok(transactionSum);
         }

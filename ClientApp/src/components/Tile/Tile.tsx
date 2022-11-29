@@ -6,6 +6,7 @@ import TransactionsItem from "../Transaction/TransactionsItem/TransactionsItem";
 import AddButton from "../ui/AddButton/AddButton";
 import PopUp from "../PopUp/PopUp";
 import {log} from "util";
+import {CategoryItem, TransactionItem} from "../../App";
 
 
 
@@ -21,17 +22,18 @@ export enum TileType {
   categories_list
 }
 
-interface TransactionItem{
-  title: string;
-  category: string;
-  value: number
-}
+// interface TransactionItem{
+//   title: string;
+//   category: string;
+//   value: number
+// }
  
 export interface TileInterface{
   // title: string;
   type: TileType;
   spend_sum?: number;
   transactionsList?: TransactionItem[];
+  categoriesList?: CategoryItem[];
 
 }
 
@@ -39,21 +41,22 @@ export interface TileInterface{
 const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
   title,
   type,
-  spend_sum = 0,
+  spend_sum = '0',
   transactionsList = [],
+  categoriesList= [],
   className,
   }) => {
 
-  const [selectedOption, setSelectedOption] = useState("November");
+  // const [selectedOption, setSelectedOption] = useState("November");
   const [modalIsActive, setModalActive] = useState(false);
 
-  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setModalActive(true);
-  }
-  function add_trans() {
-    console.log('LOG');
-  }
+  // const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   event.preventDefault();
+  //   setModalActive(true);
+  // }
+  // function add_trans() {
+  //   console.log('LOG');
+  // }
 
   return (
     <StyledTile className={className}  type={type}>
@@ -79,7 +82,26 @@ const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
             </StyledTransactionsList>
             <AddButton setActive={setModalActive} />
             <PopUp active={modalIsActive} setActive={setModalActive}/>
-          </>: ''}
+          </>
+        : type === TileType.categories_list ? '' : ''
+            // <>
+            //   <StyledTransactionsList>
+            //     {categoriesList.map((transaction) => {
+            //       return (
+            //         <>
+            //           <TransactionsItem title={transaction.title} value={transaction.value}
+            //                             category={transaction.category}/>
+            //           <StyledLine/>
+            //         </>
+            //       );
+            //     })}
+            //
+            //   </StyledTransactionsList>
+            //   <AddButton setActive={setModalActive} />
+            //   <PopUp active={modalIsActive} setActive={setModalActive}/>
+            // </>
+
+      }
     </StyledTile>
 
   );

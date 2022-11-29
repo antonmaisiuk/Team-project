@@ -9,7 +9,7 @@ using Elaborate.Entities;
 
 namespace Elaborate.Controllers
 {
-    [Route("api/TransCategory")]
+    //[Route("api/category")]
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -18,7 +18,7 @@ namespace Elaborate.Controllers
         {
             _dbContext = dbContext;
         }
-        [HttpGet]
+        [Route("categories")]
         public ActionResult<IEnumerable<TransCategory>> GetAll()
         {
             var categories = _dbContext
