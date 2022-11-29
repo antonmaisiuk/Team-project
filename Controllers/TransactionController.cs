@@ -9,7 +9,7 @@ using Elaborate.Entities;
 
 namespace Elaborate.Controllers
 {
-    
+
     [Route("api/transaction")]
     public class TransactionController : ControllerBase
     {
@@ -35,12 +35,22 @@ namespace Elaborate.Controllers
                 .Transactions
                 .FirstOrDefault(r => r.Id == id);
 
-            if(transaction is null)
+            if (transaction is null)
             {
                 return NotFound();
             }
 
             return Ok(transaction);
+        }
+
+        [HttpGet("/transactionsSum")]
+        public ActionResult<Transaction> GetSumOfTransactions()
+        {
+            var transactionSum = _dbContext
+                .Transactions
+                .Sum(t => t.Value);
+            // nie sprawdzam czy istnieje jakikolwiek rekord, najwyżej zwróci 0
+            return Ok(transactionSum);
         }
 
         [HttpPost]
