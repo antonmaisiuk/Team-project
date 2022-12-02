@@ -32,7 +32,6 @@ namespace Elaborate
         {
             var accounts = new List<Account>()
             {
-                /*
                 new Account()
                 {
                     Name = "Patryk",
@@ -91,7 +90,6 @@ namespace Elaborate
                         }
                     }
                 }
-                */
             };
             return accounts;
         }
