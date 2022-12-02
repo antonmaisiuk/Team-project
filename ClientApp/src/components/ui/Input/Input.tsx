@@ -1,4 +1,4 @@
-import React, {FC, HTMLAttributes, HTMLInputTypeAttribute} from 'react';
+import React, {DataHTMLAttributes, FC, HTMLAttributes, HTMLInputTypeAttribute} from 'react';
 import { StyledInput} from './styled';
 
 export enum InputEnum {
@@ -8,16 +8,18 @@ export enum InputEnum {
 }
 
 export interface InputInterface {
-  type: InputEnum
+  type: InputEnum,
+  value?: string,
 }
 
 const Input:FC<InputInterface & HTMLAttributes<HTMLInputElement>> = ({
   type,
   placeholder,
+  value,
   id,
 }) => {
   return (
-    <><StyledInput type={type} placeholder={placeholder} id={id}/></>
+    <><StyledInput type={type} placeholder={placeholder} id={id} value={value}/></>
   );
 };
 

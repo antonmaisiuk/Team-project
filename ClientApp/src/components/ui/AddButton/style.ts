@@ -5,12 +5,12 @@ import Popup from "reactjs-popup";
 export const Wrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-top: 50px;
+  //margin-top: 50px;
 `;
 
 export const StyledAdd = styled.button`
-  width: 73.46px;
-  height: 73.46px;
+  width: 40px;
+  height: 40px;
   border-radius: 50px;
   border: none;
   background-color: #D9D9D9;

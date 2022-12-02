@@ -1,17 +1,23 @@
 import styled from 'styled-components';
-import {TileInterface, TileType} from "./Tile";
-import Popup from "reactjs-popup";
+import {TileBaseInterface, TileType} from "./Tile";
 
-export const StyledTile = styled.div<TileInterface>`
+export const StyledTile = styled.div<TileBaseInterface>`
   //display: grid;
   //grid-template-rows: 1fr auto;
   
   ${props => props.type === TileType.spending_sum && `
-    margin-bottom: 10px;
+    margin-bottom: 34px;
+    max-height: 30%;
+    grid-row: 1 / 1 ;
+  `}
+  ${props => props.type === TileType.categories_list && `
+    // margin-bottom: 10px;
+    max-height: 68%;
     grid-row: 1 / 1 ;
   `}
   ${props => props.type === TileType.transactions_list && `
     // margin-bottom: 10px;
+    height: auto;
     grid-row: 1 / 4 ;
   `}
   
@@ -24,19 +30,21 @@ export const StyledTile = styled.div<TileInterface>`
 
   
 
-  max-width: 652px;
+  //max-width: 652px;
 `;
 
-export const StyledTileTitle = styled.h2`
-  
-  
-
-  font-family: "'Inter', sans-serif", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 35px;
-  line-height: 42px;
-  color: #000;
+export const StyledTileTitle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  h2{
+    font-family: "'Inter', sans-serif", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 35px;
+    line-height: 42px;
+    color: #000;
+  }  
   padding-bottom: 8px;
   border-bottom: 1px solid #C7C7C7;
 `;
@@ -58,17 +66,24 @@ export const StyledSendingSum = styled.div`
     line-height: 61px;
   }
 `;
-export const StyledTransactionsList = styled.div`
+export const StyledList = styled.div<TileBaseInterface>`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   //padding-right: 15px;
-  max-height: 250px;
-  overflow-y: scroll;
+  ${props => props.type === TileType.transactions_list && `
+    max-height: 300px;
+  `}
+  ${props => props.type === TileType.categories_list && `
+    max-height: 100px;
+  `}
   
+  overflow-y: scroll;
+  margin-top: 20px;
 `;
 
 export const StyledLine = styled.span`
+  display: inline-block;
   width: 100%;
   height: 1px;
   background-color: #C7C7C7;
