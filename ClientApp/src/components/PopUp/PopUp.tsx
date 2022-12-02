@@ -67,7 +67,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         id: 1,
-        title: 'Transaction title',
+        title: 'New transaction title',
         value: value.value,
         date: date.value,
         comment: comment.value,

@@ -18,22 +18,7 @@ namespace Elaborate.Elaborate.Entities
             this.Comment = comment;
             this.AccountId = accountId;
             //this.TransCategoryId = transactionCatId;
-                try
-                {
-                    string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db";
-
-                    using var con = new MySqlConnection(mySqlConnectionString);
-                    con.Open();
-                    string query = "SELECT MAX(Id) FROM Transactions ";
-                    var cmd = new MySqlCommand(query, con);
-                    var maxId = Int32.Parse(cmd.ExecuteScalar().ToString());
-                    this.Id = maxId + 1;
-                    con.Close();
-                }
-                catch (Exception ex)
-                {
-
-                }
+                
             }
 
             [Key]
