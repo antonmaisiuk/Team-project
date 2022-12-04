@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import Popup from 'reactjs-popup';
-import {PopUpInterface} from "./PopUp";
+import {PopUpBaseInterface} from "./PopUp";
 import exp from "constants";
 
-export const StyledPopUpContainer = styled.div<PopUpInterface>`
+export const StyledPopUpContainer = styled.div<PopUpBaseInterface>`
   position: absolute;
   //position: f;
   top: 0;

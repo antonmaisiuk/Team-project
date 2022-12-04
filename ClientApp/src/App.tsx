@@ -35,17 +35,27 @@ const App = () => {
     // {title: 'First transaction', category: 'Eat', value: 766.2},
     // {title: 'Second transaction', category: 'Car', value: 1520.2},
     // {title: 'Third transaction', category: 'Shopping', value: 30},
+    // {title: 'First transaction', category: 'Eat', value: 766.2},
+    // {title: 'Second transaction', category: 'Car', value: 1520.2},
+    // {title: 'Third transaction', category: 'Shopping', value: 30},
+    // {title: 'First transaction', category: 'Eat', value: 766.2},
+    // {title: 'Second transaction', category: 'Car', value: 1520.2},
+    // {title: 'Third transaction', category: 'Shopping', value: 30},
   ]);
   const [categoriesList, setCategories] = useState<CategoryItem[]>([
     // {name: 'First category', image: 'img'},
     // {name: 'Second category', image: 'img'},
     // {name: 'Third category', image: 'img'},
     // {name: 'Four category', image: 'img'},
+    // {name: 'First category', image: 'img'},
+    // {name: 'Second category', image: 'img'},
+    // {name: 'Third category', image: 'img'},
+    // {name: 'Four category', image: 'img'},
   ]);
-  const [sendingSum, setSendingSum] = useState<number>(0);
+  const [sendingSum, setSendingSum] = useState<number>(1568);
 
   async function sending_sum() {
-    const response = await fetch('transactionsSum');
+    const response = await fetch('api/Transaction/transactionsSum');
 
     if (response.ok){
       const data = await response.json();
@@ -55,7 +65,7 @@ const App = () => {
     }
   }
   async function transactionsData() {
-    const response = await fetch('transactions');
+    const response = await fetch('api/Transaction/transactions');
 
     if (response.ok){
       const data = await response.json();
@@ -63,10 +73,9 @@ const App = () => {
     } else {
       alert("HTTP Error: " + response.status)
     }
-
   }
   async function categoriesData() {
-    const response = await fetch('categories');
+    const response = await fetch('api/Category/categories');
 
     if (response.ok){
       const data = await response.json();
@@ -77,28 +86,36 @@ const App = () => {
   }
 
   useEffect(() => {
-    // fetch("GET").then((value) => console.log(value))
     transactionsData();
     sending_sum()
     categoriesData();
   }, []);
-  // setTransactions(prevTransaction => [
-  //   ...prevTransaction,
-  //   {title: 'First transaction', category: 'Eat', value: 766.2}
-  // ])
-
   return (
-
-
-
     <>
       <Container type={ContainerType.transactions}>
         <Layout>
-          <Tile className={"spending_sum"} title={"Spending"} type={TileType.spending_sum} spend_sum={sendingSum}/>
+          <Tile
+            className={"spending_sum"}
+            title={"Spending"}
+            type={TileType.spending_sum}
+            spend_sum={sendingSum}
+          />
 
-          <Tile className={"transactions_list"} title={"Transactions"} type={TileType.transactions_list}
-                transactionsList={transactionsList}/>
-          <Tile className={"categories_list"} title={"Categories"} type={TileType.categories_list} categoriesList={categoriesList} />
+          <Tile
+            className={"categories_list"}
+            title={"Categories"}
+            type={TileType.categories_list}
+            categoriesList={categoriesList}
+            setCategories={setCategories}
+          />
+
+          <Tile
+            className={"transactions_list"}
+            title={"Transactions"}
+            type={TileType.transactions_list}
+            transactionsList={transactionsList}
+            setTransactions={setTransactions}
+          />
         </Layout>
         <NavBar/>
       </Container>

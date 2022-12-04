@@ -8,11 +8,13 @@ using Elaborate.Elaborate.Entities;
 using Elaborate.Entities;
 using AutoMapper;
 using System.Text.Json;
+using MySql.Data.MySqlClient;
 
 namespace Elaborate.Controllers
 {
 
     //[Route("api/transaction")]
+    [Route("api/[controller]")]
     public class TransactionController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -28,8 +30,8 @@ namespace Elaborate.Controllers
         /// Pobranie listy transakcji
         /// </summary>
         /// <returns>Listę transakcji</returns>
-        //  [HttpGet]
-        [Route("transactions")]
+        [HttpGet("transactions")]
+        //[Route("transactions")]
          public ActionResult<IEnumerable<Transaction>> GetAll()
          {
              var transactions = _dbContext
@@ -57,21 +59,58 @@ namespace Elaborate.Controllers
 
              return Ok(transaction);
          }
+
+        public int GetNewId()
+        {
+            int newId = 0;
+            try
+            {
+                string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db";
+
+                using var con = new MySqlConnection(mySqlConnectionString);
+                con.Open();
+                string query = "SELECT MAX(Id) FROM Transactions ";
+                var cmd = new MySqlCommand(query, con);
+                var maxId = Int32.Parse(cmd.ExecuteScalar().ToString());
+                newId = maxId + 1;
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return newId;
+        }
+
+
         /// <summary>
         /// Tworzenie transakcji
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        /// 
+        //[Route("addTransactions")]
+        [HttpPost("addTransaction")]
         public ActionResult CreateTransaction([FromBody] CreateTransactionDto dto)
         {
+            //var rand = new Random();
             var transaction = _mapper.Map<Transaction>(dto);
-            transaction.Date = DateTime.Now;
+            transaction.Id = GetNewId();
+            //transaction.Date = d;
+            transaction.AccountId = 7;
+            transaction.TransCategoryId = 1;
             _dbContext.Transactions.Add(transaction);
             _dbContext.SaveChanges();
 
+            var transactions = _dbContext
+                 .Transactions
+                 .ToList();
 
-            return Created($"/api/transaction/{transaction.Id}", null);
+
+
+            return Ok(transactions);
+
+            //return Created($"/api/transaction/{transaction.Id}", null);
         }
 
 
@@ -102,8 +141,8 @@ namespace Elaborate.Controllers
         //    return Ok(transaction);
         //}
 
-        //[HttpGet("api/transactionsSum")]
-        [Route("transactionsSum")]
+        [HttpGet("transactionsSum")]
+        //[Route("transactionsSum")]
         public ActionResult<Transaction> GetSumOfTransactions()
         {
             decimal transactionSum = _dbContext

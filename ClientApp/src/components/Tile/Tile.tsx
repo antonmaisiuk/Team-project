@@ -1,20 +1,24 @@
-import React, {FC, HTMLAttributes, useState} from 'react';
-import {StyledLine, StyledSendingSum, StyledTile, StyledTileTitle, StyledTransactionsList} from './style';
-import Select from "react-select/base";
-import {InputActionMeta} from 'react-select';
+import React, {Dispatch, FC, HTMLAttributes, SetStateAction, useState} from 'react';
+import { StyledLine, StyledList, StyledSendingSum, StyledTile, StyledTileTitle} from './style';
 import TransactionsItem from "../Transaction/TransactionsItem/TransactionsItem";
 import AddButton from "../ui/AddButton/AddButton";
 import PopUp from "../PopUp/PopUp";
-import {log} from "util";
 import {CategoryItem, TransactionItem} from "../../App";
+import CategoriesItem from "../Category/CategoriesItem/CategoriesItem";
 
 
 
-const options = [
-  {value: '11', label: 'November'},
-  {value: '10', label: 'October'},
-  {value: '9', label: 'September'}
-];
+// const options = [
+//   {value: '11', label: 'November'},
+//   {value: '10', label: 'October'},
+//   {value: '9', label: 'September'}
+// ];
+
+// interface TransactionItem{
+//   title: string;
+//   category: string;
+//   value: number
+// }
 
 export enum TileType {
   spending_sum,
@@ -22,45 +26,59 @@ export enum TileType {
   categories_list
 }
 
-// interface TransactionItem{
-//   title: string;
-//   category: string;
-//   value: number
+// export interface TileInterface{
+//   // title: string;
+//   type: TileType;
+//   spend_sum?: number;
+//   transactionsList?: TransactionItem[];
+//   categoriesList?: CategoryItem[];
+//
+//   setTransactions?: Dispatch<SetStateAction<[]>>,
 // }
- 
-export interface TileInterface{
-  // title: string;
+export interface TileBaseInterface{
   type: TileType;
   spend_sum?: number;
-  transactionsList?: TransactionItem[];
   categoriesList?: CategoryItem[];
-
+  setCategories?: Dispatch<SetStateAction<CategoryItem[]>>,
+  transactionsList?: TransactionItem[];
+  setTransactions?: Dispatch<SetStateAction<TransactionItem[]>>,
 }
+export interface TileCategoryInterface extends TileBaseInterface{
+  type: TileType;
+  categoriesList: CategoryItem[];
+  setCategories: Dispatch<SetStateAction<CategoryItem[]>>,
+}
+export interface TileTransactionInterface extends TileBaseInterface{
+  type: TileType;
+  transactionsList: TransactionItem[];
+  setTransactions: Dispatch<SetStateAction<TransactionItem[]>>,
+}
+export interface TileSpendingSumInterface extends TileBaseInterface{
+  type: TileType;
+  spend_sum: number;
+}
+type TileInterface = TileCategoryInterface | TileTransactionInterface | TileSpendingSumInterface;
 
 
-const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
+const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
   title,
   type,
   spend_sum = '0',
   transactionsList = [],
   categoriesList= [],
   className,
+  setTransactions = ()=>{},
+  setCategories= ()=>{}
   }) => {
 
-  // const [selectedOption, setSelectedOption] = useState("November");
   const [modalIsActive, setModalActive] = useState(false);
-
-  // const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   event.preventDefault();
-  //   setModalActive(true);
-  // }
-  // function add_trans() {
-  //   console.log('LOG');
-  // }
 
   return (
     <StyledTile className={className}  type={type}>
-      <StyledTileTitle>{title}</StyledTileTitle>
+      <StyledTileTitle>
+        <h2>{title}</h2>
+        {!(type === TileType.spending_sum) && <AddButton setActive={setModalActive} />}
+      </StyledTileTitle>
 
       {type === TileType.spending_sum ?
         <StyledSendingSum>
@@ -68,7 +86,7 @@ const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
 
         </StyledSendingSum>
         : type === TileType.transactions_list ?
-          <><StyledTransactionsList>
+          <><StyledList type={type} setTransactions={setTransactions}>
             {transactionsList.map((transaction) => {
               return (
                 <>
@@ -79,29 +97,25 @@ const Tile: FC<TileInterface & HTMLAttributes<HTMLDivElement>> = ({
               );
             })}
 
-            </StyledTransactionsList>
-            <AddButton setActive={setModalActive} />
-            <PopUp active={modalIsActive} setActive={setModalActive}/>
+            </StyledList>
+            <PopUp active={modalIsActive} setActive={setModalActive} setTransactions={setTransactions} />
           </>
-        : type === TileType.categories_list ? '' : ''
-            // <>
-            //   <StyledTransactionsList>
-            //     {categoriesList.map((transaction) => {
-            //       return (
-            //         <>
-            //           <TransactionsItem title={transaction.title} value={transaction.value}
-            //                             category={transaction.category}/>
-            //           <StyledLine/>
-            //         </>
-            //       );
-            //     })}
-            //
-            //   </StyledTransactionsList>
-            //   <AddButton setActive={setModalActive} />
-            //   <PopUp active={modalIsActive} setActive={setModalActive}/>
-            // </>
+        : type === TileType.categories_list ?
+            <>
+              <StyledList type={type} setTransactions={setTransactions}>
+                {categoriesList.map((category) => {
+                  return (
+                    <>
+                      <CategoriesItem name={category.name} category_sum={0} image_link={'0'}/>
+                      <StyledLine/>
+                    </>
+                  );
+                })}
 
-      }
+              </StyledList>
+
+              <PopUp active={modalIsActive} setActive={setModalActive} setTransactions={setTransactions}/>
+            </> : ''}
     </StyledTile>
 
   );
