@@ -12,12 +12,15 @@ namespace Elaborate.Models
         public int Id { get; set; }
         [Display(Name = "Nazwa Konta")]
         [Required]
+        [MaxLength(30)]
         public string Name { get; set; }
         [Display(Name = "Adres E-mail")]
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
         [Display(Name = "Numer telefonu")]
         [Required]
+        [Phone]
         public string Phone { get; set; }
     }
 }

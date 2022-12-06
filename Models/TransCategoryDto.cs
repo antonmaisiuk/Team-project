@@ -12,6 +12,7 @@ namespace Elaborate.Models
         public int Id { get; set; }
         [Display(Name = "Nazwa Kategorii")]
         [Required]
+        [MaxLength(30)]
         public string Name { get; set; }
         [Display(Name = "Id image")]
         public string image { get; set; }
