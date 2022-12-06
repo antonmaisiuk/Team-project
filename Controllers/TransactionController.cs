@@ -9,6 +9,7 @@ using Elaborate.Entities;
 using AutoMapper;
 using System.Text.Json;
 using MySql.Data.MySqlClient;
+using Elaborate.Models;
 
 namespace Elaborate.Controllers
 {
@@ -111,6 +112,27 @@ namespace Elaborate.Controllers
             return Ok(transactions);
 
             //return Created($"/api/transaction/{transaction.Id}", null);
+        }
+
+        /// <summary>
+        /// Zmiana danych transakcji // Bartosz Truszkowski
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateTransaction(int id, [FromBody] UpdateTransaction updateTransaction)
+        {
+            var transactionToUpdate = _dbContext.Transactions.FirstOrDefault(t => t.Id == id);
+
+            if (transactionToUpdate is null)
+                return NotFound("Nie znaleziono transakcji o podanym id");
+
+            transactionToUpdate.Comment = updateTransaction.Comment;
+            transactionToUpdate.Value = updateTransaction.Value;
+            transactionToUpdate.Title = updateTransaction.Title;
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(transactionToUpdate);
         }
 
 
