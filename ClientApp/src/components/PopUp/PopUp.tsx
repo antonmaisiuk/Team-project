@@ -52,8 +52,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   const sendForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    let {title, value, date, comment} = event.target as typeof event.target & {
-      id : {value: number},
+    const {title, value, date, comment} = event.target as typeof event.target & {
+      // id : {value: number},
       title: {value: string},
       value: {value: number},
       date: {value: string},
@@ -66,16 +66,18 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        id: 1,
-        title: 'New transaction title',
+        // id: 1,
+        //title: title.value,
         value: value.value,
         date: date.value,
         comment: comment.value,
       })
     })
 
+    event.;
+
     // console.log(response);
-    const data = await response.json();
+    const data = await response.json(); //odbieranie aktualnej listy transakcji
 
     // title.value = '';
     // comment.value = '';
@@ -108,7 +110,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       setTransactions={setTransactions}
     >
       <StyledPopUpContent className={"add_content"} onClick={e => e.stopPropagation()}>
-        <StyledForm onSubmit={e => sendForm(e)} method={'POST'}>
+        <StyledForm onSubmit={e => sendForm(e)}>
           <StyledFormContent>
             <StyledFormItem >
               <Input
@@ -126,7 +128,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
               <Input
                 type={InputEnum.date}
                 id={"date"}
-                value={"02-12-2022"}
+                // value={"02-12-2022"}
                 // onChange={(e)=> setDate(e.currentTarget.value)}
                 // defaultValue={"02-12-2022"}
               />

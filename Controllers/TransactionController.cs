@@ -74,10 +74,11 @@ namespace Elaborate.Controllers
                 var maxId = Int32.Parse(cmd.ExecuteScalar().ToString());
                 newId = maxId + 1;
                 con.Close();
+                
             }
             catch (Exception ex)
             {
-
+                
             }
             return newId;
         }
@@ -95,10 +96,11 @@ namespace Elaborate.Controllers
         {
             //var rand = new Random();
             var transaction = _mapper.Map<Transaction>(dto);
-            transaction.Id = GetNewId();
+            //transaction.Id = GetNewId();
             //transaction.Date = d;
             transaction.AccountId = 7;
             transaction.TransCategoryId = 1;
+            transaction.Title = "New title";
             _dbContext.Transactions.Add(transaction);
             _dbContext.SaveChanges();
 
