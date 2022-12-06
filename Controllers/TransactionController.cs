@@ -61,6 +61,17 @@ namespace Elaborate.Controllers
              return Ok(transaction);
          }
 
+        [HttpGet("filterById")]
+        public ActionResult<Transaction> FilterByCateId([FromRoute] int id)
+        {
+            var transactions = _dbContext
+                .Transactions
+                .Where(r => r.TransCategoryId == id)
+                .ToList();
+
+            return Ok(transactions);
+        }
+
         public int GetNewId()
         {
             int newId = 0;
