@@ -197,6 +197,17 @@ namespace Elaborate.Controllers
         //    return Ok(trans);
         //}
 
+        [HttpGet("filterByMonth")]
+        public ActionResult<Transaction> FilterByMonth([FromRoute] DateTime date)
+        {
+            var transactions = _dbContext
+                .Transactions
+                .Where(r => r.Date.Month == date.Month)
+                .ToList();
+
+            return Ok(transactions);
+        }
+
     }
 
 }
