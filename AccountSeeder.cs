@@ -30,6 +30,7 @@ namespace Elaborate
         }
         private IEnumerable<Account> GetAccounts()
         {
+            
             var accounts = new List<Account>()
             {
                 /*
@@ -41,6 +42,7 @@ namespace Elaborate
                     PasswordHash = "123456789",
                     ListOfTransactions = new List<Transaction>()
                     {
+                        
                         new Transaction()
                         {
                             Date = DateTime.Now,
@@ -94,6 +96,7 @@ namespace Elaborate
                 */
             };
             return accounts;
+            
         }
     }
 }
