@@ -74,7 +74,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       })
     })
 
-    event.;
+    // event.;
 
     // console.log(response);
     const data = await response.json(); //odbieranie aktualnej listy transakcji
