@@ -106,7 +106,7 @@ namespace Elaborate.Controllers
         [HttpPost("addTransaction")]
         public ActionResult CreateTransaction([FromBody] CreateTransactionDto dto)
         {
-            //var rand = new Random();
+            
             var transaction = _mapper.Map<Transaction>(dto);
             //transaction.Id = GetNewId();
             //transaction.Date = d;
@@ -120,9 +120,17 @@ namespace Elaborate.Controllers
                  .Transactions
                  .ToList();
 
+            decimal transactionSum = transactions.Sum(t => t.Value);
+
+            Object[] resultArr = new Object[] { transactions, transactionSum };
+            //var resultArr[] = { transactions, transactionSum } ;
+            //resultArr[0] = transactions;
+            //resultArr[1] = transactionSum;
+
+            
 
 
-            return Ok(transactions);
+            return Ok(resultArr);
 
             //return Created($"/api/transaction/{transaction.Id}", null);
         }

@@ -5,6 +5,7 @@ using Elaborate.Elaborate.Entities;
 using Elaborate.Entities;
 using AutoMapper;
 using Elaborate.Models;
+using System;
 
 namespace Elaborate.Controllers
 {
@@ -46,15 +47,20 @@ namespace Elaborate.Controllers
         //    return Ok(categories);
         //}
 
-        [HttpPost]
+        [HttpPost("addTransCategory")]
         public ActionResult CreateTransactionCategory([FromBody] TransCategoryDto dto)
         {
             var categories = _mapper.Map<TransCategory>(dto);
             _dbContext.TransCategories.Add(categories);
             _dbContext.SaveChanges();
 
+            var categoriesList = _dbContext
+               .TransCategories
+               .ToList();
 
-            return Created($"/api/TransCategory/{categories.Id}", null);
+            //Object[] resultArr = new Object[] { categoriesList,  };
+
+            return Ok(categoriesList);
         }
 
         //[HttpPost]
