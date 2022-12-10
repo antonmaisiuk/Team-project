@@ -16,11 +16,12 @@ import Container, {ContainerType} from "./components/Container/Container";
 
 export type TransactionItem ={
   title: string;
-  category: string;
+  transCategoryId: number;
   value: number
 }
 
 export type CategoryItem ={
+  id: number;
   name: string;
   image: string
 }
@@ -31,10 +32,10 @@ const App = () => {
   const [transactionsList, setTransactions] = useState<TransactionItem[]>([
     // {title: 'First transaction', category: 'Eat', value: 766.2},
     // {title: 'Second transaction', category: 'Car', value: 1520.2},
-    // {title: 'Third transaction', category: 'Shopping', value: 30},
+    // {title: 'Third transaction', category: 'Bills', value: 30},
     // {title: 'First transaction', category: 'Eat', value: 766.2},
     // {title: 'Second transaction', category: 'Car', value: 1520.2},
-    // {title: 'Third transaction', category: 'Shopping', value: 30},
+    // {title: 'Third transaction', category: 'Bills', value: 30},
     // {title: 'First transaction', category: 'Eat', value: 766.2},
     // {title: 'Second transaction', category: 'Car', value: 1520.2},
     // {title: 'Third transaction', category: 'Shopping', value: 30},
@@ -43,8 +44,8 @@ const App = () => {
     // {title: 'Third transaction', category: 'Shopping', value: 30},
   ]);
   const [categoriesList, setCategories] = useState<CategoryItem[]>([
-    // {name: 'First category', image: 'img'},
-    // {name: 'Second category', image: 'img'},
+    // {name: 'Eat', image: 'img'},
+    // {name: 'Bills', image: 'img'},
     // {name: 'Third category', image: 'img'},
     // {name: 'Four category', image: 'img'},
     // {name: 'First category', image: 'img'},
@@ -52,14 +53,14 @@ const App = () => {
     // {name: 'Third category', image: 'img'},
     // {name: 'Four category', image: 'img'},
   ]);
-  const [sendingSum, setSendingSum] = useState<number>(1568);
+  const [spendingSum, setSpendingSum] = useState<number>(0);
 
-  async function sending_sum() {
+  async function spending_sum() {
     const response = await fetch('api/Transaction/transactionsSum');
 
     if (response.ok){
       const data = await response.json();
-      setSendingSum(data);
+      setSpendingSum(data);
     } else {
       alert("HTTP Error: " + response.status)
     }
@@ -87,7 +88,7 @@ const App = () => {
 
   useEffect(() => {
     transactionsData();
-    sending_sum()
+    spending_sum()
     categoriesData();
   }, []);
   return (
@@ -98,13 +99,14 @@ const App = () => {
             className={"spending_sum"}
             title={"Spending"}
             type={TileType.spending_sum}
-            spend_sum={sendingSum}
+            spendingSum={spendingSum}
           />
 
           <Tile
             className={"categories_list"}
             title={"Categories"}
             type={TileType.categories_list}
+            transactionsList={transactionsList}
             categoriesList={categoriesList}
             setCategories={setCategories}
           />
@@ -112,6 +114,7 @@ const App = () => {
           <Tile
             className={"transactions_list"}
             title={"Transactions"}
+            setSpendingSum={setSpendingSum}
             type={TileType.transactions_list}
             transactionsList={transactionsList}
             setTransactions={setTransactions}

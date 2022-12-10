@@ -4,7 +4,7 @@ import {TileType} from "../../Tile/Tile";
 
 type TransactionsItemType = {
   title: string;
-  category: string;
+  category: number;
   value: number;
 }
 
@@ -21,7 +21,7 @@ const TransactionsItem:FC<TransactionsItemType> = (
     <StyledTransactionsItem>
       <StyledTextDiv>
         <h3 className={"transaction_title"}>{title}</h3>
-        <p className={"transaction_category"}>{category}</p>
+        <p className={"transaction_category"}>Category id: {category}</p>
       </StyledTextDiv>
       <StyledValueDiv>
         <p className={"transaction_value"}>$ {value}</p>
