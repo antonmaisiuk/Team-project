@@ -4,7 +4,9 @@ import {StyledContainer} from './style';
 
 export enum ContainerType {
   transactions,
-  main_screen,
+  login,
+  register,
+  home,
 }
 
 export interface ContainerInterface {

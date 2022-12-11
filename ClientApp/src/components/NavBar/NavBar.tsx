@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {FC} from 'react';
 import { StyledNavBar } from './style';
+import {ContainerType} from "../Container/Container";
 
-const NavBar = () => {
+export interface NavBarInterface {
+  // type: ContainerType;
+  children: React.ReactNode;
+}
+
+const NavBar:FC<NavBarInterface> = ({
+  children
+}) => {
   return (
     <StyledNavBar>
-
+      {children}
     </StyledNavBar>
   );
 };

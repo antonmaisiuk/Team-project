@@ -2,16 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Tile from "./components/Tile/Tile";
-import {StyledTile, StyledTileTitle} from "./components/Tile/style";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App/>
+    <App />
   </React.StrictMode>
 );
 
