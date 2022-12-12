@@ -25,7 +25,5 @@ namespace Elaborate.Elaborate.Entities
 
        // public virtual List<Investment> ListOfInvestments { get; set; }
         public virtual List<Transaction> ListOfTransactions { get; set; }
-
-
     }
 }
