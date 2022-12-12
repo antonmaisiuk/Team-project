@@ -11,7 +11,6 @@ namespace Elaborate.Elaborate.Entities
         public int Id { get; set; }
 
         [Required]
-        [StringLength(30)]
         [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", ErrorMessage = "Invalid Euser login")]
         public string UserLogin { get; set; }
 
