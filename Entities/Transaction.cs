@@ -18,7 +18,6 @@ namespace Elaborate.Elaborate.Entities
             this.Comment = comment;
             this.AccountId = accountId;
             //this.TransCategoryId = transactionCatId;
-                
             }
 
             [Key]

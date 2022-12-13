@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Elaborate.Elaborate.Entities;
+using Elaborate.Entities;
+using Elaborate.Models;
+using Microsoft.AspNetCore.Mvc;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Elaborate.Elaborate.Entities;
-using Elaborate.Entities;
-using AutoMapper;
-using System.Text.Json;
-using MySql.Data.MySqlClient;
-using Elaborate.Models;
 
 namespace Elaborate.Controllers
 {
@@ -33,33 +31,33 @@ namespace Elaborate.Controllers
         /// <returns>Listę transakcji</returns>
         [HttpGet("transactions")]
         //[Route("transactions")]
-         public ActionResult<IEnumerable<Transaction>> GetAll()
-         {
-             var transactions = _dbContext
-                 .Transactions
-                 .ToList();
+        public ActionResult<IEnumerable<Transaction>> GetAll()
+        {
+            var transactions = _dbContext
+                .Transactions
+                .ToList();
 
-             return Ok(transactions);
-         }
+            return Ok(transactions);
+        }
         /// <summary>
         /// Pobranie transakcji po Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns>transakcje</returns>
-         [HttpGet("{id}")]
-         public ActionResult<Transaction> Get([FromRoute] int id)
-         {
-             var transaction = _dbContext
-                 .Transactions
-                 .FirstOrDefault(r => r.Id == id);
+        [HttpGet("{id}")]
+        public ActionResult<Transaction> Get([FromRoute] int id)
+        {
+            var transaction = _dbContext
+                .Transactions
+                .FirstOrDefault(r => r.Id == id);
 
-             if (transaction is null)
-             {
-                 return NotFound();
-             }
+            if (transaction is null)
+            {
+                return NotFound();
+            }
 
-             return Ok(transaction);
-         }
+            return Ok(transaction);
+        }
 
         [HttpGet("filterById")]
         public ActionResult<Transaction> FilterByCateId([FromRoute] int id)
@@ -77,21 +75,10 @@ namespace Elaborate.Controllers
             int newId = 0;
             try
             {
-                string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db";
+                newId = _dbContext.Accounts.Max(u => u.Id);
+            }
+            catch (Exception ex) { }
 
-                using var con = new MySqlConnection(mySqlConnectionString);
-                con.Open();
-                string query = "SELECT MAX(Id) FROM Transactions ";
-                var cmd = new MySqlCommand(query, con);
-                var maxId = Int32.Parse(cmd.ExecuteScalar().ToString());
-                newId = maxId + 1;
-                con.Close();
-                
-            }
-            catch (Exception ex)
-            {
-                
-            }
             return newId;
         }
 
@@ -106,7 +93,7 @@ namespace Elaborate.Controllers
         [HttpPost("addTransaction")]
         public ActionResult CreateTransaction([FromBody] CreateTransactionDto dto)
         {
-            
+
             var transaction = _mapper.Map<Transaction>(dto);
             //transaction.Id = GetNewId();
             //transaction.Date = d;
@@ -127,7 +114,7 @@ namespace Elaborate.Controllers
             //resultArr[0] = transactions;
             //resultArr[1] = transactionSum;
 
-            
+
 
 
             return Ok(resultArr);
