@@ -195,7 +195,7 @@ namespace Elaborate.Controllers
         //}
 
         [HttpGet("filterByMonth")]
-        public ActionResult<Transaction> FilterByMonth([FromRoute] DateTime date)
+        public ActionResult<Transaction> FilterByMonth([FromBody] DateTime date)
         {
             var transactions = _dbContext
                 .Transactions
