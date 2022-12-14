@@ -7,7 +7,7 @@ export const StyledTile = styled.div<TileBaseInterface>`
   
   ${props => props.type === TileType.spending_sum && `
     margin-bottom: 34px;
-    max-height: 30%;
+    // max-height: 30%;
     grid-row: 1 / 1 ;
   `}
   ${props => props.type === TileType.categories_list && `

@@ -12,7 +12,7 @@ export const StyledContainer = styled.div`
   
   margin: 0 auto;
   max-width: 1338px;
-  height: calc(100vh - 117px);
+  height: 100%;
   //max-height: calc(100vh - 80px);
 
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');

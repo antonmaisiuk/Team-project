@@ -44,43 +44,43 @@ namespace Elaborate.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>transakcje</returns>
-        [HttpGet("{id}")]
-        public ActionResult<Transaction> Get([FromRoute] int id)
-        {
-            var transaction = _dbContext
-                .Transactions
-                .FirstOrDefault(r => r.Id == id);
+        //[HttpPost("{id}")]
+        //public ActionResult<Transaction> Get([FromBody] int id)
+        //{
+        //    var transaction = _dbContext
+        //        .Transactions
+        //        .FirstOrDefault(r => r.Id == id);
 
-            if (transaction is null)
-            {
-                return NotFound();
-            }
+        //    if (transaction is null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(transaction);
-        }
+        //    return Ok(transaction);
+        //}
 
-        [HttpGet("filterById")]
-        public ActionResult<Transaction> FilterByCateId([FromRoute] int id)
-        {
-            var transactions = _dbContext
-                .Transactions
-                .Where(r => r.TransCategoryId == id)
-                .ToList();
+        //[HttpGet("filterById")]
+        //public ActionResult<Transaction> FilterByCateId([FromRoute] int id)
+        //{
+        //    var transactions = _dbContext
+        //        .Transactions
+        //        .Where(r => r.TransCategoryId == id)
+        //        .ToList();
 
-            return Ok(transactions);
-        }
+        //    return Ok(transactions);
+        //}
 
-        public int GetNewId()
-        {
-            int newId = 0;
-            try
-            {
-                newId = _dbContext.Accounts.Max(u => u.Id);
-            }
-            catch (Exception ex) { }
+        //public int GetNewId()
+        //{
+        //    int newId = 0;
+        //    try
+        //    {
+        //        newId = _dbContext.Accounts.Max(u => u.Id);
+        //    }
+        //    catch (Exception ex) { }
 
-            return newId;
-        }
+        //    return newId;
+        //}
 
 
         /// <summary>
@@ -110,12 +110,6 @@ namespace Elaborate.Controllers
             decimal transactionSum = transactions.Sum(t => t.Value);
 
             Object[] resultArr = new Object[] { transactions, transactionSum };
-            //var resultArr[] = { transactions, transactionSum } ;
-            //resultArr[0] = transactions;
-            //resultArr[1] = transactionSum;
-
-
-
 
             return Ok(resultArr);
 
@@ -178,8 +172,6 @@ namespace Elaborate.Controllers
             decimal transactionSum = _dbContext
                 .Transactions
                 .Sum(t => t.Value);
-            //string jsonString = JsonSerializer.Serialize(transactionSum);
-            // nie sprawdzam czy istnieje jakikolwiek rekord, najwyżej zwróci 0
             return Ok(transactionSum);
         }
 
@@ -194,16 +186,16 @@ namespace Elaborate.Controllers
         //    return Ok(trans);
         //}
 
-        [HttpPost("filterByMonth")]
-        public ActionResult<Transaction> FilterByMonth([FromBody] DateTime date)
-        {
-            var transactions = _dbContext
-                .Transactions
-                .Where(r => r.Date.Month == date.Month)
-                .ToList();
+        //[HttpPost("filterByMonth")]
+        //public ActionResult<Transaction> FilterByMonth([FromBody] DateTime date)
+        //{
+        //    var transactions = _dbContext
+        //        .Transactions
+        //        .Where(r => r.Date.Month == date.Month)
+        //        .ToList();
 
-            return Ok(transactions);
-        }
+        //    return Ok(transactions);
+        //}
 
     }
 
