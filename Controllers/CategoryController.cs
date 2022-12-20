@@ -6,6 +6,7 @@ using Elaborate.Entities;
 using AutoMapper;
 using Elaborate.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Elaborate.Controllers
 {
@@ -61,6 +62,27 @@ namespace Elaborate.Controllers
             //Object[] resultArr = new Object[] { categoriesList,  };
 
             return Ok(categoriesList);
+        }
+
+        /// <summary>
+        /// Bartosz Truszkowski
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="DeleteCategort"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCategort(int id)
+        {
+            var CategorynToDelete = _dbContext.TransCategories.FirstOrDefault(t => t.Id == id);
+
+            if (CategorynToDelete is null)
+                return NotFound("Nie znaleziono kategorii o podanym id");
+            
+            _dbContext.TransCategories.Remove(CategorynToDelete);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(CategorynToDelete);
         }
 
         //[HttpPost]
