@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Elaborate.Elaborate.Entities;
 using Elaborate.Entities;
+using Elaborate.Helpers;
 using Elaborate.Models;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
@@ -18,6 +19,7 @@ namespace Elaborate.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly JwtService _jwtService;
 
         public TransactionController(ApplicationDbContext dbContext, IMapper mapper)
         {
@@ -33,9 +35,15 @@ namespace Elaborate.Controllers
         //[Route("transactions")]
         public ActionResult<IEnumerable<Transaction>> GetAll()
         {
+            var jwt = Request.Cookies["jwt"];
+
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+
             var transactions = _dbContext
-                .Transactions
-                .ToList();
+            .Transactions.Where(r => r.Account.Id == userId)
+            .ToList();
 
             return Ok(transactions);
         }
