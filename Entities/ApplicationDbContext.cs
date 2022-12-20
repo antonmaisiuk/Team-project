@@ -37,7 +37,7 @@ namespace Elaborate.Entities
             modelBuilder.Entity<Account>()
                 .Property(r => r.PasswordHash)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(60);
 
             modelBuilder.Entity<Transaction>()
                 .Property(r => r.Title)
