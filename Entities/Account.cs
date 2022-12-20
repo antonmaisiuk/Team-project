@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Elaborate.Elaborate.Entities
@@ -23,6 +24,7 @@ namespace Elaborate.Elaborate.Entities
         public string Phone { get; set; }
         [Display(Name = "Hasło")]
         [Required]
+        [JsonIgnore]
         public string PasswordHash { get; set; }
 
        // public virtual List<Investment> ListOfInvestments { get; set; }

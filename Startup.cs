@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Elaborate.Data;
 using System.Configuration;
+using Elaborate.Helpers;
 
 namespace Elaborate
 {
@@ -31,6 +32,7 @@ namespace Elaborate
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db";
             //services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<ApplicationDbContext>();
@@ -40,6 +42,7 @@ namespace Elaborate
             services.AddControllersWithViews();
 
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<JwtService>();
 
             services.AddDbContext<AccountContext>(opt => opt.UseMySQL(mySqlConnectionString));
             services.AddControllers(); //Kod z Tutoriala Antona który wydaje siê byæ na razie nie potzebny poniewa¿ mamy ju¿ to
@@ -81,6 +84,13 @@ namespace Elaborate
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+
+            app.UseCors(options => options
+                .WithOrigins(new[] {"http://localhost:3000", "http://localhost:8080" , "http://localhost:4200" })
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+                );
 
             app.UseSpa(spa =>
             {

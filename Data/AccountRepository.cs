@@ -22,5 +22,15 @@ namespace Elaborate.Data
 
             return account;
         }
+
+        public Account GetByEmail(string email)
+        {
+            return _context.Accounts.FirstOrDefault(u => u.Email == email);
+        }
+
+        public Account GetById(int id)
+        {
+            return _context.Accounts.FirstOrDefault(u => u.Id == id);
+        }
     }
 }

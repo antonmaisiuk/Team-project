@@ -9,5 +9,8 @@ namespace Elaborate.Data
     public interface IAccountRepository
     {
         Account Create(Account account);
+        Account GetByEmail(string email);
+
+        Account GetById(int id);
     }
 }

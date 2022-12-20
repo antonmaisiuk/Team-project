@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Elaborate.Data;
 using Elaborate.Models;
 using Elaborate.Elaborate.Entities;
+using Elaborate.Helpers;
 
 namespace Elaborate.Controllers
 {
@@ -14,12 +15,14 @@ namespace Elaborate.Controllers
     public class AuthController : Controller
     {
         private readonly IAccountRepository _repository;
+        private readonly JwtService _jwtService;
         /// <summary>
         /// Konstruktor
         /// </summary>
-        public AuthController(IAccountRepository repository)
+        public AuthController(IAccountRepository repository, JwtService jwtService)
         {
             _repository = repository;
+            _jwtService = jwtService;
         }
 
 
@@ -36,6 +39,51 @@ namespace Elaborate.Controllers
             };
 
             return Created("succes", _repository.Create(account));
+        }
+
+
+        [HttpPost("login")]
+        public IActionResult Login(LoginDto dto)
+        {
+            var user = _repository.GetByEmail(dto.Email);
+
+            if (user == null) return BadRequest(new { message = "Invalid Credentials" });
+
+            if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            {
+                return BadRequest(new { message = "Invalid Credentials" });
+            }
+
+            var jwt = _jwtService.Generate(user.Id);
+
+            Response.Cookies.Append("jwt", jwt, new Microsoft.AspNetCore.Http.CookieOptions
+            {
+                HttpOnly = true
+            });
+
+            return Ok(new
+            {
+                message = "success"
+            });
+        }
+        
+        [HttpGet("user")]
+        public IActionResult User()
+        {
+            try
+            {
+                var jwt = Request.Cookies["jwt"];
+
+                var token = _jwtService.Verify(jwt);
+
+                int userId = int.Parse(token.Issuer);
+                var user = _repository.GetById(userId);
+
+                return Ok(user);
+            }catch(Exception _)
+            {
+                return Unauthorized();
+            }
         }
     }
 }
