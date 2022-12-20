@@ -145,6 +145,20 @@ namespace Elaborate.Controllers
             return Ok(transactionToUpdate);
         }
 
+        [HttpPost]
+        public ActionResult<Transaction> DeleteTransaction(int transactionId)
+        {
+            var transactionToDelete = _dbContext.Transactions.SingleOrDefault(t => t.Id == transactionId);
+
+            if (transactionToDelete != null)
+            {
+                _dbContext.Transactions.Remove(transactionToDelete);
+                _dbContext.SaveChanges();
+                return Ok(transactionToDelete);
+            }
+            else return NotFound(transactionId);
+        }
+
 
         //[HttpGet]
         //public ActionResult<IEnumerable<Transaction>> GetAll()
