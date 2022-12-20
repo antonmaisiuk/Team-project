@@ -17,7 +17,6 @@ namespace Elaborate.Entities
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransCategory> TransCategories { get; set; }
-        public DbSet<Login> Logins { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,19 +52,6 @@ namespace Elaborate.Entities
                 .Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(30);
-
-            modelBuilder.Entity<Login>()
-                .Property(r => r.UserLogin)
-                .IsRequired()
-                .HasMaxLength(30);
-
-            modelBuilder.Entity<Login>()
-                .Property(r => r.Password)
-                .IsRequired();
-
-            modelBuilder.Entity<Login>()
-                .Property(r => r.RepeatPassword)
-                .IsRequired();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

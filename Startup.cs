@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Elaborate.Data;
 using System.Configuration;
 
 namespace Elaborate
@@ -37,6 +38,12 @@ namespace Elaborate
             services.AddAutoMapper(this.GetType().Assembly);
 
             services.AddControllersWithViews();
+
+            services.AddScoped<IAccountRepository, AccountRepository>();
+
+            services.AddDbContext<AccountContext>(opt => opt.UseMySQL(mySqlConnectionString));
+            services.AddControllers(); //Kod z Tutoriala Antona który wydaje siê byæ na razie nie potzebny poniewa¿ mamy ju¿ to
+
 
             //services.AddDbContext<AccountDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
