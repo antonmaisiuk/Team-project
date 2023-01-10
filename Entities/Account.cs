@@ -21,6 +21,7 @@ namespace Elaborate.Elaborate.Entities
         public string Email { get; set; }
         [Display(Name = "Numer telefonu")]
         [Required]
+        [Index(IsUnique = true)]
         public string Phone { get; set; }
         [Display(Name = "Hasło")]
         [Required]
