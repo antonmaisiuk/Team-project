@@ -40,5 +40,19 @@ namespace Elaborate.Controllers
 
             return Ok(investmentsPreciousMetal);
         }
+
+        [HttpPost("addinvestment")]
+        public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
+        {
+            var investment = _mapper.Map<InvestmentPreciousMetals>(dto);
+            _dbContext.InvestmentsPreciousMetals.Add(investment);
+            _dbContext.SaveChanges();
+
+            var investmentList = _dbContext
+                .InvestmentsPreciousMetals
+                .ToList();
+
+            return Ok(investmentList);
+        }
     }
 }
