@@ -28,13 +28,17 @@ namespace Elaborate.Entities
         [Required]
         public int TypePreciousMetalId { get; set; }
         public virtual TypePreciousMetal TypePreciousMetal { get; set; }
-        public decimal ValueOfInvestment 
+        public decimal ValueOfInvestment
         {
-            get 
+            get
             {
                 decimal decimalAmount = Convert.ToDecimal(Amount);
                 return _metalRate * decimalAmount; 
             } 
+            set
+            {
+
+            }
         }
 
 
