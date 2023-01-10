@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Entities
 {
+    /// <summary>
+    /// ApplicationDbContext buduję bazę danych aplikacji po przez migracje
+    /// </summary>
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -17,6 +20,8 @@ namespace Elaborate.Entities
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransCategory> TransCategories { get; set; }
+        public DbSet<InvestmentPreciousMetals> InvestmentsPreciousMetals { get; set; }
+        public DbSet<TypePreciousMetal> TypesPreciousMetal { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,6 +57,30 @@ namespace Elaborate.Entities
                 .Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(30);
+
+            modelBuilder.Entity<InvestmentPreciousMetals>()
+                .Property(r => r.Amount)
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentPreciousMetals>()
+                .Property(r => r.AccountId)
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentPreciousMetals>()
+                .Property(r => r.TypePreciousMetalId)
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentPreciousMetals>()
+                .Property(r => r.ValueOfInvestment)
+                .IsRequired();
+
+            modelBuilder.Entity<TypePreciousMetal>()
+                .Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(30);     
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

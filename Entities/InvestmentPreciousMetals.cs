@@ -16,6 +16,7 @@ namespace Elaborate.Entities
         public int Id { get; set; }
 
         [Display(Name = "Ilość metalu w gramach")]
+        [Range(0, double.MaxValue)]
         [Required]
         public double Amount { get; set; }
         /// <summary>
