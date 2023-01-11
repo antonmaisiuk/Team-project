@@ -4,6 +4,7 @@ using Elaborate.Entities;
 using Elaborate.Helpers;
 using Elaborate.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -105,9 +106,9 @@ namespace Elaborate.Controllers
             var transaction = _mapper.Map<Transaction>(dto);
             //transaction.Id = GetNewId();
             //transaction.Date = d;
-            transaction.AccountId = 7;
-            transaction.TransCategoryId = 1;
-            transaction.Title = "New title";
+            transaction.AccountId = dto.AccountId;
+            transaction.Account = dto.Account;
+            transaction.Title = dto.Title;
             _dbContext.Transactions.Add(transaction);
             _dbContext.SaveChanges();
 
@@ -135,7 +136,7 @@ namespace Elaborate.Controllers
 
             if (transactionToUpdate is null)
                 return NotFound("Nie znaleziono transakcji o podanym id");
-
+                   
             transactionToUpdate.Comment = updateTransaction.Comment;
             transactionToUpdate.Value = updateTransaction.Value;
             transactionToUpdate.Title = updateTransaction.Title;

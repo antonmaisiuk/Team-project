@@ -24,7 +24,7 @@ namespace Elaborate.Controllers
             _dbContext = dbContext;
             _mapper = mapper;
         }
-  
+
         [Route("investments")]
         public ActionResult<IEnumerable<InvestmentPreciousMetals>> GetAll()
         {
@@ -41,7 +41,7 @@ namespace Elaborate.Controllers
             return Ok(investmentsPreciousMetal);
         }
 
-        [HttpPost("addinvestment")]
+        [HttpPost("addInvestment")]
         public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
         {
             var investment = _mapper.Map<InvestmentPreciousMetals>(dto);
@@ -53,6 +53,25 @@ namespace Elaborate.Controllers
                 .ToList();
 
             return Ok(investmentList);
+        }
+
+
+        [HttpPut("updatInvestment")]
+        public async Task<ActionResult> UpdateTransaction(int id, [FromBody] InvestmentPreciousMetalsDto dto)
+        {
+            var investmentToUpdate = _dbContext.InvestmentsPreciousMetals.FirstOrDefault(i => i.Id == id);
+
+            if (investmentToUpdate is null)
+                return NotFound("Nie znaleziono inwestycji o podanym id");
+
+            if (dto.Amount > 0 && dto.Amount < double.MaxValue)
+                investmentToUpdate.Amount = dto.Amount;
+            investmentToUpdate.AccountId = dto.AccountId;
+            investmentToUpdate.TypePreciousMetalId = dto.TypePreciousMetalId;
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(investmentToUpdate);
         }
     }
 }
