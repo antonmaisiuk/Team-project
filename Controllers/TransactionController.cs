@@ -22,10 +22,11 @@ namespace Elaborate.Controllers
         private readonly IMapper _mapper;
         private readonly JwtService _jwtService;
 
-        public TransactionController(ApplicationDbContext dbContext, IMapper mapper)
+        public TransactionController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
         //[HttpGet]
         /// <summary>

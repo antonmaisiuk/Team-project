@@ -117,7 +117,7 @@ const Transactions = () => {
           />
         </Layout>
         <NavBar>
-          <Button onClick={() => navigate('/home')} >Home</Button>
+          <Button onClick={() => navigate('/')} >Home</Button>
         </NavBar>
       </Container>
     </>

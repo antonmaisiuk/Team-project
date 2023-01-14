@@ -16,22 +16,27 @@ const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!userName) navigate('/login')
+  })
+
+
   const logout = async () =>{
 
-    const response = await fetch('api/Auth/logout',{
+    const response = await fetch('api/logout',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       credentials: 'include',
     })
     setUserName('');
 
-    navigate('/login')
+    navigate('/login');
   }
-  
+
   return (
     <Container type={ContainerType.home}>
       <Layout>
-        {userName ? 'Hi '+ userName : 'You are not logged in'}
+        {userName ? 'Hi '+ userName : 'You are not logged('}
       </Layout>
       <NavBar>
         <Button onClick={() => navigate('/transactions')} >Transactions</Button>

@@ -5,7 +5,7 @@ import Home from "./components/Home/Home";
 import {Counter} from "./components/Counter";
 import NavBar from "./components/NavBar/NavBar";
 import Container, {ContainerType} from "./components/Container/Container";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
 import Auth, {AuthType} from "./components/Auth/Auth";
 import Transactions from "./components/Transactions/Transactions";
 
@@ -31,11 +31,12 @@ export type CategoryItem ={
 const App = () => {
 
   const [name, setName] = useState('');
+  
 
   useEffect(() => {
     (
       async () => {
-        const response = await fetch('api/Auth/user',{
+        const response = await fetch('api/user',{
           headers: {'Content-Type': 'application/json'},
           credentials: 'include',
         })
@@ -52,8 +53,8 @@ const App = () => {
         <Route path="/login" element={<Auth type={AuthType.login} />}/>
         <Route path="/register" element={<Auth type={AuthType.register} />}/>
         <Route path="/transactions" element={<Transactions />}/>
-        <Route path="/home" element={<Home userName={name} setUserName={setName} />}/>
-        <Route path="/" element={<Home userName={name} setUserName={setName}/>}/>
+        {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
+        <Route path="/" element={<Transactions />}/>
       </Routes>
     </Router>
   );
