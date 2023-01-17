@@ -105,11 +105,14 @@ namespace Elaborate.Controllers
         {
 
             var transaction = _mapper.Map<Transaction>(dto);
-            //transaction.Id = GetNewId();
-            //transaction.Date = d;
-            transaction.AccountId = dto.AccountId;
-            transaction.Account = dto.Account;
-            transaction.Title = dto.Title;
+
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            transaction.AccountId = int.Parse(token.Issuer);
+
+            transaction.TransCategoryId = 1;
+            //transaction.Account = dto.Account;
+            //transaction.Title = dto.Title;
             _dbContext.Transactions.Add(transaction);
             _dbContext.SaveChanges();
 
@@ -138,9 +141,11 @@ namespace Elaborate.Controllers
             if (transactionToUpdate is null)
                 return NotFound("Nie znaleziono transakcji o podanym id");
                    
-            transactionToUpdate.Comment = updateTransaction.Comment;
-            transactionToUpdate.Value = updateTransaction.Value;
             transactionToUpdate.Title = updateTransaction.Title;
+            transactionToUpdate.Value = updateTransaction.Value;
+            transactionToUpdate.Date = updateTransaction.Date;
+
+            //transactionToUpdate.Title = updateTransaction.Title;
 
             await _dbContext.SaveChangesAsync();
 
@@ -193,9 +198,13 @@ namespace Elaborate.Controllers
         //[Route("transactionsSum")]
         public ActionResult<Transaction> GetSumOfTransactions()
         {
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            int userId = int.Parse(token.Issuer);
+
             decimal transactionSum = _dbContext
-                .Transactions
-                .Sum(t => t.Value);
+            .Transactions.Where(r => r.Account.Id == userId).Sum(t => t.Value);
+            
             return Ok(transactionSum);
         }
 

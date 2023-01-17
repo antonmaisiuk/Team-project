@@ -24,22 +24,22 @@ const Transactions = () => {
 
 
   const [transactionsList, setTransactions] = useState<TransactionItem[]>([
-    {title: 'First transaction', transCategoryId: 1, value: 766.2},
-    {title: 'Second transaction', transCategoryId: 1, value: 1520.2},
-    {title: 'Third transaction', transCategoryId: 2, value: 30},
-    {title: 'First transaction', transCategoryId: 2, value: 766.2},
-    {title: 'Second transaction', transCategoryId: 2, value: 1520.2},
-    {title: 'Third transaction', transCategoryId: 1, value: 30},
-    {title: 'First transaction', transCategoryId: 2, value: 766.2},
-    {title: 'Second transaction', transCategoryId: 1, value: 1520.2},
-    {title: 'Third transaction', transCategoryId: 2, value: 30},
-    {title: 'First transaction', transCategoryId: 1, value: 766.2},
-    {title: 'Second transaction', transCategoryId: 2, value: 1520.2},
-    {title: 'Third transaction', transCategoryId: 1, value: 30},
+    // {title: 'First transaction', transCategoryId: 1, value: 766.2},
+    // {title: 'Second transaction', transCategoryId: 1, value: 1520.2},
+    // {title: 'Third transaction', transCategoryId: 2, value: 30},
+    // {title: 'First transaction', transCategoryId: 2, value: 766.2},
+    // {title: 'Second transaction', transCategoryId: 2, value: 1520.2},
+    // {title: 'Third transaction', transCategoryId: 1, value: 30},
+    // {title: 'First transaction', transCategoryId: 2, value: 766.2},
+    // {title: 'Second transaction', transCategoryId: 1, value: 1520.2},
+    // {title: 'Third transaction', transCategoryId: 2, value: 30},
+    // {title: 'First transaction', transCategoryId: 1, value: 766.2},
+    // {title: 'Second transaction', transCategoryId: 2, value: 1520.2},
+    // {title: 'Third transaction', transCategoryId: 1, value: 30},
   ]);
   const [categoriesList, setCategories] = useState<CategoryItem[]>([
-    {id: 1, name: 'Eat', image: 'img'},
-    {id: 2, name: 'Bills', image: 'img'},
+    // {id: 1, name: 'Eat', image: 'img'},
+    // {id: 2, name: 'Bills', image: 'img'},
     // {name: 'Third category', image: 'img'},
     // {name: 'Four category', image: 'img'},
     // {name: 'First category', image: 'img'},
@@ -80,13 +80,18 @@ const Transactions = () => {
     }
   }
 
+  const navigate = useNavigate();
+
+
+
+
   useEffect(() => {
     transactionsData();
     spending_sum()
     categoriesData();
   }, []);
 
-  const navigate = useNavigate();
+
   return (
     <>
       <Container type={ContainerType.transactions}>
@@ -113,6 +118,7 @@ const Transactions = () => {
             setSpendingSum={setSpendingSum}
             type={TileType.transactions_list}
             transactionsList={transactionsList}
+            categoriesList={categoriesList}
             setTransactions={setTransactions}
           />
         </Layout>

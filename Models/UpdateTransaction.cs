@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Elaborate.Models
 {
@@ -7,5 +8,6 @@ namespace Elaborate.Models
         public string Title { get; set; }
         public decimal Value { get; set; }
         public string Comment { get; set; }
+        public DateTime Date { get; set; }
     }
 }

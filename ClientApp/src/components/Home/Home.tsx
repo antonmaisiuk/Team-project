@@ -5,20 +5,36 @@ import Layout from "../Layout/Layout";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 
-export interface HomeInterface {
-  userName: string;
-  setUserName: Dispatch<SetStateAction<string>>
-}
+// export interface HomeInterface {
+//   userName: string;
+//   setUserName: Dispatch<SetStateAction<string>>
+// }
 
-const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
-  userName,
-  setUserName = () => {}
+const Home:FC<HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!userName) navigate('/login')
-  })
+  // const [userName, setUserName] = useState('');
+  // const [userId, setUserId] = useState(0);
+  //
+  // useEffect(() => {
+  //   (
+  //     async () => {
+  //       const response = await fetch('api/user',{
+  //         headers: {'Content-Type': 'application/json'},
+  //         credentials: 'include',
+  //       })
+  //       if (response.ok){
+  //         const content = await response.json();
+  //         setUserName(content.name);
+  //         setUserId(content.id);
+  //       } else {
+  //         navigate('/login');
+  //       }
+  //
+  //     }
+  //   )();
+  // });
 
 
   const logout = async () =>{
@@ -28,7 +44,7 @@ const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
       headers: {'Content-Type': 'application/json'},
       credentials: 'include',
     })
-    setUserName('');
+    // setUserName('');
 
     navigate('/login');
   }
@@ -36,7 +52,7 @@ const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
   return (
     <Container type={ContainerType.home}>
       <Layout>
-        {userName ? 'Hi '+ userName : 'You are not logged('}
+        {/*{userName ? 'Hi '+ userName : 'You are not logged('}*/}
       </Layout>
       <NavBar>
         <Button onClick={() => navigate('/transactions')} >Transactions</Button>

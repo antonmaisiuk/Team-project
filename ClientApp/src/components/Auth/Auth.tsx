@@ -28,9 +28,6 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
   const submit = async (e: SyntheticEvent, type: AuthType) => {
     e.preventDefault();
 
-    setEmail('anton@gmail.com');
-    setPhone('375336315100')
-
     const url = type === AuthType.login ? 'api/login' : 'api/register';
     const response = await fetch(url,
       type === AuthType.login ? {
@@ -54,6 +51,7 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
       })
     if (response.ok) {
       setRedirect(true);
+      // window.location.reload();
     } else {
       const errorMsg = JSON.parse(await response.text());
       setErrorMsg(errorMsg.message);
@@ -62,9 +60,12 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
   }
   const navigate = useNavigate();
 
-  if (redirect) {
-    type === AuthType.login ? navigate('/transactions') : navigate('/login');
-  }
+  useEffect(() => {
+    if (redirect) {
+      type === AuthType.login ? navigate('/transactions') : navigate('/login');
+    }
+  });
+
   return (
 
     <StyledAuthContainer className={className}>

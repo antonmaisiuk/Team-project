@@ -64,7 +64,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
     const {value, date, comment} = event.target as typeof event.target & {
       // id : {value: number},
-      title: {value: string},
+      // title: {value: string},
       value: {value: number},
       date: {value: string},
       comment: {value: string},
@@ -75,18 +75,24 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         // id: 1,
-        //title: title.value,
+        title: comment.value,
         value: value.value,
         date: date.value,
-        comment: comment.value,
+        // comment: comment.value,
       })
     })
+    console.log(response);
+    if (response.ok){
+      const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
+      console.log(data);
+      setTransactions(data[0]);
+      setSpendingSum(data[1]);
+      setActive(false);
+    } else {
+      console.error('Error with response');
+    }
 
-    const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
-    console.log(data)
-    setTransactions(data[0]);
-    setSpendingSum(data[1]);
-    setActive(false);
+
   }
   const sendCategoryForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

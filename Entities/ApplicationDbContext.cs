@@ -44,10 +44,10 @@ namespace Elaborate.Entities
                 .IsRequired()
                 .HasMaxLength(60);
 
-            modelBuilder.Entity<Transaction>()
-                .Property(r => r.Title)
-                .IsRequired()
-                .HasMaxLength(30);
+            //modelBuilder.Entity<Transaction>()
+            //    .Property(r => r.Title)
+            //    .IsRequired()
+            //    .HasMaxLength(30);
 
             modelBuilder.Entity<Transaction>()
                 .Property(r => r.Value)

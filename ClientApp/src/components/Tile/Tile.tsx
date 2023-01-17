@@ -116,7 +116,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
               return (
                 <>
                   <TransactionsItem title={transaction.title} value={transaction.value}
-                                    category={transaction.transCategoryId}/>
+                                    category={categoriesList?.filter(cat => cat.id === transaction.transCategoryId).pop()}/>
                   <StyledLine/>
                 </>
               );

@@ -8,6 +8,7 @@ import Container, {ContainerType} from "./components/Container/Container";
 import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
 import Auth, {AuthType} from "./components/Auth/Auth";
 import Transactions from "./components/Transactions/Transactions";
+import PrivateRoute from "./components/Route/PrivateRoute/PrivateRoute";
 
 // const transactionsList = [
 //   {title: 'First transaction', category: 'Eat', value: 766.2},
@@ -25,13 +26,13 @@ export type TransactionItem ={
 export type CategoryItem ={
   id: number;
   name: string;
-  image: string
+  image: string;
 }
 
 const App = () => {
 
   const [name, setName] = useState('');
-  
+
 
   useEffect(() => {
     (
@@ -40,9 +41,11 @@ const App = () => {
           headers: {'Content-Type': 'application/json'},
           credentials: 'include',
         })
-        const content = await response.json();
+        if (response.ok){
+          const content = await response.json();
+          setName(content.name);
+        }
 
-        setName(content.name);
       }
     )();
   });
@@ -52,9 +55,12 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<Auth type={AuthType.login} />}/>
         <Route path="/register" element={<Auth type={AuthType.register} />}/>
-        <Route path="/transactions" element={<Transactions />}/>
+        {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
+        <Route element={<PrivateRoute/>}>
+          <Route path="/transactions" element={<Transactions/>}/>
+        </Route>
         {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
-        <Route path="/" element={<Transactions />}/>
+        <Route path="/" element={<Home />}/>
       </Routes>
     </Router>
   );
