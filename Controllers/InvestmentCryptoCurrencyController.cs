@@ -24,6 +24,22 @@ namespace Elaborate.Controllers
             _mapper = mapper;
         }
 
+        [Route("cryptocurrencies")]
+        public ActionResult<IEnumerable<InvestmentCryptoCurrency>> GetAll()
+        {
+            var jwt = Request.Cookies["jwt"];
+
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+
+            var investmentCryptoCurrency = _dbContext
+            .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+            .ToList();
+
+            return Ok(investmentCryptoCurrency);
+        }
+
         [HttpPost]
         public ActionResult<Transaction> DeleteCryptoCurrency(int cryptoCurrencyId)
         {
