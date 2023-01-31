@@ -7,33 +7,33 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Entities
 {
-    public class InvestmentPreciousMetals
+    public class InvestmentCryptoCurrency
     {
-        private decimal _metalRate = 299.99m; 
+        private decimal _CryptoCurrencyRate = 299.99m;
 
 
         [Key]
         public int Id { get; set; }
 
-        [Display(Name = "Ilość metalu w gramach")]
-        [Range(0, double.MaxValue)]
+        [Display(Name = "Ilość Kryptowaluty")]
+        [Range(0, (double)decimal.MaxValue)]
         [Required]
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         /// <summary>
         /// Id konta do którego należy inwestycja
         /// </summary>
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
-        [Display(Name = "Typ metalu")]
+        [Display(Name = "Nazwa Kryptowaluty")]
         [Required]
-        public int TypePreciousMetalId { get; set; }
-        public virtual TypePreciousMetal TypePreciousMetal { get; set; }
-        public decimal ValueOfInvestment 
+        public int TypeCryptoCurrencyId { get; set; }
+        public virtual TypeCryptoCurrency TypeCryptoCurrency { get; set; }
+        public decimal ValueOfInvestment
         {
             get
             {
                 decimal decimalAmount = Convert.ToDecimal(Amount);
-                return _metalRate * decimalAmount;
+                return _CryptoCurrencyRate * decimalAmount;
             }
 
             set
@@ -41,17 +41,17 @@ namespace Elaborate.Entities
 
             }
 
-           
+
         }
 
 
 
 
-        public InvestmentPreciousMetals(double amount, int accountId, int typePreciousMetalId)
+        public InvestmentCryptoCurrency(decimal amount, int accountId, int typeCryptoCurrencyId)
         {
             this.Amount = amount;
             this.AccountId = accountId;
-            this.TypePreciousMetalId = typePreciousMetalId;
+            this.TypeCryptoCurrencyId = typeCryptoCurrencyId;
         }
     }
 }
