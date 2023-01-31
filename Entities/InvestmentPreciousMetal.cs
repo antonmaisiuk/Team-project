@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Entities
 {
-    public class InvestmentPreciousMetals
+    public class InvestmentPreciousMetal
     {
         private decimal _metalRate = 299.99m; 
 
@@ -47,7 +47,7 @@ namespace Elaborate.Entities
 
 
 
-        public InvestmentPreciousMetals(double amount, int accountId, int typePreciousMetalId)
+        public InvestmentPreciousMetal(double amount, int accountId, int typePreciousMetalId)
         {
             this.Amount = amount;
             this.AccountId = accountId;
