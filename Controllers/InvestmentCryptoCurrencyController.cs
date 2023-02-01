@@ -53,5 +53,19 @@ namespace Elaborate.Controllers
             }
             else return NotFound(cryptoCurrencyId);
         }
+
+        [HttpPost("addCryptoCurrency")]
+        public ActionResult CreateCryptoCurrency([FromBody] TypeCryptoCurrencyDto dto)
+        {
+            var crypto = _mapper.Map<InvestmentCryptoCurrency>(dto);
+            _dbContext.InvestmentCryptoCurrencies.Add(crypto);
+            _dbContext.SaveChanges();
+
+            var cryptoList = _dbContext
+                .InvestmentCryptoCurrencies
+                .ToList();
+
+            return Ok(cryptoList);
+        }
     }
 }
