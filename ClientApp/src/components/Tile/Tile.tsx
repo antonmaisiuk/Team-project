@@ -102,7 +102,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
     <StyledTile className={className} type={type}>
       <StyledTileTitle>
         <h2>{title}</h2>
-        {!(type === TileType.spending_sum) && <AddButton setActive={setModalActive} />}
+        {(type === TileType.transactions_list) && <AddButton setActive={setModalActive} />}
       </StyledTileTitle>
 
       {type === TileType.spending_sum ?

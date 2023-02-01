@@ -108,7 +108,8 @@ namespace Elaborate.Controllers
 
             var jwt = Request.Cookies["jwt"];
             var token = _jwtService.Verify(jwt);
-            transaction.AccountId = int.Parse(token.Issuer);
+            var userId = int.Parse(token.Issuer);
+            transaction.AccountId = userId;
 
             transaction.TransCategoryId = 1;
             //transaction.Account = dto.Account;
@@ -117,8 +118,8 @@ namespace Elaborate.Controllers
             _dbContext.SaveChanges();
 
             var transactions = _dbContext
-                 .Transactions
-                 .ToList();
+            .Transactions.Where(r => r.Account.Id == userId)
+            .ToList();
 
             decimal transactionSum = transactions.Sum(t => t.Value);
 
