@@ -15,7 +15,7 @@ namespace Elaborate.Elaborate.Entities
             this.Date = date;
             this.Value = value;
             this.Title = title;
-            //this.Comment = comment;
+            this.Comment = "default comment";
             this.AccountId = accountId;
             //this.TransCategoryId = transactionCatId;
             }
@@ -35,8 +35,8 @@ namespace Elaborate.Elaborate.Entities
             [Required]
             public string Title { get; set; }
 
-            //[Display(Name = "Komentarz do Transakcji")]
-            //public string Comment { get; set; }
+            [Display(Name = "Komentarz do Transakcji")]
+            public string Comment { get; set; }
             public int AccountId { get; set; }
             public virtual Account Account { get; set; }
             public int TransCategoryId { get; set; }

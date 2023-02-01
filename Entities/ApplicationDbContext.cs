@@ -20,8 +20,10 @@ namespace Elaborate.Entities
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransCategory> TransCategories { get; set; }
-        public DbSet<InvestmentPreciousMetals> InvestmentsPreciousMetals { get; set; }
-        public DbSet<TypePreciousMetal> TypesPreciousMetal { get; set; }
+        public DbSet<InvestmentPreciousMetal> InvestmentsPreciousMetals { get; set; }
+        public DbSet<TypePreciousMetal> TypesPreciousMetals { get; set; }
+        public DbSet<InvestmentCryptoCurrency> InvestmentCryptoCurrencies { get; set; }
+        public DbSet<TypeCryptoCurrency> TypeCryptoCurrencies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,28 +60,50 @@ namespace Elaborate.Entities
                 .IsRequired()
                 .HasMaxLength(30);
 
-            modelBuilder.Entity<InvestmentPreciousMetals>()
+            modelBuilder.Entity<InvestmentPreciousMetal>()
                 .Property(r => r.Amount)
                 .IsRequired();
 
-            modelBuilder.Entity<InvestmentPreciousMetals>()
+            modelBuilder.Entity<InvestmentPreciousMetal>()
                 .Property(r => r.AccountId)
                 .HasColumnType("int")
                 .IsRequired();
 
-            modelBuilder.Entity<InvestmentPreciousMetals>()
+            modelBuilder.Entity<InvestmentPreciousMetal>()
                 .Property(r => r.TypePreciousMetalId)
                 .HasColumnType("int")
                 .IsRequired();
 
-            modelBuilder.Entity<InvestmentPreciousMetals>()
+            modelBuilder.Entity<InvestmentPreciousMetal>()
                 .Property(r => r.ValueOfInvestment)
                 .IsRequired();
 
             modelBuilder.Entity<TypePreciousMetal>()
                 .Property(r => r.Name)
                 .IsRequired()
-                .HasMaxLength(30);     
+                .HasMaxLength(30);
+            modelBuilder.Entity<InvestmentCryptoCurrency>()
+                .Property(r => r.Amount)
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentCryptoCurrency>()
+                .Property(r => r.AccountId)
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentCryptoCurrency>()
+                .Property(r => r.TypeCryptoCurrencyId)
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentCryptoCurrency>()
+                .Property(r => r.ValueOfInvestment)
+                .IsRequired();
+
+            modelBuilder.Entity<TypeCryptoCurrency>()
+                .Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(30);
 
         }
 

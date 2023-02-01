@@ -26,7 +26,7 @@ namespace Elaborate.Controllers
         }
 
         [Route("investments")]
-        public ActionResult<IEnumerable<InvestmentPreciousMetals>> GetAll()
+        public ActionResult<IEnumerable<InvestmentPreciousMetal>> GetAll()
         {
             var jwt = Request.Cookies["jwt"];
 
@@ -44,7 +44,7 @@ namespace Elaborate.Controllers
         [HttpPost("addInvestment")]
         public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
         {
-            var investment = _mapper.Map<InvestmentPreciousMetals>(dto);
+            var investment = _mapper.Map<InvestmentPreciousMetal>(dto);
             _dbContext.InvestmentsPreciousMetals.Add(investment);
             _dbContext.SaveChanges();
 
