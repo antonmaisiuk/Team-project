@@ -26,7 +26,7 @@ namespace Elaborate
         public string Comment { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
-        public int TransCategoryId { get; set; }
+        public int TransCategoryId { get; set; } = 1;
         public virtual TransCategory TransCategory { get; set; }
     }
 }
