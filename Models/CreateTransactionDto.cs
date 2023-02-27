@@ -13,7 +13,7 @@ namespace Elaborate
         public int Id { get; set; }
         [Display(Name = "Data stworzenia Transakcji")]
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
         [Display(Name = "Wartość Transakcji")]
         [Required]
         [Range(0, 999999999999999999)]

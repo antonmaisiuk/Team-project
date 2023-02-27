@@ -56,7 +56,7 @@ namespace Elaborate.Controllers
         }
 
 
-        [HttpPut("updatInvestment")]
+        [HttpPut("updateInvestment")]
         public async Task<ActionResult> UpdateTransaction(int id, [FromBody] InvestmentPreciousMetalsDto dto)
         {
             var investmentToUpdate = _dbContext.InvestmentsPreciousMetals.FirstOrDefault(i => i.Id == id);
