@@ -51,11 +51,12 @@ const Home:FC<HTMLAttributes<HTMLDivElement>> = ({
 
   return (
     <Container type={ContainerType.home}>
-      <Layout>
-        {/*{userName ? 'Hi '+ userName : 'You are not logged('}*/}
-      </Layout>
+      {/*<Layout > */}
+      {/*  /!*{userName ? 'Hi '+ userName : 'You are not logged('}*!/*/}
+      {/*</Layout>*/}
       <NavBar>
         <Button onClick={() => navigate('/transactions')} >Transactions</Button>
+        <Button onClick={() => navigate('/investments')} >Investments</Button>
         <Button onClick={() => navigate('/login')} >Login</Button>
         <Button onClick={() => logout()} >Logout</Button>
       </NavBar>

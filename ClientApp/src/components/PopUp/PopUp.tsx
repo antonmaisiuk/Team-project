@@ -102,7 +102,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       name: {value: string},
       imageLink: {value: string},
     }
-    console.log('IMAGE: ', imageLink);
     const response = await fetch('api/Category/addTransCategory', {
       method: "POST",
       headers: { 'Content-Type': 'application/json'},

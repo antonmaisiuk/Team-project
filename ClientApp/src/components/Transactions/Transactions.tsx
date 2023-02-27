@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { Route } from 'react-router';
 import Tile, {TileType} from "../Tile/Tile";
-import Layout from "../Layout/Layout";
+import Layout, {LayoutType} from "../Layout/Layout";
 import NavBar from "../NavBar/NavBar";
 import Container, {ContainerType} from "../Container/Container";
 import {Button} from "react-bootstrap";
@@ -82,9 +81,6 @@ const Transactions = () => {
 
   const navigate = useNavigate();
 
-
-
-
   useEffect(() => {
     transactionsData();
     spending_sum()
@@ -95,7 +91,7 @@ const Transactions = () => {
   return (
     <>
       <Container type={ContainerType.transactions}>
-        <Layout>
+        <Layout type={LayoutType.transactions}>
           <Tile
             className={"spending_sum"}
             title={"Spending"}
