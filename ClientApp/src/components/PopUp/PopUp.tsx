@@ -70,6 +70,10 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       comment: {value: string},
     }
 
+      if (date.value == '') {
+          date.value = getCurrentDate();
+      }
+
     const response = await fetch('api/Transaction/addTransaction', {
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
