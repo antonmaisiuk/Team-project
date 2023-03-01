@@ -19,10 +19,11 @@ namespace Elaborate.Controllers
         private readonly IMapper _mapper;
         private readonly JwtService _jwtService;
 
-        public InvestmentPeciousMetalController(ApplicationDbContext dbContext, IMapper mapper)
+        public InvestmentPeciousMetalController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         [Route("investments")]
@@ -45,14 +46,29 @@ namespace Elaborate.Controllers
         public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
         {
             var investment = _mapper.Map<InvestmentPreciousMetal>(dto);
+
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            var userId = int.Parse(token.Issuer);
+            investment.AccountId = userId;
+
+            investment.TypePreciousMetalId = 1;
+
             _dbContext.InvestmentsPreciousMetals.Add(investment);
             _dbContext.SaveChanges();
 
-            var investmentList = _dbContext
+            var investments = _dbContext
                 .InvestmentsPreciousMetals
+                .Where(r => r.Account.Id == userId)
                 .ToList();
 
-            return Ok(investmentList);
+
+            decimal investmentPreciousMetalSum = investments.Sum(t => t.ValueOfInvestment);
+
+            Object[] resultArr = new Object[] { investments, investmentPreciousMetalSum };
+
+            return Ok(resultArr);
+          
         }
 
 
@@ -72,6 +88,34 @@ namespace Elaborate.Controllers
             await _dbContext.SaveChangesAsync();
 
             return Ok(investmentToUpdate);
+        }
+
+        [HttpPost]
+        public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentPreciousMetalId)
+        {
+            var investmentPreciousMetalToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentPreciousMetalId);
+
+            if (investmentPreciousMetalToDelete != null)
+            {
+                _dbContext.InvestmentsPreciousMetals.Remove(investmentPreciousMetalToDelete);
+                _dbContext.SaveChanges();
+                return Ok(investmentPreciousMetalToDelete);
+            }
+            else return NotFound(investmentPreciousMetalId);
+        }
+
+        [HttpGet("investmentsPreciousMetalSum")]
+        //[Route("investmentsPreciousMetalSum")]
+        public ActionResult<InvestmentPreciousMetal> GetSumOfInvestmentsPreciousMetal()
+        {
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            int userId = int.Parse(token.Issuer);
+
+            decimal transactionSum = _dbContext
+            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(t => t.ValueOfInvestment);
+
+            return Ok(transactionSum);
         }
     }
 }
