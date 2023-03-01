@@ -53,5 +53,6 @@ namespace Elaborate.Entities
             this.AccountId = accountId;
             this.TypeCryptoCurrencyId = typeCryptoCurrencyId;
         }
+
     }
 }
