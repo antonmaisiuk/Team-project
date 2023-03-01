@@ -20,9 +20,14 @@ export type TransactionItem ={
   transCategoryId: number;
   value: number
 }
+export enum InvestmentType{
+  stocks,
+  crypto,
+  metals
+}
 export type InvestmentItem ={
   title: string;
-  investmentId: number;
+  investmentId: InvestmentType;
   count: number;
 }
 
@@ -60,9 +65,9 @@ const App = () => {
         <Route path="/register" element={<Auth type={AuthType.register} />}/>
         {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
         <Route element={<PrivateRoute/>}>
+          <Route path="/transactions" element={<Transactions/>}/>
+          <Route path="/investments" element={<Investments/>}/>
         </Route>
-        <Route path="/transactions" element={<Transactions/>}/>
-        <Route path="/investments" element={<Investments/>}/>
         {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
         <Route path="/" element={<Home />}/>
       </Routes>

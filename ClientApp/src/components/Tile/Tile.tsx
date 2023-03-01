@@ -3,8 +3,9 @@ import {StyledSum, StyledLine, StyledList, StyledTile, StyledTileTitle} from './
 import TransactionsItem from "../Transaction/TransactionsItem/TransactionsItem";
 import AddButton from "../ui/AddButton/AddButton";
 import PopUp, {PopUpType} from "../PopUp/PopUp";
-import {CategoryItem, InvestmentItem, TransactionItem} from "../../App";
+import {CategoryItem, InvestmentItem, InvestmentType, TransactionItem} from "../../App";
 import CategoriesItem from "../Category/CategoriesItem/CategoriesItem";
+import InvestmentsItem from '../InvestmentItem/InvestmentsItem';
 
 
 // const options = [
@@ -38,6 +39,7 @@ export enum TileType {
 // }
 export interface TileBaseInterface{
   type: TileType,
+  investType?: InvestmentType,
   spendingSum?: number,
   setSpendingSum?: Dispatch<SetStateAction<number>>,
   investingSum?: number,
@@ -62,6 +64,7 @@ export interface TileTransactionInterface extends TileBaseInterface{
 }
 export interface TileInvestingInterface extends TileBaseInterface{
   type: TileType,
+  investType: InvestmentType,
   investingList: InvestmentItem[],
   // setInvestingSum: Dispatch<SetStateAction<number>>,
   // setInvesting: Dispatch<SetStateAction<InvestmentItem[]>>,
@@ -80,6 +83,7 @@ type TileInterface = TileCategoryInterface | TileTransactionInterface | TileSpen
 const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
   title,
   type,
+  investType= InvestmentType.stocks,
   spendingSum = 0,
   investingSum = 0,
   transactionsList = [],
@@ -121,7 +125,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
     <StyledTile className={className} type={type}>
       <StyledTileTitle>
         <h2>{title}</h2>
-        {(type === TileType.transactions_list) && <AddButton setActive={setModalActive} />}
+        {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
       </StyledTileTitle>
 
       {type === TileType.spending_sum ?
@@ -175,7 +179,27 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
               <h2>$ {investingSum}</h2>
             </StyledSum>
           </>
-        : ''
+        : type === TileType.investing_list ?
+                <><StyledList type={type} setInvesting={setInvesting}>
+                  {investingList.map((invest) => {
+                    return (
+                      <>
+                        <InvestmentsItem title={invest.title} count={invest.count} investmentId={invest.investmentId}/>
+                        <StyledLine/>
+                      </>
+                    );
+                  })}
+
+                </StyledList>
+                <PopUp
+                    type={PopUpType.addInvestment}
+                    active={modalIsActive}
+                    investType={investType}
+                    setActive={setModalActive}
+                    setInvestments={setInvesting}
+                    setInvestingSum={setInvestingSum}/>
+                </>
+        :''
       }
     </StyledTile>
     // <StyledInvestTile>

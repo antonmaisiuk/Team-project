@@ -26,7 +26,7 @@ namespace Elaborate.Controllers
             _jwtService = jwtService;
         }
 
-        [HttpGet("cryptocurrencies")] // Zmiana w kodzie zamiast Route jest HttpGGet
+        [HttpGet("crypto")] // Zmiana w kodzie zamiast Route jest HttpGGet
         //[Route("cryptocurrencies")]
         public ActionResult<IEnumerable<InvestmentCryptoCurrency>> GetAll()
         {

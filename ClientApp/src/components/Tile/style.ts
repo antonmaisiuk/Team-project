@@ -48,7 +48,7 @@ export const StyledTileTitle = styled.div`
     line-height: 42px;
     color: #000;
   }  
-  padding-bottom: 8px;
+  //padding-bottom: 8px;
   border-bottom: 1px solid #C7C7C7;
 `;
 
