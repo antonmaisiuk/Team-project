@@ -6,7 +6,7 @@ import { StyledInvestmentItem } from './styled';
 
 // type TransactionsItemType = {
 //   title: string;
-//   investmentId: number;
+//   investmentType: number;
 //   count: number;
 // }
 
@@ -14,13 +14,13 @@ import { StyledInvestmentItem } from './styled';
 const InvestmentsItem:FC<InvestmentItem> = (
   {
     title,
-    investmentId,
-    count,
+    investmentType,
+    amount,
   }
 ) => {
 
   let investType = '';
-  switch (investmentId){
+  switch (investmentType){
     case InvestmentType.stocks:
       investType = 'Stocks';
       break;
@@ -42,7 +42,7 @@ const InvestmentsItem:FC<InvestmentItem> = (
         <p className={"investment_type"}>{investType}</p>
       </StyledTextDiv>
       <StyledValueDiv>
-        <p className={"investment_count"}>$ {count}</p>
+        <p className={"investment_count"}>$ {amount}</p>
       </StyledValueDiv>
     </StyledInvestmentItem>
   );

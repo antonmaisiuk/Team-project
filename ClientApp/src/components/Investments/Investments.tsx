@@ -10,13 +10,13 @@ import {useNavigate} from "react-router-dom";
 const Investments = () => {
 
   const [investStocksList, setInvestStocksList] = useState<InvestmentItem[]>([
-    {title:'Apple', investmentId: InvestmentType.stocks, count:5}
+    // {title:'Apple', investmentType: InvestmentType.stocks, count:5}
   ]);
   const [investCryptoList, setInvestCryptoList] = useState<InvestmentItem[]>([
-    {title:'Bitcoin', investmentId: InvestmentType.crypto, count:2}
+    // {title:'Bitcoin', investmentType: InvestmentType.crypto, count:2}
   ]);
   const [investMetalsList, setInvestMetalsList] = useState<InvestmentItem[]>([
-    {title:'Gold', investmentId: InvestmentType.metals, count:1}
+    // {title:'Gold', investmentType: InvestmentType.metals, count:1}
   ]);
 
   const [stocksSum, setStocksSum] = useState<number>(0);
@@ -25,13 +25,13 @@ const Investments = () => {
 
 
   async function getInvestingSums() {
-    const stocksResponse = await fetch('api/InvestmentStocks/stocksSum');
-    if (stocksResponse.ok){
-      const data = await stocksResponse.json();
-      setStocksSum(data);
-    } else {
-      alert("HTTP Error: " + stocksResponse.status)
-    }
+    // const stocksResponse = await fetch('api/InvestmentStocks/stocksSum');
+    // if (stocksResponse.ok){
+    //   const data = await stocksResponse.json();
+    //   setStocksSum(data);
+    // } else {
+    //   alert("HTTP Error: " + stocksResponse.status)
+    // }
 
     const cryptoResponse = await fetch('api/InvestmentCryptoCurrency/cryptocurrenciesSum');
     if (cryptoResponse.ok){
@@ -63,19 +63,18 @@ const Investments = () => {
     const cryptoResponse = await fetch('api/InvestmentCryptoCurrency/crypto');
     if (cryptoResponse.ok){
       const data = await cryptoResponse.json();
-      console.log('### DATA:', data);
       setInvestCryptoList(data);
     } else {
       alert("HTTP Error: " + cryptoResponse.status)
     }
 
-    // const metalsResponse = await fetch('api/InvestmentPreciousMetal/crypto');
-    // if (metalsResponse.ok){
-    //   const data = await metalsResponse.json();
-    //   setInvestMetalsList(data);
-    // } else {
-    //   alert("HTTP Error: " + metalsResponse.status)
-    // }
+    const metalsResponse = await fetch('api/InvestmentPreciousMetal/metals');
+    if (metalsResponse.ok){
+      const data = await metalsResponse.json();
+      setInvestMetalsList(data);
+    } else {
+      alert("HTTP Error: " + metalsResponse.status)
+    }
   }
 
 

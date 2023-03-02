@@ -26,7 +26,8 @@ namespace Elaborate.Controllers
             _jwtService = jwtService;
         }
 
-        [Route("investments")]
+        [HttpGet("metals")]
+        //[Route("metals")]
         public ActionResult<IEnumerable<InvestmentPreciousMetal>> GetAll()
         {
             var jwt = Request.Cookies["jwt"];
@@ -36,13 +37,13 @@ namespace Elaborate.Controllers
             int userId = int.Parse(token.Issuer);
 
             var investmentsPreciousMetal = _dbContext
-            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
+            .InvestmentsPreciousMetals.Where(r => r.AccountId == userId)
             .ToList();
 
             return Ok(investmentsPreciousMetal);
         }
 
-        [HttpPost("addInvestment")]
+        [HttpPost("addMetals")]
         public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
         {
             var investment = _mapper.Map<InvestmentPreciousMetal>(dto);
@@ -72,7 +73,7 @@ namespace Elaborate.Controllers
         }
 
 
-        [HttpPut("updateInvestment")]
+        [HttpPut("updateMetals")]
         public async Task<ActionResult> UpdateTransaction(int id, [FromBody] InvestmentPreciousMetalsDto dto)
         {
             var investmentToUpdate = _dbContext.InvestmentsPreciousMetals.FirstOrDefault(i => i.Id == id);
@@ -104,7 +105,7 @@ namespace Elaborate.Controllers
             else return NotFound(investmentPreciousMetalId);
         }
 
-        [HttpGet("investmentsPreciousMetalSum")]
+        [HttpGet("metalsSum")]
         //[Route("investmentsPreciousMetalSum")]
         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestmentsPreciousMetal()
         {

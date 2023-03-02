@@ -184,7 +184,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
                   {investingList.map((invest) => {
                     return (
                       <>
-                        <InvestmentsItem title={invest.title} count={invest.count} investmentId={invest.investmentId}/>
+                        <InvestmentsItem title={invest.title} amount={invest.amount} investmentType={investType}/>
                         <StyledLine/>
                       </>
                     );

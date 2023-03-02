@@ -27,8 +27,8 @@ export enum InvestmentType{
 }
 export type InvestmentItem ={
   title: string;
-  investmentId: InvestmentType;
-  count: number;
+  investmentType: InvestmentType;
+  amount: number;
 }
 
 export type CategoryItem ={
