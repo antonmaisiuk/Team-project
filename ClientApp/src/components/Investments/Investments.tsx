@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { Dispatch, FC, HTMLAttributes, SetStateAction, useEffect, useState } from 'react';
 import Container, {ContainerType} from "../Container/Container";
 import Layout, {LayoutType} from "../Layout/Layout";
 import Tile, {TileType} from "../Tile/Tile";
@@ -86,6 +86,18 @@ const Investments = () => {
     // categoriesData();
   }, []);
 
+    const logout = async () => {
+
+        const response = await fetch('api/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        })
+        // setUserName('');
+
+        navigate('/login');
+    }
+
   return (
     <>
       <Container type={ContainerType.transactions}>
@@ -131,7 +143,9 @@ const Investments = () => {
           />
         </Layout>
         <NavBar>
-          <Button onClick={() => navigate('/')}>Home</Button>
+                  <Button onClick={() => navigate('/')}>Home</Button>
+                  <Button onClick={() => navigate('/transactions')} >Transactions</Button>
+                  <Button onClick={() => logout()} >Logout</Button>
         </NavBar>
       </Container>
     </>
