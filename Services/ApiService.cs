@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Text.Json;
@@ -89,12 +90,9 @@ public partial class ApiService
             if (response.IsSuccessStatusCode)
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
-                CoinCapResponse coinCapResponse = JsonSerializer.Deserialize<CoinCapResponse>(responseBody);
-
-                if (coinCapResponse.Data != null)
-                {
-                    return coinCapResponse.Data.PriceUsd;
-                }
+                JObject jObject = JObject.Parse(responseBody);
+                decimal priceUsd = (decimal)jObject.SelectToken("data.priceUsd");
+                return priceUsd;
             }
 
             throw new Exception($"No value found for cryptocurrency {currencyName}.");
