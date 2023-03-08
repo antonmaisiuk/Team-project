@@ -3,50 +3,101 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-public class ApiService
+public partial class ApiService
 {
-    private readonly string apiUrl = "http://api.nbp.pl/api/"; // Jak u¿ywaæ tego API -> https://api.nbp.pl/
+    private readonly string nbpApiUrl = "http://api.nbp.pl/api/";           // Jak u¿ywaæ tego API -> https://api.nbp.pl/
+    private readonly string coinCapApiUrl = "https://api.coincap.io/v2/";   // Jak u¿ywaæ tego API -> https://docs.coincap.io/
     private readonly HttpClient httpClient;
 
     public ApiService()
     {
         httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri(apiUrl);
+        httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
     }
 
     public async Task<decimal> GetExchangeRate(string currencyCode)
     {
-        string[] tables = { "A", "B", "C" };
+        var nbpApiService = new NbpApiService(httpClient, nbpApiUrl);
+        return await nbpApiService.GetExchangeRate(currencyCode);
+    }
 
-        foreach (string table in tables)
+    public async Task<decimal> GetCryptoCurrencyValue(string currencyName)
+    {
+        var coinCapApiService = new CoinCapApiService(httpClient, coinCapApiUrl);
+        return await coinCapApiService.GetCryptoCurrencyValue(currencyName);
+    }
+}
+
+public partial class ApiService
+{
+    private class NbpApiService
+    {
+        private readonly HttpClient httpClient;
+        private readonly string apiUrl;
+
+        public NbpApiService(HttpClient httpClient, string apiUrl)
         {
-            string endpoint = $"exchangerates/rates/{table}/{currencyCode}/?format=json";
+            this.httpClient = httpClient;
+            this.apiUrl = apiUrl;
+        }
 
-            HttpResponseMessage response = await httpClient.GetAsync(endpoint);
+        public async Task<decimal> GetExchangeRate(string currencyCode)
+        {
+            string[] tables = { "A", "B", "C" };
 
-            if (response.IsSuccessStatusCode)
+            foreach (string table in tables)
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                try
-                {
-                    var options = new JsonSerializerOptions
-                    {
-                        IgnoreNullValues = true
-                    };
+                string endpoint = $"exchangerates/rates/{table}/{currencyCode}/?format=json";
 
-                    ExchangeRatesResponse ratesResponse = JsonSerializer.Deserialize<ExchangeRatesResponse>(responseBody, options);
+                HttpResponseMessage response = await httpClient.GetAsync(apiUrl + endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    ExchangeRatesResponse ratesResponse = JsonSerializer.Deserialize<ExchangeRatesResponse>(responseBody);
 
                     if (ratesResponse.Rates.Length > 0)
                     {
                         return ratesResponse.Rates[0].Mid;
                     }
                 }
-                catch (JsonException ex)
+            }
+            throw new Exception($"No exchange rate found for currency code {currencyCode}.");
+        }
+    }
+}
+
+public partial class ApiService
+{
+    private class CoinCapApiService
+    {
+        private readonly HttpClient httpClient;
+        private readonly string apiUrl;
+
+        public CoinCapApiService(HttpClient httpClient, string apiUrl)
+        {
+            this.httpClient = httpClient;
+            this.apiUrl = apiUrl;
+        }
+
+        public async Task<decimal> GetCryptoCurrencyValue(string currencyName)
+        {
+            string endpoint = $"assets/{currencyName}";
+
+            HttpResponseMessage response = await httpClient.GetAsync(apiUrl + endpoint);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+                CoinCapResponse coinCapResponse = JsonSerializer.Deserialize<CoinCapResponse>(responseBody);
+
+                if (coinCapResponse.Data != null)
                 {
-                    Console.WriteLine(ex.Message);
+                    return coinCapResponse.Data.PriceUsd;
                 }
             }
+
+            throw new Exception($"No value found for cryptocurrency {currencyName}.");
         }
-        throw new Exception($"No exchange rate found for currency code {currencyCode}.");
     }
 }
