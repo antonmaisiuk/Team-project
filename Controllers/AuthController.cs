@@ -93,7 +93,7 @@ namespace Elaborate.Controllers
             //    return Unauthorized();
             //}
         }
-<<<<<<< HEAD
+
         [HttpPost("logout")]
 
         public IActionResult Logout()
@@ -107,18 +107,5 @@ namespace Elaborate.Controllers
             });
         }
 
-=======
-
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            Response.Cookies.Delete("jwt");
-
-            return Ok(new
-            {
-                message = "succes"
-            });
-        }
->>>>>>> 188f6347436d7284a6a3b896244c63b68f844232
     }
 }

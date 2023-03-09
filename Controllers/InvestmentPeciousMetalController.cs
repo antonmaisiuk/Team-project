@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 namespace Elaborate.Controllers
 {
     [Route("api/[controller]")]
-    public class InvestmentPeciousMetalController : ControllerBase
+    public class InvestmentPreciousMetalController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly JwtService _jwtService;
 
-        public InvestmentPeciousMetalController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
+        public InvestmentPreciousMetalController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -43,7 +43,7 @@ namespace Elaborate.Controllers
             return Ok(investmentsPreciousMetal);
         }
 
-        [HttpPost("addMetals")]
+        [HttpPost("addMetal")]
         public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
         {
             var investment = _mapper.Map<InvestmentPreciousMetal>(dto);
@@ -119,20 +119,20 @@ namespace Elaborate.Controllers
             return Ok(transactionSum);
         }
         [HttpPost]
-        public ActionResult<InvestmentPreciousMetals> DeleteInvestment(int investmentId)
-        {
-            var InvestmentToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentId);
+        //public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentId)
+        //{
+        //    var InvestmentToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentId);
 
-            if (InvestmentToDelete != null)
-            {
-                _dbContext.InvestmentsPreciousMetals.Remove(InvestmentToDelete);
-                _dbContext.SaveChanges();
-                return Ok(InvestmentToDelete);
-            }
-            else return NotFound(investmentId);
-        }
+        //    if (InvestmentToDelete != null)
+        //    {
+        //        _dbContext.InvestmentsPreciousMetals.Remove(InvestmentToDelete);
+        //        _dbContext.SaveChanges();
+        //        return Ok(InvestmentToDelete);
+        //    }
+        //    else return NotFound(investmentId);
+        //}
         [HttpGet("InvestmentSum")]
-        public ActionResult<InvestmentPreciousMetals> GetSumOfInvestments()
+        public ActionResult<InvestmentPreciousMetal> GetSumOfInvestments()
         {
             decimal InvestmentSum = _dbContext
                 .InvestmentsPreciousMetals

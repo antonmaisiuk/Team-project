@@ -56,7 +56,7 @@ namespace Elaborate.Controllers
             else return NotFound(stockId);
         }
 
-        [HttpPost("addCryptoCurrency")]
+        [HttpPost("addStock")]
         public ActionResult CreateStock([FromBody] InvestmentStock dto)
         {
             var stock = _mapper.Map<InvestmentStock>(dto);
