@@ -62,7 +62,7 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
 
   useEffect(() => {
     if (redirect) {
-      type === AuthType.login ? navigate('/transactions') : navigate('/login');
+      type === AuthType.login ? navigate('/') : navigate('/login');
     }
   });
 

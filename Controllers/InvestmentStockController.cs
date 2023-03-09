@@ -1,98 +1,98 @@
-﻿using AutoMapper;
-using Elaborate.Elaborate.Entities;
-using Elaborate.Entities;
-using Elaborate.Helpers;
-using Elaborate.Models;
-using Microsoft.AspNetCore.Mvc;
-using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//using AutoMapper;
+//using Elaborate.Elaborate.Entities;
+//using Elaborate.Entities;
+//using Elaborate.Helpers;
+//using Elaborate.Models;
+//using Microsoft.AspNetCore.Mvc;
+//using MySql.Data.MySqlClient;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
 
-namespace Elaborate.Controllers
-{
-    [Route("api/[controller]")] 
-    public class InvestmentStockController : ControllerBase
-    {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly IMapper _mapper;
-        private readonly JwtService _jwtService;
+//namespace Elaborate.Controllers
+//{
+//    [Route("api/[controller]")] 
+//    public class InvestmentStockController : ControllerBase
+//    {
+//        private readonly ApplicationDbContext _dbContext;
+//        private readonly IMapper _mapper;
+//        private readonly JwtService _jwtService;
 
-        public InvestmentStockController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-            _jwtService = jwtService;
-        }
+//        public InvestmentStockController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
+//        {
+//            _dbContext = dbContext;
+//            _mapper = mapper;
+//            _jwtService = jwtService;
+//        }
 
-        [HttpGet("stocks")] 
-        public ActionResult<IEnumerable<InvestmentStock>> GetAll()
-        {
-            var jwt = Request.Cookies["jwt"];
+//        [HttpGet("stocks")] 
+//        public ActionResult<IEnumerable<InvestmentStock>> GetAll()
+//        {
+//            var jwt = Request.Cookies["jwt"];
 
-            var token = _jwtService.Verify(jwt);
+//            var token = _jwtService.Verify(jwt);
 
-            int userId = int.Parse(token.Issuer);
+//            int userId = int.Parse(token.Issuer);
 
-            var investmentStocks = _dbContext
-            .InvestmentStock.Where(r => r.Account.Id == userId)
-            .ToList();
+//            var investmentStocks = _dbContext
+//            .InvestmentStock.Where(r => r.Account.Id == userId)
+//            .ToList();
 
-            return Ok(investmentStocks);
-        }
+//            return Ok(investmentStocks);
+//        }
 
-        [HttpPost]
-        public ActionResult<InvestmentStock> DeleteStock(int stockId)
-        {
-            var stockToDelete = _dbContext.InvestmentStock.SingleOrDefault(t => t.Id == stockId);
+//        [HttpPost]
+//        public ActionResult<InvestmentStock> DeleteStock(int stockId)
+//        {
+//            var stockToDelete = _dbContext.InvestmentStock.SingleOrDefault(t => t.Id == stockId);
 
-            if (stockToDelete != null)
-            {
-                _dbContext.InvestmentStock.Remove(stockToDelete);
-                _dbContext.SaveChanges();
-                return Ok(stockToDelete);
-            }
-            else return NotFound(stockId);
-        }
+//            if (stockToDelete != null)
+//            {
+//                _dbContext.InvestmentStock.Remove(stockToDelete);
+//                _dbContext.SaveChanges();
+//                return Ok(stockToDelete);
+//            }
+//            else return NotFound(stockId);
+//        }
 
-        [HttpPost("addStock")]
-        public ActionResult CreateStock([FromBody] InvestmentStock dto)
-        {
-            var stock = _mapper.Map<InvestmentStock>(dto);
+//        [HttpPost("addStock")]
+//        public ActionResult CreateStock([FromBody] InvestmentStock dto)
+//        {
+//            var stock = _mapper.Map<InvestmentStock>(dto);
 
-            var jwt = Request.Cookies["jwt"];
-            var token = _jwtService.Verify(jwt);
-            var userId = int.Parse(token.Issuer);
-            stock.AccountId = userId;
+//            var jwt = Request.Cookies["jwt"];
+//            var token = _jwtService.Verify(jwt);
+//            var userId = int.Parse(token.Issuer);
+//            stock.AccountId = userId;
 
-            stock.StockCategoryId = 1; 
-            _dbContext.InvestmentStock.Add(stock);
-            _dbContext.SaveChanges();
+//            stock.StockCategoryId = 1; 
+//            _dbContext.InvestmentStock.Add(stock);
+//            _dbContext.SaveChanges();
 
-            var stockList = _dbContext
-                .InvestmentStock.Where(r => r.Account.Id == userId)
-                .ToList();
+//            var stockList = _dbContext
+//                .InvestmentStock.Where(r => r.Account.Id == userId)
+//                .ToList();
 
-            decimal stockSum = stockList.Sum(c => c.ValueOfInvestment);
+//            decimal stockSum = stockList.Sum(c => c.ValueOfInvestment);
 
-            Object[] resultArr = new Object[] { stock, stockSum };
+//            Object[] resultArr = new Object[] { stock, stockSum };
 
-            return Ok(resultArr);
-        }
+//            return Ok(resultArr);
+//        }
 
-        [HttpGet("StocksSum")]
-        public ActionResult<InvestmentStock> GetSumOfStocks()
-        {
-            var jwt = Request.Cookies["jwt"];
-            var token = _jwtService.Verify(jwt);
-            int userId = int.Parse(token.Issuer);
+//        [HttpGet("StocksSum")]
+//        public ActionResult<InvestmentStock> GetSumOfStocks()
+//        {
+//            var jwt = Request.Cookies["jwt"];
+//            var token = _jwtService.Verify(jwt);
+//            int userId = int.Parse(token.Issuer);
 
-            decimal StocksSum = _dbContext
-                .InvestmentStock.Where(r => r.Account.Id == userId).Sum(c => c.ValueOfInvestment);
+//            decimal StocksSum = _dbContext
+//                .InvestmentStock.Where(r => r.Account.Id == userId).Sum(c => c.ValueOfInvestment);
 
-            return Ok(StocksSum);
-        }
-    }
-}
+//            return Ok(StocksSum);
+//        }
+//    }
+//}
 
