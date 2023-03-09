@@ -111,41 +111,46 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   const sendInvestmentForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const {value, date, comment} = event.target as typeof event.target & {
-      // id : {value: number},
-      // title: {value: string},
-      value: {value: number},
+    const {investCount, date, investmentName} = event.target as typeof event.target & {
+      investCount: {value: number},
       date: {value: string},
-      comment: {value: string},
+      investmentName: {value: string},
     }
 
     if (date.value === '') {
          date.value = getCurrentDate();
     }
+    let url = '';
+    switch (investType){
+      case InvestmentType.stocks:
+        url = 'api/InvestmentStock/addStock';
+        break;
+      case InvestmentType.crypto:
+        url = 'api/InvestmentCryptoCurrency/addCryptoCurrency';
+        break;
+      case InvestmentType.metals:
+        url = 'api/InvestmentPreciousMetal/addMetals';
+        break;
+    }
 
-    const response = await fetch('api/Transaction/addTransaction', {
+    const response = await fetch(url, {
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        // id: 1,
-        title: comment.value,
-        value: value.value,
+        amount: investCount.value,
+        // TypeCryptoCurrency: investmentName.value,
         date: date.value,
-        // comment: comment.value,
       })
     })
-    console.log(response);
     if (response.ok){
-      const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
+      const data:[[], number] = await response.json();
       console.log(data);
-      setTransactions(data[0]);
-      setSpendingSum(data[1]);
+      setInvestments(data[0]);
+      setInvestingSum(data[1]);
       setActive(false);
     } else {
       console.error('Error with response');
     }
-
-
   }
   const sendCategoryForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -184,7 +189,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
   return (
     <StyledPopUpContainer
-      className={active ? "add_container active" : "add_container"}
+      className={active ? 'add_container active' : 'add_container'}
       onClick={() => setActive(false)}
       type={type}
       active={active}
@@ -289,11 +294,11 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                     <StyledFormItem >
                         <Input
                             type={InputEnum.number}
-                            placeholder={"0"}
+                            placeholder={'0'}
                           // onChange={(e)=> console.log(e.currentTarget.value)}
-                            id={"value"}
+                            id={'investCount'}
                         />
-                        <StyledLabel htmlFor={"value"}>{investType === InvestmentType.metals ? 'kg' : 'pcs'}</StyledLabel>
+                        <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'g' : 'pcs'}</StyledLabel>
                       {/*<input type={"number"} />*/}
                     </StyledFormItem>
                     <StyledLine/>
@@ -301,7 +306,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                         <label htmlFor={"date"}>Date:</label>
                         <Input
                             type={InputEnum.date}
-                            id={"date"}
+                            id={'date'}
                           // value={"02-12-2022"}
                           // onChange={(e)=> setDate(e.currentTarget.value)}
                           // defaultValue={"02-12-2022"}
@@ -310,20 +315,21 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                     </StyledFormItem>
                     <StyledLine/>
                     <StyledFormItem>
-                        <label htmlFor={"investment-title"}>
+                        <label htmlFor={'investmentName'}>
                           {investType === InvestmentType.stocks ? 'Select stock index' :
                             investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
                         </label>
-                        <select>
+                        <select id={'investmentName'}>
                             <option>Apple</option>
-                            <option>Google</option>
+                            <option>Gold</option>
+                            <option>Bitcoin</option>
                         </select>
-                        <Input
-                            type={InputEnum.text}
-                            id={"investment-title"}
-                            placeholder={"Type your comment here"}
-                          // onChange={(e)=> setComment(e.currentTarget.value)}
-                        />
+                        {/*<Input*/}
+                        {/*    type={InputEnum.text}*/}
+                        {/*    id={"investment-title"}*/}
+                        {/*    placeholder={"Type your comment here"}*/}
+                        {/*  // onChange={(e)=> setComment(e.currentTarget.value)}*/}
+                        {/*/>*/}
                       {/*<input type={"text"} id={"comment"}/>*/}
                     </StyledFormItem>
                     <StyledLine/>
@@ -331,7 +337,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
                 <StyledSendingForm>
                     <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
-                    <StyledSubmitButton type={"submit"}>Add</StyledSubmitButton>
+                    <StyledSubmitButton type={'submit'}>Add</StyledSubmitButton>
                 </StyledSendingForm>
             </StyledForm>
         }
