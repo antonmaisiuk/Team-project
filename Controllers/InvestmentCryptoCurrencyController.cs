@@ -58,7 +58,7 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addCryptoCurrency")]
-        public ActionResult CreateCryptoCurrency([FromBody] TypeCryptoCurrencyDto dto)
+        public ActionResult CreateCryptoCurrency([FromBody] CreateInvestmentCryptoCurrencyDto dto)
         {
             var crypto = _mapper.Map<InvestmentCryptoCurrency>(dto);
 

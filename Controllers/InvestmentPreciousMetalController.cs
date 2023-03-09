@@ -44,7 +44,7 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addMetal")]
-        public ActionResult CreateInvestment([FromBody] InvestmentPreciousMetalsDto dto)
+        public ActionResult CreateInvestment([FromBody] CreateInvestmentPreciousMetalsDto dto)
         {
             var investment = _mapper.Map<InvestmentPreciousMetal>(dto);
 
@@ -74,7 +74,7 @@ namespace Elaborate.Controllers
 
 
         [HttpPut("updateMetals")]
-        public async Task<ActionResult> UpdateTransaction(int id, [FromBody] InvestmentPreciousMetalsDto dto)
+        public async Task<ActionResult> UpdateTransaction(int id, [FromBody] InvestmentPreciousMetal dto)
         {
             var investmentToUpdate = _dbContext.InvestmentsPreciousMetals.FirstOrDefault(i => i.Id == id);
 

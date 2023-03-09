@@ -57,7 +57,7 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addStock")]
-        public ActionResult CreateStock([FromBody] InvestmentStock dto)
+        public ActionResult CreateStock([FromBody] CreateInvestmentStockDto dto)
         {
             var stock = _mapper.Map<InvestmentStock>(dto);
 
