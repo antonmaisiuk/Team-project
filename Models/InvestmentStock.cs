@@ -14,7 +14,6 @@ namespace Elaborate.Models
 
         [Required]
         public int Value { get; set; }
-
         [Display(Name = "Ilość posiadanych akcji")]
         [Range(0, double.MaxValue)]
         [Required]
