@@ -37,7 +37,7 @@ namespace Elaborate.Controllers
             int userId = int.Parse(token.Issuer);
 
             var investmentsPreciousMetal = _dbContext
-            .InvestmentsPreciousMetals.Where(r => r.AccountId == userId)
+            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
             .ToList();
 
             return Ok(investmentsPreciousMetal);
