@@ -1,14 +1,11 @@
 ﻿using Elaborate.Elaborate.Entities;
-using Elaborate.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace Elaborate.Models
+namespace Elaborate.Entities
 {
     public class InvestmentStock
     {
-        // Moddel do inwestycji w akcje
-
         [Key]
         public int Id { get; set; }
 
@@ -22,6 +19,7 @@ namespace Elaborate.Models
         public virtual Account Account { get; set; }
         [Display(Name = "id spółki której akcje chcemy kupić")]
         [Required]
-        public int StockCategoryId { get; set; }
+        public int TypeStockId { get; set; }
+        public virtual TypeStock TypeStock { get; set; }
     }
 }
