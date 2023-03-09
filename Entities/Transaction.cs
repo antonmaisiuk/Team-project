@@ -10,12 +10,12 @@ namespace Elaborate.Elaborate.Entities
 {
     public class Transaction
     {
-            public Transaction(DateTime date, decimal value, string title, string comment,  int accountId)
+            public Transaction(DateTime date, decimal value, string title,  int accountId)
             {
             this.Date = date;
             this.Value = value;
             this.Title = title;
-            this.Comment = comment;
+            this.Comment = "default comment";
             this.AccountId = accountId;
             //this.TransCategoryId = transactionCatId;
             }

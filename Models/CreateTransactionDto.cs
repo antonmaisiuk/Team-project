@@ -13,7 +13,8 @@ namespace Elaborate
         public int Id { get; set; }
         [Display(Name = "Data stworzenia Transakcji")]
         [Required]
-        public DateTime Date { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime Date { get; set; } = DateTime.Now;
         [Display(Name = "Wartość Transakcji")]
         [Required]
         [Range(0, 999999999999999999)]
@@ -23,10 +24,11 @@ namespace Elaborate
         [MaxLength(30)]
         public string Title { get; set; }
         [Display(Name = "Komentarz do Transakcji")]
+        [MaxLength(60)]
         public string Comment { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
-        public int TransCategoryId { get; set; }
+        public int TransCategoryId { get; set; } = 1;
         public virtual TransCategory TransCategory { get; set; }
     }
 }

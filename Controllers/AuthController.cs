@@ -70,20 +70,28 @@ namespace Elaborate.Controllers
         [HttpGet("user")]
         public IActionResult User()
         {
-            try
-            {
+            //try
+            //{
                 var jwt = Request.Cookies["jwt"];
 
-                var token = _jwtService.Verify(jwt);
+                if (jwt != null)
+                {
+                    var token = _jwtService.Verify(jwt);
 
-                int userId = int.Parse(token.Issuer);
-                var user = _repository.GetById(userId);
+                    int userId = int.Parse(token.Issuer);
+                    var user = _repository.GetById(userId);
 
-                return Ok(user);
-            }catch(Exception _)
-            {
-                return Unauthorized();
-            }
+                    return Ok(user);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+                
+            //}catch(Exception _)
+            //{
+            //    return Unauthorized();
+            //}
         }
 <<<<<<< HEAD
         [HttpPost("logout")]

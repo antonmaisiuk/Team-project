@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Entities
 {
-    public class InvestmentPreciousMetals
+    public class InvestmentPreciousMetal
     {
         private decimal _metalRate = 299.99m; 
 
@@ -28,23 +28,26 @@ namespace Elaborate.Entities
         [Required]
         public int TypePreciousMetalId { get; set; }
         public virtual TypePreciousMetal TypePreciousMetal { get; set; }
-        public decimal ValueOfInvestment
+        public decimal ValueOfInvestment 
         {
             get
             {
                 decimal decimalAmount = Convert.ToDecimal(Amount);
-                return _metalRate * decimalAmount; 
-            } 
+                return _metalRate * decimalAmount;
+            }
+
             set
             {
 
             }
+
+           
         }
 
 
 
 
-        public InvestmentPreciousMetals(double amount, int accountId, int typePreciousMetalId)
+        public InvestmentPreciousMetal(double amount, int accountId, int typePreciousMetalId)
         {
             this.Amount = amount;
             this.AccountId = accountId;

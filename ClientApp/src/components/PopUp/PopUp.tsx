@@ -12,19 +12,23 @@ import {
   StyledSubmitButton
 } from './style';
 import Input, {InputEnum} from "../ui/Input/Input";
-import {CategoryItem, TransactionItem} from "../../App";
+import {CategoryItem, InvestmentItem, InvestmentType, TransactionItem} from "../../App";
 
 export enum PopUpType{
   addTransaction,
-  addCategory
+  addCategory,
+  addInvestment
 }
 
 export interface PopUpBaseInterface {
   active: boolean,
   type: PopUpType,
+  investType?: InvestmentType,
   setActive: Dispatch<SetStateAction<boolean>>
   setTransactions?: Dispatch<SetStateAction<TransactionItem[]>>,
+  setInvestments?: Dispatch<SetStateAction<InvestmentItem[]>>,
   setCategories?: Dispatch<SetStateAction<CategoryItem[]>>,
+  setInvestingSum?: Dispatch<SetStateAction<number>>
   setSpendingSum?: Dispatch<SetStateAction<number>>
 }
 
@@ -40,18 +44,26 @@ export interface PopUpTransactionInterface extends PopUpBaseInterface{
   setTransactions: Dispatch<SetStateAction<TransactionItem[]>>,
   setSpendingSum: Dispatch<SetStateAction<number>>
 }
+export interface PopUpInvestmentInterface extends PopUpBaseInterface{
+  active: boolean,
+  investType: InvestmentType,
+  setActive: Dispatch<SetStateAction<boolean>>,
+  setInvestments: Dispatch<SetStateAction<InvestmentItem[]>>,
+  setInvestingSum: Dispatch<SetStateAction<number>>
+}
 
-type PopUpInterface = PopUpTransactionInterface | PopUpCategoryInterface;
-
-
+type PopUpInterface = PopUpTransactionInterface | PopUpCategoryInterface | PopUpInvestmentInterface;
 
 const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   type,
   active,
   setActive,
+  investType,
   setTransactions = ()=>{},
+  setInvestments = ()=>{},
   setCategories= ()=>{},
   setSpendingSum = () => {},
+  setInvestingSum = () => {},
 }) => {
 
   // const [title, setTitle] = useState('');
@@ -64,10 +76,14 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
     const {value, date, comment} = event.target as typeof event.target & {
       // id : {value: number},
-      title: {value: string},
+      // title: {value: string},
       value: {value: number},
       date: {value: string},
       comment: {value: string},
+    }
+
+    if (date.value === '') {
+         date.value = getCurrentDate();
     }
 
     const response = await fetch('api/Transaction/addTransaction', {
@@ -75,18 +91,61 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         // id: 1,
-        //title: title.value,
+        title: comment.value,
         value: value.value,
         date: date.value,
-        comment: comment.value,
+        // comment: comment.value,
       })
     })
+    console.log(response);
+    if (response.ok){
+      const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
+      console.log(data);
+      setTransactions(data[0]);
+      setSpendingSum(data[1]);
+      setActive(false);
+    } else {
+      console.error('Error with response');
+    }
+  }
+  const sendInvestmentForm = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
-    console.log(data)
-    setTransactions(data[0]);
-    setSpendingSum(data[1]);
-    setActive(false);
+    const {value, date, comment} = event.target as typeof event.target & {
+      // id : {value: number},
+      // title: {value: string},
+      value: {value: number},
+      date: {value: string},
+      comment: {value: string},
+    }
+
+    if (date.value === '') {
+         date.value = getCurrentDate();
+    }
+
+    const response = await fetch('api/Transaction/addTransaction', {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        // id: 1,
+        title: comment.value,
+        value: value.value,
+        date: date.value,
+        // comment: comment.value,
+      })
+    })
+    console.log(response);
+    if (response.ok){
+      const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
+      console.log(data);
+      setTransactions(data[0]);
+      setSpendingSum(data[1]);
+      setActive(false);
+    } else {
+      console.error('Error with response');
+    }
+
+
   }
   const sendCategoryForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -96,7 +155,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       name: {value: string},
       imageLink: {value: string},
     }
-
     const response = await fetch('api/Category/addTransCategory', {
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
@@ -120,7 +178,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   function getCurrentDate() {
     let curr = new Date();
     curr.setDate(curr.getDate() + 3);
-    // console.log(curr.toISOString().substring(0, 10));
     return curr.toISOString().substring(0, 10);
   }
 
@@ -218,6 +275,58 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                     {/*  /!*<input type={"text"} id={"comment"}/>*!/*/}
                     {/*</StyledFormItem>*/}
                     {/*<StyledLine/>*/}
+                </StyledFormContent>
+
+                <StyledSendingForm>
+                    <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
+                    <StyledSubmitButton type={"submit"}>Add</StyledSubmitButton>
+                </StyledSendingForm>
+            </StyledForm>
+        }
+        {type === PopUpType.addInvestment &&
+            <StyledForm onSubmit={e => sendInvestmentForm(e)}>
+                <StyledFormContent>
+                    <StyledFormItem >
+                        <Input
+                            type={InputEnum.number}
+                            placeholder={"0"}
+                          // onChange={(e)=> console.log(e.currentTarget.value)}
+                            id={"value"}
+                        />
+                        <StyledLabel htmlFor={"value"}>{investType === InvestmentType.metals ? 'kg' : 'pcs'}</StyledLabel>
+                      {/*<input type={"number"} />*/}
+                    </StyledFormItem>
+                    <StyledLine/>
+                    <StyledFormItem>
+                        <label htmlFor={"date"}>Date:</label>
+                        <Input
+                            type={InputEnum.date}
+                            id={"date"}
+                          // value={"02-12-2022"}
+                          // onChange={(e)=> setDate(e.currentTarget.value)}
+                          // defaultValue={"02-12-2022"}
+                        />
+                      {/*<input type={"date"} id={"date"}/>*/}
+                    </StyledFormItem>
+                    <StyledLine/>
+                    <StyledFormItem>
+                        <label htmlFor={"investment-title"}>
+                          {investType === InvestmentType.stocks ? 'Select stock index' :
+                            investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
+                        </label>
+                        <select>
+                            <option>Apple</option>
+                            <option>Google</option>
+                        </select>
+                        <Input
+                            type={InputEnum.text}
+                            id={"investment-title"}
+                            placeholder={"Type your comment here"}
+                          // onChange={(e)=> setComment(e.currentTarget.value)}
+                        />
+                      {/*<input type={"text"} id={"comment"}/>*/}
+                    </StyledFormItem>
+                    <StyledLine/>
                 </StyledFormContent>
 
                 <StyledSendingForm>

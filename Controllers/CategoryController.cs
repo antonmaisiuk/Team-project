@@ -7,6 +7,7 @@ using AutoMapper;
 using Elaborate.Models;
 using System;
 using System.Threading.Tasks;
+using Elaborate.Helpers;
 
 namespace Elaborate.Controllers
 {
@@ -15,11 +16,13 @@ namespace Elaborate.Controllers
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly JwtService _jwtService;
 
-        public CategoryController(ApplicationDbContext dbContext, IMapper mapper)
+        public CategoryController(ApplicationDbContext dbContext, IMapper mapper, JwtService jwtService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         //[Route("categories")]

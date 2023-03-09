@@ -1,19 +1,20 @@
 import React, {FC, HTMLAttributes} from 'react';
 import {StyledLayout} from './style';
 
-// export enum ContainerType {
-//   transactions,
-//   main_screen,
-// }
+export enum LayoutType {
+  transactions,
+  investments,
+  main_screen,
+}
 
-// export interface ContainerInterface {
-//   type: ContainerType;
-//   children: React.ReactNode;
-// }
+export interface ContainerInterface {
+  type: LayoutType;
+  children: React.ReactNode;
+}
 
-const Layout: FC<HTMLAttributes<HTMLDivElement>> = ({children}) => {
+const Layout: FC<HTMLAttributes<HTMLDivElement> & ContainerInterface> = ({children, type}) => {
   return (
-    <StyledLayout>
+    <StyledLayout type={type}>
       {children}
     </StyledLayout>
   );

@@ -3,14 +3,16 @@ using System;
 using Elaborate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Elaborate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230131203344_bb")]
+    partial class bb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,7 +129,7 @@ namespace Elaborate.Migrations
                     b.ToTable("InvestmentCryptoCurrencies");
                 });
 
-            modelBuilder.Entity("Elaborate.Entities.InvestmentPreciousMetal", b =>
+            modelBuilder.Entity("Elaborate.Entities.InvestmentPreciousMetals", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,7 +224,7 @@ namespace Elaborate.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Elaborate.Entities.InvestmentPreciousMetal", b =>
+            modelBuilder.Entity("Elaborate.Entities.InvestmentPreciousMetals", b =>
                 {
                     b.HasOne("Elaborate.Elaborate.Entities.Account", "Account")
                         .WithMany()

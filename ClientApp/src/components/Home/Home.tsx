@@ -5,36 +5,58 @@ import Layout from "../Layout/Layout";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 
-export interface HomeInterface {
-  userName: string;
-  setUserName: Dispatch<SetStateAction<string>>
-}
+// export interface HomeInterface {
+//   userName: string;
+//   setUserName: Dispatch<SetStateAction<string>>
+// }
 
-const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
-  userName,
-  setUserName = () => {}
+const Home:FC<HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   const navigate = useNavigate();
 
+  // const [userName, setUserName] = useState('');
+  // const [userId, setUserId] = useState(0);
+  //
+  // useEffect(() => {
+  //   (
+  //     async () => {
+  //       const response = await fetch('api/user',{
+  //         headers: {'Content-Type': 'application/json'},
+  //         credentials: 'include',
+  //       })
+  //       if (response.ok){
+  //         const content = await response.json();
+  //         setUserName(content.name);
+  //         setUserId(content.id);
+  //       } else {
+  //         navigate('/login');
+  //       }
+  //
+  //     }
+  //   )();
+  // });
+
+
   const logout = async () =>{
 
-    const response = await fetch('api/Auth/logout',{
+    const response = await fetch('api/logout',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       credentials: 'include',
     })
-    setUserName('');
+    // setUserName('');
 
-    navigate('/login')
+    navigate('/login');
   }
-  
+
   return (
     <Container type={ContainerType.home}>
-      <Layout>
-        {userName ? 'Hi '+ userName : 'You are not logged in'}
-      </Layout>
+      {/*<Layout > */}
+      {/*  /!*{userName ? 'Hi '+ userName : 'You are not logged('}*!/*/}
+      {/*</Layout>*/}
       <NavBar>
         <Button onClick={() => navigate('/transactions')} >Transactions</Button>
+        <Button onClick={() => navigate('/investments')} >Investments</Button>
         <Button onClick={() => navigate('/login')} >Login</Button>
         <Button onClick={() => logout()} >Logout</Button>
       </NavBar>

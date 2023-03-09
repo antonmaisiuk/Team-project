@@ -33,6 +33,9 @@ export const StyledTile = styled.div<TileBaseInterface>`
   //max-width: 652px;
 `;
 
+export const StyledInvestTile = styled.div<TileBaseInterface>`
+`;
+
 export const StyledTileTitle = styled.div`
   display: flex;
   flex-direction: row;
@@ -45,11 +48,15 @@ export const StyledTileTitle = styled.div`
     line-height: 42px;
     color: #000;
   }  
-  padding-bottom: 8px;
+  //padding-bottom: 8px;
   border-bottom: 1px solid #C7C7C7;
 `;
 
-export const StyledSendingSum = styled.div`
+export const StyledInvestingSum = styled.div`
+  
+`;
+
+export const StyledSum = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
