@@ -12,6 +12,8 @@ namespace Elaborate.Entities
     /// </summary>
     public class ApplicationDbContext : DbContext
     {
+        internal object InvestmentStock;
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
