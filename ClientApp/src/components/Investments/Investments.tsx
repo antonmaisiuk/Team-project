@@ -25,13 +25,13 @@ const Investments = () => {
 
 
   async function getInvestingSums() {
-    // const stocksResponse = await fetch('api/InvestmentStocks/stocksSum');
-    // if (stocksResponse.ok){
-    //   const data = await stocksResponse.json();
-    //   setStocksSum(data);
-    // } else {
-    //   alert("HTTP Error: " + stocksResponse.status)
-    // }
+    const stocksResponse = await fetch('api/InvestmentStocks/stocksSum');
+    if (stocksResponse.ok){
+      const data = await stocksResponse.json();
+      setStocksSum(data);
+    } else {
+      alert("HTTP Error: " + stocksResponse.status)
+    }
 
     const cryptoResponse = await fetch('api/InvestmentCryptoCurrency/cryptocurrenciesSum');
     if (cryptoResponse.ok){
@@ -51,14 +51,15 @@ const Investments = () => {
   }
 
   async function getInvestingData() {
-    // const stocksResponse = await fetch('api/InvestmentStocks/stocks');
-    // if (stocksResponse.ok){
-    //   const data = await stocksResponse.json();
-    //
-    //   setInvestStocksList(data);
-    // } else {
-    //   alert("HTTP Error: " + stocksResponse.status)
-    // }
+
+    const stocksResponse = await fetch('api/InvestmentStocks/stocks');
+    if (stocksResponse.ok){
+      const data = await stocksResponse.json();
+
+      setInvestStocksList(data);
+    } else {
+      alert("HTTP Error: " + stocksResponse.status)
+    }
 
     const cryptoResponse = await fetch('api/InvestmentCryptoCurrency/crypto');
     if (cryptoResponse.ok){
