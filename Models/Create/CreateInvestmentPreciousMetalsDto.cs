@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Models
 {
-    public class InvestmentPreciousMetalsDto
+    public class CreateInvestmentPreciousMetalsDto
     {
-        [Key]
-        public int Id { get; set; }
-
         [Display(Name = "Ilość metalu w gramach")]
         [Range(0, double.MaxValue)]
         [Required]

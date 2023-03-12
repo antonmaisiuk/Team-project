@@ -51,6 +51,7 @@ const Investments = () => {
   }
 
   async function getInvestingData() {
+
     const stocksResponse = await fetch('api/InvestmentStocks/stocks');
     if (stocksResponse.ok){
       const data = await stocksResponse.json();

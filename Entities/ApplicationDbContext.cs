@@ -12,6 +12,7 @@ namespace Elaborate.Entities
     /// </summary>
     public class ApplicationDbContext : DbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -24,6 +25,9 @@ namespace Elaborate.Entities
         public DbSet<TypePreciousMetal> TypesPreciousMetals { get; set; }
         public DbSet<InvestmentCryptoCurrency> InvestmentCryptoCurrencies { get; set; }
         public DbSet<TypeCryptoCurrency> TypeCryptoCurrencies { get; set; }
+        public DbSet<InvestmentStock> InvestmentStocks { get; set; }
+        public DbSet<TypeStock> TypeStocks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -74,10 +78,6 @@ namespace Elaborate.Entities
                 .HasColumnType("int")
                 .IsRequired();
 
-            modelBuilder.Entity<InvestmentPreciousMetal>()
-                .Property(r => r.ValueOfInvestment)
-                .IsRequired();
-
             modelBuilder.Entity<TypePreciousMetal>()
                 .Property(r => r.Name)
                 .IsRequired()
@@ -96,11 +96,26 @@ namespace Elaborate.Entities
                 .HasColumnType("int")
                 .IsRequired();
 
-            modelBuilder.Entity<InvestmentCryptoCurrency>()
-                .Property(r => r.ValueOfInvestment)
+            modelBuilder.Entity<TypeCryptoCurrency>()
+                .Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(30);
+
+            modelBuilder.Entity<InvestmentStock>()
+                .Property(r => r.Amount)
                 .IsRequired();
 
-            modelBuilder.Entity<TypeCryptoCurrency>()
+            modelBuilder.Entity<InvestmentStock>()
+                .Property(r => r.AccountId)
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<InvestmentStock>()
+                .Property(r => r.TypeStockId)
+                .HasColumnType("int")
+                .IsRequired();
+
+            modelBuilder.Entity<TypeStock>()
                 .Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(30);

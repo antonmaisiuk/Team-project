@@ -54,7 +54,7 @@ namespace Elaborate.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>transakcje</returns>
-        //[HttpPost("{id}")]
+    //[HttpPost("{id}")]
         //public ActionResult<Transaction> Get([FromBody] int id)
         //{
         //    var transaction = _dbContext

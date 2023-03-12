@@ -16,6 +16,7 @@ namespace Elaborate.Models
         public string Name { get; set; }
         [Display(Name = "Adres E-mail")]
         [Required]
+        [MaxLength(40)]
         [EmailAddress]
         public string Email { get; set; }
         [Display(Name = "Numer telefonu")]

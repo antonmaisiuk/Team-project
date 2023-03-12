@@ -1,19 +1,13 @@
 ﻿using Elaborate.Elaborate.Entities;
-using System;
-using System.Collections.Generic;
+using Elaborate.Entities;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Xml.Linq;
+using System;
 
-namespace Elaborate.Entities
+namespace Elaborate.Models
 {
-    public class InvestmentCryptoCurrency
+    public class CreateInvestmentCryptoCurrencyDto
     {
-
-
-        [Key]
-        public int Id { get; set; }
-
         [Display(Name = "Ilość Kryptowaluty")]
         [Range(0, (double)decimal.MaxValue)]
         [Required]
@@ -27,6 +21,5 @@ namespace Elaborate.Entities
         [Required]
         public int TypeCryptoCurrencyId { get; set; }
         public virtual TypeCryptoCurrency TypeCryptoCurrency { get; set; }
-
     }
 }

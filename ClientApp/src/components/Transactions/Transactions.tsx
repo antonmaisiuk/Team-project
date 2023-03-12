@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import { Route } from 'react-router';
+import React, { Dispatch, FC, HTMLAttributes, SetStateAction, useEffect, useState } from 'react';
 import Tile, {TileType} from "../Tile/Tile";
-import Layout from "../Layout/Layout";
+import Layout, {LayoutType} from "../Layout/Layout";
 import NavBar from "../NavBar/NavBar";
 import Container, {ContainerType} from "../Container/Container";
 import {Button} from "react-bootstrap";
@@ -82,20 +81,28 @@ const Transactions = () => {
 
   const navigate = useNavigate();
 
-
-
-
   useEffect(() => {
     transactionsData();
     spending_sum()
     categoriesData();
   }, []);
 
+    const logout = async () => {
+
+        const response = await fetch('api/logout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        })
+        // setUserName('');
+
+        navigate('/login');
+    }
 
   return (
     <>
       <Container type={ContainerType.transactions}>
-        <Layout>
+        <Layout type={LayoutType.transactions}>
           <Tile
             className={"spending_sum"}
             title={"Spending"}
@@ -123,7 +130,9 @@ const Transactions = () => {
           />
         </Layout>
         <NavBar>
-          <Button onClick={() => navigate('/')} >Home</Button>
+                  <Button onClick={() => navigate('/')} >Home</Button>
+                  <Button onClick={() => navigate('/investments')} >Investments</Button>
+                  <Button onClick={() => logout()} >Logout</Button>
         </NavBar>
       </Container>
     </>

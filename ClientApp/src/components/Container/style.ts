@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  //justify-content: space-between;
+  justify-content: space-between;
   //flex-wrap: wrap;
   //column-count: 2;
   //column-gap: 34px;

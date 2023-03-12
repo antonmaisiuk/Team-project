@@ -10,9 +10,24 @@ namespace Elaborate
     public class TransactionDto
     {
         public int Id { get; set; }
+
+        [Display(Name = "Data stworzenia Transakcji")]
+        [Required]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; } = DateTime.Now;
+
+        [Display(Name = "Wartość Transakcji")]
+        [Required]
+        [Range(0, 999999999999999999)]
         public decimal Value { get; set; }
+
+        [Display(Name = "Nazwa transakcji")]
+        [Required]
+        [MaxLength(30)]
         public string Title { get; set; }
+
+        [Display(Name = "Komentarz do Transakcji")]
+        [MaxLength(60)]
         public string Comment { get; set; }
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }

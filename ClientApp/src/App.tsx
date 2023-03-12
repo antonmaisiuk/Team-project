@@ -2,13 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Tile, {TileType} from "./components/Tile/Tile";
 import Layout from "./components/Layout/Layout";
 import Home from "./components/Home/Home";
-import {Counter} from "./components/Counter";
-import NavBar from "./components/NavBar/NavBar";
-import Container, {ContainerType} from "./components/Container/Container";
-import {BrowserRouter as Router, Route, Routes, useNavigate} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import Auth, {AuthType} from "./components/Auth/Auth";
 import Transactions from "./components/Transactions/Transactions";
 import PrivateRoute from "./components/Route/PrivateRoute/PrivateRoute";
+import Investments from "./components/Investments/Investments";
 
 // const transactionsList = [
 //   {title: 'First transaction', category: 'Eat', value: 766.2},
@@ -21,6 +19,16 @@ export type TransactionItem ={
   title: string;
   transCategoryId: number;
   value: number
+}
+export enum InvestmentType{
+  stocks,
+  crypto,
+  metals
+}
+export type InvestmentItem ={
+  title: string;
+  investmentType: InvestmentType;
+  amount: number;
 }
 
 export type CategoryItem ={
@@ -58,6 +66,7 @@ const App = () => {
         {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
         <Route element={<PrivateRoute/>}>
           <Route path="/transactions" element={<Transactions/>}/>
+          <Route path="/investments" element={<Investments/>}/>
         </Route>
         {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
         <Route path="/" element={<Home />}/>
