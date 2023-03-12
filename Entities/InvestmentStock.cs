@@ -9,8 +9,6 @@ namespace Elaborate.Entities
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public int Value { get; set; }
         [Display(Name = "Ilość posiadanych akcji")]
         [Range(0, double.MaxValue)]
         [Required]
