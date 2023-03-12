@@ -9,7 +9,6 @@ namespace Elaborate.Entities
 {
     public class InvestmentCryptoCurrency
     {
-        private decimal _CryptoCurrencyRate = 299.99m;
 
 
         [Key]
@@ -28,31 +27,6 @@ namespace Elaborate.Entities
         [Required]
         public int TypeCryptoCurrencyId { get; set; }
         public virtual TypeCryptoCurrency TypeCryptoCurrency { get; set; }
-        public decimal ValueOfInvestment
-        {
-            get
-            {
-                decimal decimalAmount = Convert.ToDecimal(Amount);
-                return _CryptoCurrencyRate * decimalAmount;
-            }
-
-            set
-            {
-
-            }
-
-
-        }
-
-
-
-
-        public InvestmentCryptoCurrency(decimal amount, int accountId, int typeCryptoCurrencyId)
-        {
-            this.Amount = amount;
-            this.AccountId = accountId;
-            this.TypeCryptoCurrencyId = typeCryptoCurrencyId;
-        }
 
     }
 }

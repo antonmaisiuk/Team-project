@@ -64,9 +64,9 @@ namespace Elaborate.Controllers
                 .ToList();
 
 
-            decimal investmentPreciousMetalSum = investments.Sum(t => t.ValueOfInvestment);
+           
 
-            Object[] resultArr = new Object[] { investments, investmentPreciousMetalSum };
+            Object[] resultArr = new Object[] { investments };
 
             return Ok(resultArr);
           
@@ -105,7 +105,7 @@ namespace Elaborate.Controllers
             else return NotFound(investmentPreciousMetalId);
         }
 
-        [HttpGet("metalsSum")]
+        /*[HttpGet("metalsSum")]
         //[Route("investmentsPreciousMetalSum")]
         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestmentsPreciousMetal()
         {
@@ -117,8 +117,8 @@ namespace Elaborate.Controllers
             .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(t => t.ValueOfInvestment);
 
             return Ok(transactionSum);
-        }
-        [HttpPost]
+        }*/
+        //[HttpPost]
         //public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentId)
         //{
         //    var InvestmentToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentId);
@@ -131,14 +131,13 @@ namespace Elaborate.Controllers
         //    }
         //    else return NotFound(investmentId);
         //}
-        [HttpGet("InvestmentSum")]
+       /*[HttpGet("InvestmentSum")]
         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestments()
         {
             decimal InvestmentSum = _dbContext
-                .InvestmentsPreciousMetals
-                .Sum(t => t.ValueOfInvestment);
+                .InvestmentsPreciousMetals;
             return Ok(InvestmentSum);
-        }
+        }*/
 
 
 

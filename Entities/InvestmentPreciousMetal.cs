@@ -9,9 +9,6 @@ namespace Elaborate.Entities
 {
     public class InvestmentPreciousMetal
     {
-        private decimal _metalRate = 299.99m; 
-
-
         [Key]
         public int Id { get; set; }
 
@@ -28,30 +25,6 @@ namespace Elaborate.Entities
         [Required]
         public int TypePreciousMetalId { get; set; }
         public virtual TypePreciousMetal TypePreciousMetal { get; set; }
-        public decimal ValueOfInvestment 
-        {
-            get
-            {
-                decimal decimalAmount = Convert.ToDecimal(Amount);
-                return _metalRate * decimalAmount;
-            }
 
-            set
-            {
-
-            }
-
-           
-        }
-
-
-
-
-        public InvestmentPreciousMetal(double amount, int accountId, int typePreciousMetalId)
-        {
-            this.Amount = amount;
-            this.AccountId = accountId;
-            this.TypePreciousMetalId = typePreciousMetalId;
-        }
     }
 }

@@ -75,14 +75,14 @@ namespace Elaborate.Controllers
                 .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
                 .ToList();
 
-            decimal cryptoSum = cryptoList.Sum(c => c.ValueOfInvestment);
+            
 
-            Object[] resultArr = new Object[] { crypto, cryptoSum };
+            Object[] resultArr = new Object[] { crypto };
 
             return Ok(resultArr);
         }
 
-        [HttpGet("cryptocurrenciesSum")]
+        /*[HttpGet("cryptocurrenciesSum")]
         public ActionResult<InvestmentCryptoCurrency> GetSumOfCryptoCurrencies()
         {
             var jwt = Request.Cookies["jwt"];
@@ -90,9 +90,9 @@ namespace Elaborate.Controllers
             int userId = int.Parse(token.Issuer);
 
             decimal cryptoSum = _dbContext
-                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.ValueOfInvestment);
+                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId);
 
             return Ok(cryptoSum);
-        }
+        }*/
     }
 }
