@@ -98,7 +98,7 @@ namespace Elaborate.Controllers
 
         public IActionResult Logout()
         {
-            Response.Cookies.Delete("jtw");
+            Response.Cookies.Delete("jwt");
 
             return Ok(new
             {
