@@ -58,7 +58,7 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addCryptoCurrency")]
-        public ActionResult CreateCryptoCurrency([FromBody] CreateInvestmentCryptoCurrencyDto dto)
+        public ActionResult CreateCryptoCurrency([FromBody] CreateInvestmentCryptoCurrencyDto dto, int typeId)
         {
             var crypto = _mapper.Map<InvestmentCryptoCurrency>(dto);
 
@@ -67,7 +67,18 @@ namespace Elaborate.Controllers
             var userId = int.Parse(token.Issuer);
             crypto.AccountId = userId;
 
-            crypto.TypeCryptoCurrencyId = 1; // Pytanie czy to jest potrzebne ??? 
+
+            //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
+            if (typeId == null)
+            {
+                crypto.TypeCryptoCurrencyId = 0;
+            }
+            else
+            {
+                crypto.TypeCryptoCurrencyId = typeId;
+            }
+
+
             _dbContext.InvestmentCryptoCurrencies.Add(crypto);
             _dbContext.SaveChanges();
 
@@ -75,11 +86,9 @@ namespace Elaborate.Controllers
                 .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
                 .ToList();
 
-            
+           
 
-            Object[] resultArr = new Object[] { crypto };
-
-            return Ok(resultArr);
+            return Ok(crypto);
         }
 
         /*[HttpGet("cryptocurrenciesSum")]

@@ -57,7 +57,7 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addStock")]
-        public ActionResult CreateStock([FromBody] CreateInvestmentStockDto dto)
+        public ActionResult CreateStock([FromBody] CreateInvestmentStockDto dto, int typeId)
         {
             var stock = _mapper.Map<InvestmentStock>(dto);
 
@@ -66,7 +66,15 @@ namespace Elaborate.Controllers
             var userId = int.Parse(token.Issuer);
             stock.AccountId = userId;
 
-            stock.TypeStockId = 1;
+            if(typeId == null)
+            {
+                stock.TypeStockId = 3;
+            }
+            else
+            {
+                stock.TypeStockId = typeId; 
+            }
+            
             _dbContext.InvestmentStocks.Add(stock);
             _dbContext.SaveChanges();
 
@@ -74,11 +82,7 @@ namespace Elaborate.Controllers
                 .InvestmentStocks.Where(r => r.Account.Id == userId)
                 .ToList();
 
-           // decimal stockSum = stockList.Sum(c => c.ValueOfInvestment);
-
-            Object[] resultArr = new Object[] { stock, /*stockSum*/ };
-
-            return Ok(resultArr);
+            return Ok(stock);
         }
 
         /*[HttpGet("StocksSum")]

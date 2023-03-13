@@ -19,7 +19,7 @@ namespace Elaborate
 
             //Podobno autoMapper przepisze wartości pól które są takie same (takie same pola)
             CreateMap<CreateTransactionDto, Transaction>();
-            CreateMap<CreateInvestmentCryptoCurrencyDto, InvestmentStock>();
+            CreateMap<CreateInvestmentCryptoCurrencyDto, InvestmentCryptoCurrency>();
             CreateMap<CreateInvestmentPreciousMetalsDto, InvestmentPreciousMetal>();
             CreateMap<CreateInvestmentStockDto, InvestmentStock>();
         }

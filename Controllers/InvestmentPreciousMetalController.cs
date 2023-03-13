@@ -6,6 +6,7 @@ using Elaborate.Models;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,18 +45,26 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addMetal")]
-        public ActionResult CreateInvestment([FromBody] CreateInvestmentPreciousMetalsDto dto)
+        public ActionResult CreateInvestment([FromBody] CreateInvestmentPreciousMetalsDto dto, int typeId)
         {
-            var investment = _mapper.Map<InvestmentPreciousMetal>(dto);
+            var metalInvestment = _mapper.Map<InvestmentPreciousMetal>(dto);
 
             var jwt = Request.Cookies["jwt"];
             var token = _jwtService.Verify(jwt);
             var userId = int.Parse(token.Issuer);
-            investment.AccountId = userId;
+            metalInvestment.AccountId = userId;
 
-            investment.TypePreciousMetalId = 1;
+           
+            if (typeId == null)
+            {
+                metalInvestment.TypePreciousMetalId = 0;
+            }
+            else
+            {
+                metalInvestment.TypePreciousMetalId = typeId;
+            }
 
-            _dbContext.InvestmentsPreciousMetals.Add(investment);
+            _dbContext.InvestmentsPreciousMetals.Add(metalInvestment);
             _dbContext.SaveChanges();
 
             var investments = _dbContext
