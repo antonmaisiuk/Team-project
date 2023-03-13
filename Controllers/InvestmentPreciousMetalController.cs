@@ -55,6 +55,7 @@ namespace Elaborate.Controllers
             metalInvestment.AccountId = userId;
 
            
+            //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
             if (typeId == null)
             {
                 metalInvestment.TypePreciousMetalId = 0;
@@ -72,12 +73,7 @@ namespace Elaborate.Controllers
                 .Where(r => r.Account.Id == userId)
                 .ToList();
 
-
-           
-
-            Object[] resultArr = new Object[] { investments };
-
-            return Ok(resultArr);
+            return Ok(metalInvestment);
           
         }
 

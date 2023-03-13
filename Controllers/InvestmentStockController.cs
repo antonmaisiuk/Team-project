@@ -66,9 +66,11 @@ namespace Elaborate.Controllers
             var userId = int.Parse(token.Issuer);
             stock.AccountId = userId;
 
-            if(typeId == null)
+
+            //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
+            if (typeId == null)
             {
-                stock.TypeStockId = 3;
+                stock.TypeStockId = 0;
             }
             else
             {
