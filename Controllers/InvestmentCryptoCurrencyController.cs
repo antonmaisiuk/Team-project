@@ -91,6 +91,17 @@ namespace Elaborate.Controllers
             return Ok(crypto);
         }
 
+        [HttpGet]
+        public List<object> GetUniqueCryptocurrencies()
+        {
+            var cryptocurrencies = _dbContext.InvestmentCryptoCurrencies
+                .Select(t => new { Cryptocurrency = t.TypeCryptoCurrency })
+                .Distinct()
+                .ToList<object>();
+
+            return cryptocurrencies;
+        }
+
         /*[HttpGet("cryptocurrenciesSum")]
         public ActionResult<InvestmentCryptoCurrency> GetSumOfCryptoCurrencies()
         {

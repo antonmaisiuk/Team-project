@@ -87,6 +87,17 @@ namespace Elaborate.Controllers
             return Ok(stock);
         }
 
+        [HttpGet]
+        public List<object> GetUniqueStocks()
+        {
+            var stocks = _dbContext.InvestmentStocks
+                .Select(t => new { Stock = t.TypeStock })
+                .Distinct()
+                .ToList<object>();
+
+            return stocks;
+        }
+
         /*[HttpGet("StocksSum")]
         public ActionResult<InvestmentStock> GetSumOfStocks()
         {

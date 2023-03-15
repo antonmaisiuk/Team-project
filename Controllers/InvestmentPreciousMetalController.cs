@@ -110,6 +110,17 @@ namespace Elaborate.Controllers
             else return NotFound(investmentPreciousMetalId);
         }
 
+        [HttpGet]
+        public List<object> GetUniquePreciousMetals()
+        {
+            var preciousMetals = _dbContext.InvestmentsPreciousMetals
+                .Select(t => new { PreciousMetal = t.TypePreciousMetal })
+                .Distinct()
+                .ToList<object>();
+
+            return preciousMetals;
+        }
+
         /*[HttpGet("metalsSum")]
         //[Route("investmentsPreciousMetalSum")]
         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestmentsPreciousMetal()
@@ -136,13 +147,13 @@ namespace Elaborate.Controllers
         //    }
         //    else return NotFound(investmentId);
         //}
-       /*[HttpGet("InvestmentSum")]
-        public ActionResult<InvestmentPreciousMetal> GetSumOfInvestments()
-        {
-            decimal InvestmentSum = _dbContext
-                .InvestmentsPreciousMetals;
-            return Ok(InvestmentSum);
-        }*/
+        /*[HttpGet("InvestmentSum")]
+         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestments()
+         {
+             decimal InvestmentSum = _dbContext
+                 .InvestmentsPreciousMetals;
+             return Ok(InvestmentSum);
+         }*/
 
 
 
