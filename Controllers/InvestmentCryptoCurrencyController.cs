@@ -100,15 +100,15 @@ namespace Elaborate.Controllers
             }
         }
 
-        [HttpGet]
-        public List<object> GetUniqueCryptocurrencies()
+        [HttpGet("types")]
+        public ActionResult<IEnumerable<InvestmentCryptoCurrency>> GetUniqueCryptocurrencies()
         {
-            var cryptocurrencies = _dbContext.InvestmentCryptoCurrencies
-                .Select(t => new { Cryptocurrency = t.TypeCryptoCurrency })
-                .Distinct()
-                .ToList<object>();
+            var cryptocurrencies = _dbContext.TypeCryptoCurrencies.ToList();
+                //.Select(t => new { Cryptocurrency = t.TypeCryptoCurrency })
+                //.Distinct()
+                //.ToList();
 
-            return cryptocurrencies;
+            return Ok(cryptocurrencies);
         }
 
         [HttpGet("cryptocurrenciesSum")]

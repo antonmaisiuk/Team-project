@@ -122,15 +122,15 @@ namespace Elaborate.Controllers
             else return NotFound(investmentPreciousMetalId);
         }
 
-        [HttpGet]
-        public List<object> GetUniquePreciousMetals()
+        [HttpGet("types")]
+        public ActionResult<IEnumerable<InvestmentPreciousMetal>> GetUniquePreciousMetals()
         {
-            var preciousMetals = _dbContext.InvestmentsPreciousMetals
-                .Select(t => new { PreciousMetal = t.TypePreciousMetal })
-                .Distinct()
-                .ToList<object>();
+            var preciousMetals = _dbContext.TypesPreciousMetals.ToList();
+                //.Select(t => new { PreciousMetal = t.TypePreciousMetal })
+                //.Distinct()
+                //.ToList();
 
-            return preciousMetals;
+            return Ok(preciousMetals);
         }
 
         [HttpGet("metalsSum")]

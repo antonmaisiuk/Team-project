@@ -57,7 +57,7 @@ namespace Elaborate.Controllers
         }
 
         [HttpPost("addStock")]
-        public ActionResult CreateStock([FromBody] CreateInvestmentStockDto dto, int typeId)
+        public ActionResult CreateStock([FromBody] CreateInvestmentStockDto dto/*, int typeId*/)
         {
             var stock = _mapper.Map<InvestmentStock>(dto);
 
@@ -68,14 +68,14 @@ namespace Elaborate.Controllers
 
 
             //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
-            if (typeId == null)
-            {
-                stock.TypeStockId = 0;
-            }
-            else
-            {
-                stock.TypeStockId = typeId; 
-            }
+            //if (typeId == null)
+            //{
+            //    stock.TypeStockId = 0;
+            //}
+            //else
+            //{
+            //    stock.TypeStockId = typeId; 
+            //}
 
             //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
             var existingStock = _dbContext.InvestmentStocks
@@ -85,7 +85,16 @@ namespace Elaborate.Controllers
             {
                 existingStock.Amount += stock.Amount;
                 _dbContext.SaveChanges();
-                return Ok(existingStock);
+
+                var stockList = _dbContext
+                    .InvestmentStocks.Where(r => r.Account.Id == userId)
+                    .ToList();
+                double stocksSum = _dbContext
+                .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { stockList, stocksSum };
+
+                return Ok(resultArr);
             }
             else
             {
@@ -96,19 +105,23 @@ namespace Elaborate.Controllers
                     .InvestmentStocks.Where(r => r.Account.Id == userId)
                     .ToList();
 
-                return Ok(stock);
+                double stocksSum = _dbContext
+                .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { stockList, stocksSum };
+
+                return Ok(resultArr);
             }
         }
 
-        [HttpGet]
-        public List<object> GetUniqueStocks()
+        [HttpGet("types")]
+        public ActionResult<IEnumerable<InvestmentStock>> GetUniqueStocks()
         {
-            var stocks = _dbContext.InvestmentStocks
-                .Select(t => new { Stock = t.TypeStock })
-                .Distinct()
-                .ToList<object>();
+            var stocks = _dbContext.TypeStocks.ToList();
+            //.Select(t => new { Stock = t.TypeStock })
+            //.Distinct()
 
-            return stocks;
+            return Ok(stocks);
         }
 
         [HttpGet("StocksSum")]
