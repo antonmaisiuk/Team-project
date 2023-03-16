@@ -6,6 +6,12 @@ import {InvestmentItem, InvestmentType} from "../../App";
 import {Button} from "react-bootstrap";
 import NavBar from "../NavBar/NavBar";
 import {useNavigate} from "react-router-dom";
+import {InvestingTypeInterface} from "../PopUp/PopUp";
+
+// export interface InvestingTypeInterface{
+//   id: number,
+//   name: string,
+// }
 
 const Investments = () => {
 
@@ -22,6 +28,8 @@ const Investments = () => {
   const [stocksSum, setStocksSum] = useState<number>(0);
   const [cryptoSum, setCryptoSum] = useState<number>(0);
   const [metalsSum, setMetalsSum] = useState<number>(0);
+
+  const [investingTypes, setInvestingTypes] = useState<InvestingTypeInterface[]>([]);
 
 
   async function getInvestingSums() {
@@ -125,6 +133,8 @@ const Investments = () => {
             className={"stocks_invest_list"}
             title={"Stocks balance"}
             investType={InvestmentType.stocks}
+            setInvestingSum={setStocksSum}
+            setInvesting={setInvestStocksList}
             type={TileType.investing_list}
             investingList={investStocksList}
           />
@@ -132,6 +142,8 @@ const Investments = () => {
             className={"crypto_invest_list"}
             title={"Crypto balance"}
             type={TileType.investing_list}
+            setInvestingSum={setCryptoSum}
+            setInvesting={setInvestCryptoList}
             investType={InvestmentType.crypto}
             investingList={investCryptoList}
           />
@@ -139,6 +151,8 @@ const Investments = () => {
             className={"metals_invest_list"}
             title={"Metals balance"}
             investType={InvestmentType.metals}
+            setInvestingSum={setMetalsSum}
+            setInvesting={setInvestMetalsList}
             type={TileType.investing_list}
             investingList={investMetalsList}
           />

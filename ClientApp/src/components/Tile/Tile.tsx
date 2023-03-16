@@ -121,6 +121,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
       .reduce((partialSum, a) => partialSum + a.value, 0); ;
   }
 
+  // console.log('### investList: ', investingList);
   return (
     <StyledTile className={className} type={type}>
       <StyledTileTitle>
@@ -184,7 +185,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
                   {investingList.map((invest) => {
                     return (
                       <>
-                        <InvestmentsItem title={invest.title} amount={invest.amount} investmentType={investType}/>
+                        <InvestmentsItem /*{title={invest.title}}*/ amount={invest.amount} typeId={invest.typeId} investType={investType} /*{investmentType={investType}}*/ />
                         <StyledLine/>
                       </>
                     );

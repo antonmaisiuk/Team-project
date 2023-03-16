@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, FormEvent, HTMLAttributes, SetStateAction} from 'react';
+import React, {Dispatch, FC, FormEvent, HTMLAttributes, SetStateAction, useEffect, useState} from 'react';
 import {
   StyledCancelButton,
   StyledForm,
@@ -18,6 +18,11 @@ export enum PopUpType{
   addTransaction,
   addCategory,
   addInvestment
+}
+
+export interface InvestingTypeInterface{
+  id: number,
+  name: string,
 }
 
 export interface PopUpBaseInterface {
@@ -66,10 +71,23 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   setInvestingSum = () => {},
 }) => {
 
-  // const [title, setTitle] = useState('');
+  const [investingTypes, setInvestingTypes] = useState<InvestingTypeInterface[]>([]);
   // const [value, setValue] = useState(0);
   // const [date, setDate] = useState(getCurrentDate());
   // const [comment, setComment] = useState('');
+
+  let controller = '';
+  switch (investType){
+    case InvestmentType.stocks:
+      controller = 'InvestmentStock';
+      break;
+    case InvestmentType.crypto:
+      controller = 'InvestmentCryptoCurrency';
+      break;
+    case InvestmentType.metals:
+      controller = 'InvestmentPreciousMetal';
+      break;
+  }
 
   const sendTransactionForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -108,50 +126,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       console.error('Error with response');
     }
   }
-  const sendInvestmentForm = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const {investCount, date, investmentName} = event.target as typeof event.target & {
-      investCount: {value: number},
-      date: {value: string},
-      investmentName: {value: string},
-    }
-
-    if (date.value === '') {
-         date.value = getCurrentDate();
-    }
-    let url = '';
-    switch (investType){
-      case InvestmentType.stocks:
-        url = 'api/InvestmentStock/addStock';
-        break;
-      case InvestmentType.crypto:
-        url = 'api/InvestmentCryptoCurrency/addCryptoCurrency';
-        break;
-      case InvestmentType.metals:
-        url = 'api/InvestmentPreciousMetal/addMetals';
-        break;
-    }
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        amount: investCount.value,
-        // TypeCryptoCurrency: investmentName.value,
-        date: date.value,
-      })
-    })
-    if (response.ok){
-      const data:[[], number] = await response.json();
-      console.log(data);
-      setInvestments(data[0]);
-      setInvestingSum(data[1]);
-      setActive(false);
-    } else {
-      console.error('Error with response');
-    }
-  }
   const sendCategoryForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -174,7 +148,75 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     setCategories(data);
     setActive(false);
   }
+  const sendInvestmentForm = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
+    const {investCount, investmentName} = event.target as typeof event.target & {
+      investCount: {value: number},
+      // date: {value: string},
+      investmentName: {value: number},
+    }
+
+    // if (date.value === '') {
+    //   date.value = getCurrentDate();
+    // }
+    // let url = '';
+    // switch (investType){
+    //   case InvestmentType.stocks:
+    //     url = 'api/InvestmentStock/addStock';
+    //     break;
+    //   case InvestmentType.crypto:
+    //     url = 'api/InvestmentCryptoCurrency/addCryptoCurrency';
+    //     break;
+    //   case InvestmentType.metals:
+    //     url = 'api/InvestmentPreciousMetal/addMetals';
+    //     break;
+    // }
+
+    const response = await fetch(`api/${controller}/addStock`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        Amount: investCount.value,
+        TypeStockId: investmentName.value,
+        // date: date.value,
+      })
+    })
+    if (response.ok){
+      const data:[[], number] = await response.json();
+      console.log(data);
+      // data[0].map(item => item.typeId = (investingTypes.filter(type => type.id === item.typeId).pop() || {}).name);
+      setInvestments(data[0]);
+      setInvestingSum(data[1]);
+      setActive(false);
+    } else {
+      console.error('Error with response');
+    }
+  }
+
+  async function getInvestingTypes() {
+    // let controller;
+    // switch (investType){
+    //   case InvestmentType.stocks:
+    //     controller = 'InvestmentStock';
+    //     break;
+    //   case InvestmentType.crypto:
+    //     controller = 'InvestmentCryptoCurrency';
+    //     break;
+    //   case InvestmentType.metals:
+    //     controller = 'InvestmentPreciousMetal';
+    //     break;
+    // }
+
+    const typeResponse = await fetch(`api/${controller}/types`);
+    if (typeResponse.ok) {
+      const data = await typeResponse.json();
+      console.log('### data: ', data);
+      setInvestingTypes(data);
+    } else {
+      alert("HTTP Error: " + typeResponse.status)
+    }
+  }
 
   function closePopUp(e: FormEvent<HTMLButtonElement>) {
     e.preventDefault()
@@ -186,6 +228,11 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     return curr.toISOString().substring(0, 10);
   }
 
+  useEffect(() => {
+    if(active){
+      getInvestingTypes()
+    }
+  }, [active]);
 
   return (
     <StyledPopUpContainer
@@ -301,18 +348,18 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                         <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'g' : 'pcs'}</StyledLabel>
                       {/*<input type={"number"} />*/}
                     </StyledFormItem>
-                    <StyledLine/>
-                    <StyledFormItem>
-                        <label htmlFor={"date"}>Date:</label>
-                        <Input
-                            type={InputEnum.date}
-                            id={'date'}
-                          // value={"02-12-2022"}
-                          // onChange={(e)=> setDate(e.currentTarget.value)}
-                          // defaultValue={"02-12-2022"}
-                        />
-                      {/*<input type={"date"} id={"date"}/>*/}
-                    </StyledFormItem>
+                    {/*<StyledLine/>*/}
+                    {/*<StyledFormItem>*/}
+                    {/*    <label htmlFor={"date"}>Date:</label>*/}
+                    {/*    <Input*/}
+                    {/*        type={InputEnum.date}*/}
+                    {/*        id={'date'}*/}
+                    {/*      // value={"02-12-2022"}*/}
+                    {/*      // onChange={(e)=> setDate(e.currentTarget.value)}*/}
+                    {/*      // defaultValue={"02-12-2022"}*/}
+                    {/*    />*/}
+                    {/*  /!*<input type={"date"} id={"date"}/>*!/*/}
+                    {/*</StyledFormItem>*/}
                     <StyledLine/>
                     <StyledFormItem>
                         <label htmlFor={'investmentName'}>
@@ -320,9 +367,11 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                             investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
                         </label>
                         <select id={'investmentName'}>
-                            <option>Apple</option>
-                            <option>Gold</option>
-                            <option>Bitcoin</option>
+                          {investingTypes.map((type) => (
+                            <option value={type.id}>{type.name}</option>
+                          ))}
+                            {/*<option>Gold</option>*/}
+                            {/*<option>Bitcoin</option>*/}
                         </select>
                         {/*<Input*/}
                         {/*    type={InputEnum.text}*/}

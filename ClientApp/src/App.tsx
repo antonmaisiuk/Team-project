@@ -26,9 +26,10 @@ export enum InvestmentType{
   metals
 }
 export type InvestmentItem ={
-  title: string;
-  investmentType: InvestmentType;
+  typeId: number
+  // title: string;
   amount: number;
+  investType: InvestmentType;
 }
 
 export type CategoryItem ={

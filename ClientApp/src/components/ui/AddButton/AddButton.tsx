@@ -15,7 +15,9 @@ const AddButton: FC<AddButtonInterface & HTMLAttributes<HTMLButtonElement>> = ({
 
   return (
     <Wrapper className={'add_button'}>
-      <StyledAdd onClick={() => setActive(true)} >
+      <StyledAdd onClick={() => {
+        setActive(true);
+      }} >
         <AddIcon/>
         {/*<StyledPopUp trigger={} position="top center" disabled={false} closeOnDocumentClick={false} arrow={false}>*/}
         {/*  <div>Ahaha</div>*/}
