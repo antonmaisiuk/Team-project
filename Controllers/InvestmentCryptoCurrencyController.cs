@@ -111,7 +111,7 @@ namespace Elaborate.Controllers
             return cryptocurrencies;
         }
 
-        /*[HttpGet("cryptocurrenciesSum")]
+        [HttpGet("cryptocurrenciesSum")]
         public ActionResult<InvestmentCryptoCurrency> GetSumOfCryptoCurrencies()
         {
             var jwt = Request.Cookies["jwt"];
@@ -119,9 +119,9 @@ namespace Elaborate.Controllers
             int userId = int.Parse(token.Issuer);
 
             decimal cryptoSum = _dbContext
-                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId);
+                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
 
             return Ok(cryptoSum);
-        }*/
+        }
     }
 }

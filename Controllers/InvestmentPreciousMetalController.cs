@@ -133,7 +133,7 @@ namespace Elaborate.Controllers
             return preciousMetals;
         }
 
-        /*[HttpGet("metalsSum")]
+        [HttpGet("metalsSum")]
         //[Route("investmentsPreciousMetalSum")]
         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestmentsPreciousMetal()
         {
@@ -141,11 +141,11 @@ namespace Elaborate.Controllers
             var token = _jwtService.Verify(jwt);
             int userId = int.Parse(token.Issuer);
 
-            decimal transactionSum = _dbContext
-            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(t => t.ValueOfInvestment);
+            double metalsSum = _dbContext
+            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(t => t.Amount);
 
-            return Ok(transactionSum);
-        }*/
+            return Ok(metalsSum);
+        }
         //[HttpPost]
         //public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentId)
         //{

@@ -25,7 +25,7 @@ const Investments = () => {
 
 
   async function getInvestingSums() {
-    const stocksResponse = await fetch('api/InvestmentStocks/stocksSum');
+    const stocksResponse = await fetch('api/InvestmentStock/stocksSum');
     if (stocksResponse.ok){
       const data = await stocksResponse.json();
       setStocksSum(data);
@@ -52,7 +52,7 @@ const Investments = () => {
 
   async function getInvestingData() {
 
-    const stocksResponse = await fetch('api/InvestmentStocks/stocks');
+    const stocksResponse = await fetch('api/InvestmentStock/stocks');
     if (stocksResponse.ok){
       const data = await stocksResponse.json();
 

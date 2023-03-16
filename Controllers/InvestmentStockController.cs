@@ -111,18 +111,18 @@ namespace Elaborate.Controllers
             return stocks;
         }
 
-        /*[HttpGet("StocksSum")]
+        [HttpGet("StocksSum")]
         public ActionResult<InvestmentStock> GetSumOfStocks()
         {
             var jwt = Request.Cookies["jwt"];
             var token = _jwtService.Verify(jwt);
             int userId = int.Parse(token.Issuer);
 
-            decimal StocksSum = _dbContext
-                .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.ValueOfInvestment);
+            double StocksSum = _dbContext
+                .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
 
             return Ok(StocksSum);
-        }*/
+        }
     }
 }
 
