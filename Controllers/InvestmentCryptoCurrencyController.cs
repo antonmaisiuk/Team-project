@@ -81,7 +81,23 @@ namespace Elaborate.Controllers
 
             return Ok(resultArr);
         }
+        [HttpPut("updateCrypto")]
+        public async Task<ActionResult> UpdateCrypto(int id, [FromBody] InvestmentCryptoCurrency dto)
+        {
+            var investmentToUpdate = _dbContext.InvestmentCryptoCurrencies.FirstOrDefault(i => i.Id == id);
 
+            if (investmentToUpdate is null)
+                return NotFound("Nie znaleziono inwestycji o podanym id");
+
+            if (dto.Amount > 0 && dto.Amount < decimal.MaxValue)
+                investmentToUpdate.Amount = dto.Amount;
+            investmentToUpdate.AccountId = dto.AccountId;
+            investmentToUpdate.TypeCryptoCurrencyId = dto.TypeCryptoCurrencyId;
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(investmentToUpdate);
+        }
         /*[HttpGet("cryptocurrenciesSum")]
         public ActionResult<InvestmentCryptoCurrency> GetSumOfCryptoCurrencies()
         {
