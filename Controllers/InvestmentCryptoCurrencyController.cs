@@ -78,17 +78,26 @@ namespace Elaborate.Controllers
                 crypto.TypeCryptoCurrencyId = typeId;
             }
 
+            //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
+            var existingCrypto = _dbContext.InvestmentCryptoCurrencies
+    .FirstOrDefault(c => c.TypeCryptoCurrencyId == crypto.TypeCryptoCurrencyId && c.AccountId == userId);
 
-            _dbContext.InvestmentCryptoCurrencies.Add(crypto);
-            _dbContext.SaveChanges();
+            if (existingCrypto != null)
+            {
+                existingCrypto.Amount += crypto.Amount;
+                _dbContext.SaveChanges();
+                return Ok(existingCrypto);
+            }
+            else
+            {
+                _dbContext.InvestmentCryptoCurrencies.Add(crypto);
+                _dbContext.SaveChanges();
 
-            var cryptoList = _dbContext
-                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
-                .ToList();
-
-           
-
-            return Ok(crypto);
+                var cryptoList = _dbContext
+                    .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+                    .ToList();
+                return Ok(crypto);
+            }
         }
 
         [HttpGet]

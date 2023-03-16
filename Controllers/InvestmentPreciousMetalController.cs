@@ -65,16 +65,28 @@ namespace Elaborate.Controllers
                 metalInvestment.TypePreciousMetalId = typeId;
             }
 
-            _dbContext.InvestmentsPreciousMetals.Add(metalInvestment);
-            _dbContext.SaveChanges();
+            //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
+            var existingMetal = _dbContext.InvestmentsPreciousMetals
+    .FirstOrDefault(c => c.TypePreciousMetalId == metalInvestment.TypePreciousMetalId && c.AccountId == userId);
 
-            var investments = _dbContext
-                .InvestmentsPreciousMetals
-                .Where(r => r.Account.Id == userId)
-                .ToList();
+            if (existingMetal != null)
+            {
+                existingMetal.Amount += metalInvestment.Amount;
+                _dbContext.SaveChanges();
+                return Ok(existingMetal);
+            }
+            else
+            {
+                _dbContext.InvestmentsPreciousMetals.Add(metalInvestment);
+                _dbContext.SaveChanges();
 
-            return Ok(metalInvestment);
-          
+                var investments = _dbContext
+                    .InvestmentsPreciousMetals
+                    .Where(r => r.Account.Id == userId)
+                    .ToList();
+
+                return Ok(metalInvestment);
+            }  
         }
 
 

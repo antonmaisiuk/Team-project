@@ -76,15 +76,28 @@ namespace Elaborate.Controllers
             {
                 stock.TypeStockId = typeId; 
             }
-            
-            _dbContext.InvestmentStocks.Add(stock);
-            _dbContext.SaveChanges();
 
-            var stockList = _dbContext
-                .InvestmentStocks.Where(r => r.Account.Id == userId)
-                .ToList();
+            //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
+            var existingStock = _dbContext.InvestmentStocks
+    .FirstOrDefault(c => c.TypeStockId == stock.TypeStockId && c.AccountId == userId);
 
-            return Ok(stock);
+            if (existingStock != null)
+            {
+                existingStock.Amount += stock.Amount;
+                _dbContext.SaveChanges();
+                return Ok(existingStock);
+            }
+            else
+            {
+                _dbContext.InvestmentStocks.Add(stock);
+                _dbContext.SaveChanges();
+
+                var stockList = _dbContext
+                    .InvestmentStocks.Where(r => r.Account.Id == userId)
+                    .ToList();
+
+                return Ok(stock);
+            }
         }
 
         [HttpGet]
