@@ -118,7 +118,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
 
     return transactionsList
       .filter((item) => item.transCategoryId === catId)
-      .reduce((partialSum, a) => partialSum + a.value, 0); ;
+      .reduce((partialSum, a) => partialSum + a.value, 0);
   }
 
   // console.log('### investList: ', investingList);
@@ -183,6 +183,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
         : type === TileType.investing_list ?
                 <><StyledList type={type} setInvesting={setInvesting}>
                   {investingList.map((invest) => {
+                    // console.log('### Invest: ', invest);
                     return (
                       <>
                         <InvestmentsItem /*{title={invest.title}}*/ amount={invest.amount} typeId={invest.typeId} investType={investType} /*{investmentType={investType}}*/ />

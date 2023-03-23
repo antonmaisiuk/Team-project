@@ -111,7 +111,7 @@ namespace Elaborate.Entities
                 .IsRequired();
 
             modelBuilder.Entity<InvestmentStock>()
-                .Property(r => r.TypeStockId)
+                .Property(r => r.TypeId)
                 .HasColumnType("int")
                 .IsRequired();
 

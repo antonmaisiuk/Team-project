@@ -17,7 +17,7 @@ namespace Elaborate.Entities
         public virtual Account Account { get; set; }
         [Display(Name = "id spółki której akcje chcemy kupić")]
         [Required]
-        public int TypeStockId { get; set; }
+        public int TypeId { get; set; }
         public virtual TypeStock TypeStock { get; set; }
     }
 }

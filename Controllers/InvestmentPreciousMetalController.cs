@@ -44,7 +44,7 @@ namespace Elaborate.Controllers
             return Ok(investmentsPreciousMetal);
         }
 
-        [HttpPost("addMetal")]
+        [HttpPost("Add")]
         public ActionResult CreateInvestment([FromBody] CreateInvestmentPreciousMetalsDto dto, int typeId)
         {
             var metalInvestment = _mapper.Map<InvestmentPreciousMetal>(dto);

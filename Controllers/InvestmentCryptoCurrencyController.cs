@@ -57,8 +57,8 @@ namespace Elaborate.Controllers
             else return NotFound(cryptoCurrencyId);
         }
 
-        [HttpPost("addCryptoCurrency")]
-        public ActionResult CreateCryptoCurrency([FromBody] CreateInvestmentCryptoCurrencyDto dto, int typeId)
+        [HttpPost("Add")]
+        public ActionResult CreateCryptoCurrency([FromBody] CreateInvestmentCryptoCurrencyDto dto/*, int typeId*/)
         {
             var crypto = _mapper.Map<InvestmentCryptoCurrency>(dto);
 
@@ -69,14 +69,14 @@ namespace Elaborate.Controllers
 
 
             //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
-            if (typeId == null)
-            {
-                crypto.TypeCryptoCurrencyId = 0;
-            }
-            else
-            {
-                crypto.TypeCryptoCurrencyId = typeId;
-            }
+            //if (typeId == null)
+            //{
+            //    crypto.TypeCryptoCurrencyId = 0;
+            //}
+            //else
+            //{
+            //    crypto.TypeCryptoCurrencyId = typeId;
+            //}
 
             //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
             var existingCrypto = _dbContext.InvestmentCryptoCurrencies

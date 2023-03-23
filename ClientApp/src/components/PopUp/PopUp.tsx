@@ -76,16 +76,20 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   // const [date, setDate] = useState(getCurrentDate());
   // const [comment, setComment] = useState('');
 
-  let controller = '';
+  let controller = '', cat = '';
+  // console.log('### INVEST TYPE: ', investType);
   switch (investType){
     case InvestmentType.stocks:
       controller = 'InvestmentStock';
+      cat = 'TypeStockId';
       break;
     case InvestmentType.crypto:
       controller = 'InvestmentCryptoCurrency';
+      cat = 'Crypto';
       break;
     case InvestmentType.metals:
       controller = 'InvestmentPreciousMetal';
+      cat = 'Metals';
       break;
   }
 
@@ -154,7 +158,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     const {investCount, investmentName} = event.target as typeof event.target & {
       investCount: {value: number},
       // date: {value: string},
-      investmentName: {value: number},
+      investmentName: {value: HTMLSelectElement},
     }
 
     // if (date.value === '') {
@@ -172,13 +176,13 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     //     url = 'api/InvestmentPreciousMetal/addMetals';
     //     break;
     // }
-
-    const response = await fetch(`api/${controller}/addStock`, {
-      method: "POST",
+    // console.log('### investmentName: ', investmentName);
+    const response = await fetch(`api/${controller}/Add`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
         Amount: investCount.value,
-        TypeStockId: investmentName.value,
+        TypeId: investmentName.value,
         // date: date.value,
       })
     })
