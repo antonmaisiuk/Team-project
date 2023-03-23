@@ -57,7 +57,7 @@ namespace Elaborate.Controllers
             else return NotFound(cryptoCurrencyId);
         }
 
-        [HttpPost("addCryptoCurrency")]
+        [HttpPost("Add")]
         public ActionResult CreateCryptoCurrency([FromBody] CreateInvestmentCryptoCurrencyDto dto, int typeId)
         {
             var crypto = _mapper.Map<InvestmentCryptoCurrency>(dto);
@@ -78,17 +78,31 @@ namespace Elaborate.Controllers
             {
                 existingCrypto.Amount += crypto.Amount;
                 _dbContext.SaveChanges();
-                return Ok(existingCrypto);
+
+                var list = _dbContext
+                    .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+                    .ToList();
+                decimal sum = _dbContext
+                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
             else
             {
                 _dbContext.InvestmentCryptoCurrencies.Add(crypto);
                 _dbContext.SaveChanges();
 
-                var cryptoList = _dbContext
+                var list = _dbContext
                     .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
                     .ToList();
-                return Ok(crypto);
+                decimal sum = _dbContext
+                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
         }
 

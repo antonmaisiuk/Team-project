@@ -38,18 +38,18 @@ const InvestmentsItem:FC<InvestmentItem> = (
         break;
     }
 
-    // const typeResponse = await fetch(`api/${controller}/types`);
-    // if (typeResponse.ok) {
-    //   const data = await typeResponse.json();
-    //   console.log('### data: ', data);
-    //   // setInvestingTypes(data);
-    //   console.log('### typeId: ', typeId);
-    //   const currentType = data.filter((item: { id: number; }) => item.id === typeId);
-    //   console.log('### currentType: ', currentType);
-    //   setInvestingType(currentType[0]);
-    // } else {
-    //   alert("HTTP Error: " + typeResponse.status)
-    // }
+    const typeResponse = await fetch(`api/${controller}/types`);
+    if (typeResponse.ok) {
+      const data = await typeResponse.json();
+      console.log('### data: ', data);
+      // setInvestingTypes(data);
+      console.log('### typeId: ', typeId);
+      const currentType = data.filter((item: { id: number; }) => item.id === typeId);
+      console.log('### currentType: ', currentType);
+      setInvestingType(currentType[0]);
+    } else {
+      alert("HTTP Error: " + typeResponse.status)
+    }
   }
 
 
@@ -76,7 +76,7 @@ const InvestmentsItem:FC<InvestmentItem> = (
     <StyledInvestmentItem>
       <StyledTextDiv>
         <h3 className={"investment_title"}>{investingType.name}</h3>
-        <p className={"investment_type"}>{investType}</p>
+        {/*<p className={"investment_type"}>{investType}</p>*/}
       </StyledTextDiv>
       <StyledValueDiv>
         <p className={"investment_count"}>{amount} psc</p>

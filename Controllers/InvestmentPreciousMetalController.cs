@@ -64,19 +64,31 @@ namespace Elaborate.Controllers
             {
                 existingMetal.Amount += metalInvestment.Amount;
                 _dbContext.SaveChanges();
-                return Ok(existingMetal);
+
+                var list = _dbContext
+                    .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
+                    .ToList();
+                double sum = _dbContext
+                .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
             else
             {
                 _dbContext.InvestmentsPreciousMetals.Add(metalInvestment);
                 _dbContext.SaveChanges();
 
-                var investments = _dbContext
-                    .InvestmentsPreciousMetals
-                    .Where(r => r.Account.Id == userId)
+                var list = _dbContext
+                    .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
                     .ToList();
+                double sum = _dbContext
+                .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
 
-                return Ok(metalInvestment);
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }  
         }
 

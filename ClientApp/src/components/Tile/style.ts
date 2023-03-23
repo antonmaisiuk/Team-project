@@ -25,6 +25,8 @@ export const StyledTile = styled.div<TileBaseInterface>`
 
   background-color: white;
   padding: 20px 30px;
+  max-height: 100%;
+  overflow-y: scroll;
   
   border-radius: 18px;
 
