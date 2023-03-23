@@ -25,7 +25,7 @@ namespace Elaborate.Entities
         public virtual Account Account { get; set; }
         [Display(Name = "Nazwa Kryptowaluty")]
         [Required]
-        public int TypeCryptoCurrencyId { get; set; }
+        public int TypeId { get; set; }
         public virtual TypeCryptoCurrency TypeCryptoCurrency { get; set; }
 
     }

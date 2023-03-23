@@ -68,19 +68,11 @@ namespace Elaborate.Controllers
             crypto.AccountId = userId;
 
 
-            //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
-            if (typeId == null)
-            {
-                crypto.TypeCryptoCurrencyId = 0;
-            }
-            else
-            {
-                crypto.TypeCryptoCurrencyId = typeId;
-            }
+
 
             //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
             var existingCrypto = _dbContext.InvestmentCryptoCurrencies
-    .FirstOrDefault(c => c.TypeCryptoCurrencyId == crypto.TypeCryptoCurrencyId && c.AccountId == userId);
+    .FirstOrDefault(c => c.TypeId == crypto.TypeId && c.AccountId == userId);
 
             if (existingCrypto != null)
             {

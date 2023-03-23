@@ -74,7 +74,7 @@ namespace Elaborate.Entities
                 .IsRequired();
 
             modelBuilder.Entity<InvestmentPreciousMetal>()
-                .Property(r => r.TypePreciousMetalId)
+                .Property(r => r.TypeId)
                 .HasColumnType("int")
                 .IsRequired();
 
@@ -92,7 +92,7 @@ namespace Elaborate.Entities
                 .IsRequired();
 
             modelBuilder.Entity<InvestmentCryptoCurrency>()
-                .Property(r => r.TypeCryptoCurrencyId)
+                .Property(r => r.TypeId)
                 .HasColumnType("int")
                 .IsRequired();
 
@@ -111,7 +111,7 @@ namespace Elaborate.Entities
                 .IsRequired();
 
             modelBuilder.Entity<InvestmentStock>()
-                .Property(r => r.TypeStockId)
+                .Property(r => r.TypeId)
                 .HasColumnType("int")
                 .IsRequired();
 

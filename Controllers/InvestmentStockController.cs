@@ -79,7 +79,7 @@ namespace Elaborate.Controllers
 
             //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
             var existingStock = _dbContext.InvestmentStocks
-    .FirstOrDefault(c => c.TypeStockId == stock.TypeStockId && c.AccountId == userId);
+    .FirstOrDefault(c => c.TypeId == stock.TypeId && c.AccountId == userId);
 
             if (existingStock != null)
             {
