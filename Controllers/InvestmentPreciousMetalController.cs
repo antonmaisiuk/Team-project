@@ -55,19 +55,10 @@ namespace Elaborate.Controllers
             metalInvestment.AccountId = userId;
 
            
-            //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
-            if (typeId == null)
-            {
-                metalInvestment.TypePreciousMetalId = 0;
-            }
-            else
-            {
-                metalInvestment.TypePreciousMetalId = typeId;
-            }
 
             //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
             var existingMetal = _dbContext.InvestmentsPreciousMetals
-    .FirstOrDefault(c => c.TypePreciousMetalId == metalInvestment.TypePreciousMetalId && c.AccountId == userId);
+    .FirstOrDefault(c => c.TypeId == metalInvestment.TypeId && c.AccountId == userId);
 
             if (existingMetal != null)
             {
@@ -101,7 +92,7 @@ namespace Elaborate.Controllers
             if (dto.Amount > 0 && dto.Amount < double.MaxValue)
                 investmentToUpdate.Amount = dto.Amount;
             investmentToUpdate.AccountId = dto.AccountId;
-            investmentToUpdate.TypePreciousMetalId = dto.TypePreciousMetalId;
+            investmentToUpdate.TypeId = dto.TypeId;
 
             await _dbContext.SaveChangesAsync();
 

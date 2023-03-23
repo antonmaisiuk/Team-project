@@ -23,7 +23,7 @@ namespace Elaborate.Entities
         public virtual Account Account { get; set; }
         [Display(Name = "Typ metalu")]
         [Required]
-        public int TypePreciousMetalId { get; set; }
+        public int TypeId { get; set; }
         public virtual TypePreciousMetal TypePreciousMetal { get; set; }
 
     }
