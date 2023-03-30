@@ -26,16 +26,29 @@ namespace Elaborate.Helpers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secureKey);
-            tokenHandler.ValidateToken(jwt, new TokenValidationParameters()
+            var validationParameters = new TokenValidationParameters()
             {
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateAudience = false,
+                ValidateLifetime = true // Sprawdź ważność tokenu
+            };
+            try
+            {
+                tokenHandler.ValidateToken(jwt, validationParameters, out SecurityToken validatedToken);
+                return (JwtSecurityToken)validatedToken;
             }
-                , out SecurityToken validatedToken);
-
-            return  (JwtSecurityToken) validatedToken;
+            catch (SecurityTokenExpiredException)
+            {
+                // Token wygasł, wykonaj odpowiednie akcje.
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Inne błędy podczas weryfikacji tokenu.
+                throw new Exception("Nie można zweryfikować tokenu JWT.", ex);
+            }
         }
     }
 }

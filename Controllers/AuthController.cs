@@ -7,6 +7,7 @@ using Elaborate.Data;
 using Elaborate.Models;
 using Elaborate.Elaborate.Entities;
 using Elaborate.Helpers;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Elaborate.Controllers
 {
@@ -66,15 +67,15 @@ namespace Elaborate.Controllers
                 message = "success"
             });
         }
-        
+
         [HttpGet("user")]
         public IActionResult User()
         {
-            //try
-            //{
-                var jwt = Request.Cookies["jwt"];
+            var jwt = Request.Cookies["jwt"];
 
-                if (jwt != null)
+            if (jwt != null)
+            {
+                try
                 {
                     var token = _jwtService.Verify(jwt);
 
@@ -83,15 +84,22 @@ namespace Elaborate.Controllers
 
                     return Ok(user);
                 }
-                else
+                catch (SecurityTokenExpiredException)
                 {
+                    // Token wygasł, wykonaj odpowiednie akcje.
+                    Response.Cookies.Delete("jwt");
                     return Unauthorized();
                 }
-                
-            //}catch(Exception _)
-            //{
-            //    return Unauthorized();
-            //}
+                catch
+                {
+                    // Weryfikacja nie powiodła się lub wystąpił inny błąd.
+                    return Unauthorized();
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpPost("logout")]
