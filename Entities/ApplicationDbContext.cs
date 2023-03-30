@@ -78,6 +78,12 @@ namespace Elaborate.Entities
                 .HasColumnType("int")
                 .IsRequired();
 
+            //Oznaczenie klucza obcego
+            modelBuilder.Entity<InvestmentPreciousMetal>()
+                .HasOne(r => r.TypePreciousMetal)
+                .WithMany()
+                .HasForeignKey(r => r.TypeId);
+
             modelBuilder.Entity<TypePreciousMetal>()
                 .Property(r => r.Name)
                 .IsRequired()
@@ -95,6 +101,11 @@ namespace Elaborate.Entities
                 .Property(r => r.TypeId)
                 .HasColumnType("int")
                 .IsRequired();
+            //Oznaczenie klucza obcego
+            modelBuilder.Entity<InvestmentCryptoCurrency>()
+                .HasOne(r => r.TypeCryptoCurrency)
+                .WithMany()
+                .HasForeignKey(r => r.TypeId);
 
             modelBuilder.Entity<TypeCryptoCurrency>()
                 .Property(r => r.Name)
@@ -114,6 +125,12 @@ namespace Elaborate.Entities
                 .Property(r => r.TypeId)
                 .HasColumnType("int")
                 .IsRequired();
+
+            //Oznaczenie klucza obcego
+            modelBuilder.Entity<InvestmentStock>()
+                .HasOne(r => r.TypeStock)
+                .WithMany()
+                .HasForeignKey(r => r.TypeId);
 
             modelBuilder.Entity<TypeStock>()
                 .Property(r => r.Name)
