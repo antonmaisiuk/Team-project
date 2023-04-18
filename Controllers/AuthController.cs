@@ -8,6 +8,9 @@ using Elaborate.Models;
 using Elaborate.Elaborate.Entities;
 using Elaborate.Helpers;
 using Microsoft.IdentityModel.Tokens;
+using Elaborate.Exceptions;
+using Microsoft.AspNetCore.Http;
+using System.Data.Entity;
 
 namespace Elaborate.Controllers
 {
@@ -17,30 +20,53 @@ namespace Elaborate.Controllers
     {
         private readonly IAccountRepository _repository;
         private readonly JwtService _jwtService;
+        private readonly AccountContext _context;
         /// <summary>
         /// Konstruktor
         /// </summary>
-        public AuthController(IAccountRepository repository, JwtService jwtService)
+        public AuthController(IAccountRepository repository, JwtService jwtService, AccountContext context)
         {
             _repository = repository;
             _jwtService = jwtService;
+            _context = context;
         }
 
 
         [HttpPost("register")]
         public IActionResult Register(RegisterDto dto)
         {
-            var account = new Account
+            if (ModelState.IsValid)
             {
-                Name = dto.Name,
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                Phone = dto.Phone
+                // sprawdź, czy podany adres e-mail nie jest już przypisany do innego konta
+                if (_context.Accounts.Any(u => u.Email == dto.Email))
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        new { Status = "Bad Request - Email is already taken" });
+                }
+                // sprawdź, czy podany numer telefonu nie jest już przypisany do innego konta
+                if (_context.Accounts.Any(u => u.Phone == dto.Phone))
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest,
+                        new { Status = "Bad Request - Phone number is already taken" });
+                }
 
-            };
+                //Przepisywanie do Account wartości atrybutów 
+                var account = new Account
+                {
+                    Name = dto.Name,
+                    Email = dto.Email,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                    Phone = dto.Phone
 
-            return Created("succes", _repository.Create(account));
+                };
+
+                return Created("succes", _repository.Create(account));
+
+            }
+
+            return View(dto);
         }
+
 
 
         [HttpPost("login")]
