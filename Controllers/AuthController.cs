@@ -8,7 +8,6 @@ using Elaborate.Models;
 using Elaborate.Elaborate.Entities;
 using Elaborate.Helpers;
 using Microsoft.IdentityModel.Tokens;
-using Elaborate.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System.Data.Entity;
 
@@ -41,13 +40,13 @@ namespace Elaborate.Controllers
                 if (_context.Accounts.Any(u => u.Email == dto.Email))
                 {
                     return StatusCode(StatusCodes.Status400BadRequest,
-                        new { Status = "Bad Request - Email is already taken" });
+                        new { message = "Email is already taken" });
                 }
                 // sprawdź, czy podany numer telefonu nie jest już przypisany do innego konta
                 if (_context.Accounts.Any(u => u.Phone == dto.Phone))
                 {
                     return StatusCode(StatusCodes.Status400BadRequest,
-                        new { Status = "Bad Request - Phone number is already taken" });
+                        new { message = "Phone number is already taken" });
                 }
 
                 //Przepisywanie do Account wartości atrybutów 
