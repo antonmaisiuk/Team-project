@@ -32,7 +32,7 @@ namespace Elaborate.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>()
-              .Property(r => r.Name)
+              .Property(r => r.UserName)
               .IsRequired()
               .HasMaxLength(30);
 
@@ -42,7 +42,7 @@ namespace Elaborate.Entities
                 .HasMaxLength(50);
 
             modelBuilder.Entity<Account>()
-                .Property(r => r.Phone)
+                .Property(r => r.PhoneNumber)
                 .IsRequired();
 
             modelBuilder.Entity<Account>()

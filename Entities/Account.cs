@@ -14,7 +14,7 @@ namespace Elaborate.Elaborate.Entities
         public int Id { get; set; }
         [Display(Name = "Nazwa Konta")]
         [Required]
-        public string Name { get; set; }
+        public string UserName { get; set; }
         [Display(Name = "Adres E-mail")]
         [Required]
         [Index(IsUnique = true)]
@@ -22,7 +22,7 @@ namespace Elaborate.Elaborate.Entities
         [Display(Name = "Numer telefonu")]
         [Required]
         [Index(IsUnique = true)]
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
         [Display(Name = "Hasło")]
         [Required]
         [JsonIgnore]

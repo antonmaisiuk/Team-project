@@ -13,6 +13,11 @@ using Microsoft.Extensions.Hosting;
 using Elaborate.Data;
 using System.Configuration;
 using Elaborate.Helpers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Data.Entity;
+using User.Management.Service.Models;
+using User.Management.Service.Services;
 
 namespace Elaborate
 {
@@ -48,6 +53,34 @@ namespace Elaborate
 
             services.AddDbContext<AccountContext>(opt => opt.UseMySQL(mySqlConnectionString));
             services.AddControllers(); //Kod z Tutoriala Antona który wydaje siê byæ na razie nie potzebny poniewa¿ mamy ju¿ to
+
+
+            #region Dodane podczas twoerzenia potwierdzenia email
+            // For Identity
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+            // Adding Authentication
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            });
+
+            //Add Email Configs
+            var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            
+            services.AddScoped<IEmailService, EmailService>();
+
+            //Add Config for Required Email
+            services.Configure<IdentityOptions>(
+                opts => opts.SignIn.RequireConfirmedEmail = true
+                );
+
+            #endregion
 
 
             //services.AddDbContext<AccountDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));

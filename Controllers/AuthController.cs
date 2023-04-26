@@ -10,6 +10,9 @@ using Elaborate.Helpers;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
 using System.Data.Entity;
+using User.Management.Service.Services;
+using User.Management.Service.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Elaborate.Controllers
 {
@@ -20,19 +23,23 @@ namespace Elaborate.Controllers
         private readonly IAccountRepository _repository;
         private readonly JwtService _jwtService;
         private readonly AccountContext _context;
+        private readonly IEmailService _emailService;
+        private readonly UserManager<IdentityUser> _userManager;
         /// <summary>
         /// Konstruktor
         /// </summary>
-        public AuthController(IAccountRepository repository, JwtService jwtService, AccountContext context)
+        public AuthController(IAccountRepository repository, JwtService jwtService, AccountContext context, IEmailService emailService, UserManager<IdentityUser> userManager)
         {
             _repository = repository;
             _jwtService = jwtService;
             _context = context;
+            _emailService = emailService;
+            _userManager = userManager;
         }
 
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterDto dto)
+        public async Task<IActionResult> RegisterAsync(RegisterDto dto)
         {
             if (ModelState.IsValid)
             {
@@ -43,7 +50,7 @@ namespace Elaborate.Controllers
                         new { message = "Email is already taken" });
                 }
                 // sprawdź, czy podany numer telefonu nie jest już przypisany do innego konta
-                if (_context.Accounts.Any(u => u.Phone == dto.Phone))
+                if (_context.Accounts.Any(u => u.PhoneNumber == dto.Phone))
                 {
                     return StatusCode(StatusCodes.Status400BadRequest,
                         new { message = "Phone number is already taken" });
@@ -52,18 +59,41 @@ namespace Elaborate.Controllers
                 //Przepisywanie do Account wartości atrybutów 
                 var account = new Account
                 {
-                    Name = dto.Name,
+                    UserName = dto.Name,
                     Email = dto.Email,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                    Phone = dto.Phone
+                    PhoneNumber = dto.Phone
 
                 };
+
+                /*//Add Token to Verify the email....
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(account);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Authentication", new { token, email = account.Email }, Request.Scheme);
+                var message = new Message(new string[] { account.Email! }, "Confirmation email link", confirmationLink!);
+                _emailService.SendEmail(message);*/
 
                 return Created("succes", _repository.Create(account));
 
             }
 
             return View(dto);
+        }
+
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status200OK,
+                      new  { Status = "Success", Message = "Email Verified Successfully" });
+                }
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                       new  { Status = "Error", Message = "This User Doesnot exist!" });
         }
 
 
@@ -138,6 +168,18 @@ namespace Elaborate.Controllers
                 message = "success"
 
             });
+        }
+
+        [HttpGet]
+        public IActionResult TestEmail()
+        {
+            var message = new Message(new string[] 
+            { "fabgkamil@gmail.com" }, "Test", "<h1>Subscibe to my channel!<h1>");
+            
+
+            _emailService.SendEmail(message);
+            return StatusCode(StatusCodes.Status200OK,
+                new { Status = "Succes", Message = "Email Sent Succesfully" });
         }
 
     }
