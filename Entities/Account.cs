@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Elaborate.Entities
 {
-    public class Account
+    public class Account : IdentityUser
     {
         [Key]
         public int Id { get; set; }
@@ -28,8 +29,8 @@ namespace Elaborate.Elaborate.Entities
         [JsonIgnore]
         public string PasswordHash { get; set; }
 
-        [Required]
-        public Boolean IsConfirmed { get; set; }
+        //[Required]
+        //public Boolean IsConfirmed { get; set; }
 
        // public virtual List<Investment> ListOfInvestments { get; set; }
         public virtual List<Transaction> ListOfTransactions { get; set; }

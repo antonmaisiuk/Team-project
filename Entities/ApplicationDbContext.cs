@@ -1,4 +1,6 @@
 ﻿using Elaborate.Elaborate.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,8 @@ namespace Elaborate.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           // base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Account>()
               .Property(r => r.UserName)
               .IsRequired()
@@ -49,6 +53,10 @@ namespace Elaborate.Entities
                 .Property(r => r.PasswordHash)
                 .IsRequired()
                 .HasMaxLength(60);
+
+            modelBuilder.Entity<Account>()
+                .Property(r => r.LockoutEnabled)
+                .HasDefaultValue(true);
 
             //modelBuilder.Entity<Transaction>()
             //    .Property(r => r.Title)
@@ -141,7 +149,7 @@ namespace Elaborate.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=elaborate-db");
+            optionsBuilder.UseMySQL("server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=marcin");
         }
     }
 }

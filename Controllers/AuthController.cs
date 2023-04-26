@@ -56,6 +56,8 @@ namespace Elaborate.Controllers
                         new { message = "Phone number is already taken" });
                 }
 
+
+
                 //Przepisywanie do Account wartości atrybutów 
                 var account = new Account
                 {
@@ -66,14 +68,19 @@ namespace Elaborate.Controllers
 
                 };
 
-                /*//Add Token to Verify the email....
+                //Tworzenie użytkownika i zapisywanie do bazy danych
+                _repository.Create(account);
+
+                //Add Token to Verify the email....
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(account);
-                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Authentication", new { token, email = account.Email }, Request.Scheme);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "api", new { token, email = account.Email }, Request.Scheme);
                 var message = new Message(new string[] { account.Email! }, "Confirmation email link", confirmationLink!);
-                _emailService.SendEmail(message);*/
+                _emailService.SendEmail(message);
 
-                return Created("succes", _repository.Create(account));
+                
 
+                return StatusCode(StatusCodes.Status200OK,
+                   new  { Status = "Success", Message = $"User created & Email Sent to {account.Email} SuccessFully" });
             }
 
             return View(dto);
@@ -82,19 +89,21 @@ namespace Elaborate.Controllers
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user =  _context.Accounts.FirstOrDefault(u => u.Email == email);
             if (user != null)
             {
-                var result = await _userManager.ConfirmEmailAsync(user, token);
-                if (result.Succeeded)
-                {
-                    return StatusCode(StatusCodes.Status200OK,
-                      new  { Status = "Success", Message = "Email Verified Successfully" });
-                }
+                user.EmailConfirmed = true; // zmiana wartości właściwości
+                _context.SaveChanges(); // zapisanie zmian w bazie danych
+
+                return StatusCode(StatusCodes.Status200OK,
+                    new { Status = "Success", Message = "Email Verified Successfully" });
             }
+
             return StatusCode(StatusCodes.Status500InternalServerError,
-                       new  { Status = "Error", Message = "This User Doesnot exist!" });
+                new { Status = "Error", Message = "This User Doesnot exist!" });
         }
+
+
 
 
 
