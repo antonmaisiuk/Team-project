@@ -16,7 +16,7 @@ import {InvestingTypeInterface} from "../PopUp/PopUp";
 const Investments = () => {
 
   const [investStocksList, setInvestStocksList] = useState<InvestmentItem[]>([
-    // {title:'Apple', investmentType: InvestmentType.stocks, count:5}
+    // {typeId: 2,  amount: 5, investType: InvestmentType.stocks}
   ]);
   const [investCryptoList, setInvestCryptoList] = useState<InvestmentItem[]>([
     // {title:'Bitcoin', investmentType: InvestmentType.crypto, count:2}
@@ -60,11 +60,64 @@ const Investments = () => {
 
   async function getInvestingData() {
 
-    const stocksResponse = await fetch('api/InvestmentStock/stocks');
+    const controller = 'InvestmentStock';
+    const stocksResponse = await fetch(`api/${controller}/stocks`);
     if (stocksResponse.ok){
       const data = await stocksResponse.json();
 
-      setInvestStocksList(data);
+      let sum = 0;
+      const stocks = await Promise.all(data.map(async (item) => {
+        console.log('### STOCK ITEM: ', item);
+        const typeResponse = await fetch(`api/${controller}/types`);
+        if (typeResponse.ok) {
+          const data = await typeResponse.json();
+          const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
+
+          // setInvestingType(currentType[0]);
+          // LBDPC773MDRPJ3YB
+
+          console.log('### Data types: ', currentType[0].index);
+          const url = `https://realstonks.p.rapidapi.com/${currentType[0].index}`;
+          const options = {
+            method: 'GET',
+            headers: {
+              'content-type': 'application/octet-stream',
+              'X-RapidAPI-Key': 'b7f693bd5bmsh15d4fb4def8fb20p1cd336jsn6a66c0245a0c',
+              'X-RapidAPI-Host': 'realstonks.p.rapidapi.com'
+            }
+          };
+          try {
+            const response = await fetch(url, options);
+            const stockData = await response.json();
+            // console.log(result);
+
+          // const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AAPL&apikey=LBDPC773MDRPJ3YB`);
+          // const stockData = await response.json();
+
+
+            console.log('### stockData: ', stockData);
+            sum += Number((item.amount * stockData.price).toFixed(2));
+            return {
+              typeId: item.typeId,
+              investInfo: currentType[0],
+              amount: item.amount,
+              pricePerPiece: stockData.price || 0,
+              priceTotal: Number((item.amount * stockData.price).toFixed(2)),
+            }
+          } catch (error) {
+            console.error(error);
+          }
+
+          // stock.pricePerPiece = Number(stockData['Global Quote']['05. price']);
+          // stock.investingSum = stock
+          // setCurrentPrice(Number(stockData['Global Quote']['05. price']));
+        } else {
+          alert("HTTP Error: " + typeResponse.status)
+        }
+      }))
+      console.log('### STOCKS: ', stocks);
+      setInvestStocksList(stocks);
+      setStocksSum(sum);
     } else {
       alert("HTTP Error: " + stocksResponse.status)
     }
@@ -91,7 +144,7 @@ const Investments = () => {
 
   useEffect(() => {
     getInvestingData();
-    getInvestingSums();
+    // getInvestingSums();
     // categoriesData();
   }, []);
 

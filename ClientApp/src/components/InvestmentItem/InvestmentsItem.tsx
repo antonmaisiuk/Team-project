@@ -1,12 +1,14 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
 import {StyledTextDiv, StyledValueDiv} from "./styled";
 import {InvestmentItem, InvestmentType} from "../../App";
 import { StyledInvestmentItem } from './styled';
+// import yahooFinance from 'yahoo-finance2';
 // import {CategoryItem} from "../../Transactions/Transactions";
 
 type InvestingType = {
   id: number,
   name: string,
+  index: string,
   image: string,
 }
 
@@ -16,17 +18,23 @@ const InvestmentsItem:FC<InvestmentItem> = (
     typeId,
     amount,
     investType,
+    pricePerPiece,
+    investInfo,
+    priceTotal,
   }
 ) => {
   const [investingType, setInvestingType] = useState<InvestingType>({
     id: 0,
     name: 'Inne',
-    image: ''
+    index: 'AAPL',
+    image: '',
   });
+  const [currentPrice, setCurrentPrice] = useState(0);
+  const [currency, setCurrency] = useState('USD');
 
   async function getInvestingTypes() {
     let controller;
-    switch (investType){
+    switch (investType) {
       case InvestmentType.stocks:
         controller = 'InvestmentStock';
         break;
@@ -38,23 +46,25 @@ const InvestmentsItem:FC<InvestmentItem> = (
         break;
     }
 
-    const typeResponse = await fetch(`api/${controller}/types`);
-    if (typeResponse.ok) {
-      const data = await typeResponse.json();
-      console.log('### data: ', data);
-      // setInvestingTypes(data);
-      console.log('### typeId: ', typeId);
-      const currentType = data.filter((item: { id: number; }) => item.id === typeId);
-      console.log('### currentType: ', currentType);
-      setInvestingType(currentType[0]);
-    } else {
-      alert("HTTP Error: " + typeResponse.status)
-    }
+    // const typeResponse = await fetch(`api/${controller}/types`);
+    // if (typeResponse.ok) {
+    //   const data = await typeResponse.json();
+    //   const currentType = data.filter((item: { id: number }) => item.id === typeId);
+    //   setInvestingType(currentType[0]);
+    //
+    //   // LBDPC773MDRPJ3YB
+    //   const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${investingType.index}&apikey=LBDPC773MDRPJ3YB`);
+    //   const stockData = await response.json();
+    //   setCurrentPrice(Number(stockData['Global Quote']['05. price']));
+    // } else {
+    //   alert("HTTP Error: " + typeResponse.status)
+    // }
+
   }
 
 
   useEffect(() => {
-    getInvestingTypes();
+    // getInvestingTypes();
   }, []);
   // let investType = '';
   // switch (typeStockId){
@@ -72,14 +82,18 @@ const InvestmentsItem:FC<InvestmentItem> = (
   //     break;
   // }
 
+
   return (
     <StyledInvestmentItem>
       <StyledTextDiv>
-        <h3 className={"investment_title"}>{investingType.name}</h3>
+        <h3 className={"investment_title"}>{investInfo.name}</h3>
         {/*<p className={"investment_type"}>{investType}</p>*/}
+        <p className={"investment_count"}>{amount} psc</p>
+        <p className={"investment_value"}>{pricePerPiece} {currency}</p>
       </StyledTextDiv>
       <StyledValueDiv>
-        <p className={"investment_count"}>{amount} psc</p>
+        <p className={"investment_value"}>{priceTotal} {currency}</p>
+
       </StyledValueDiv>
     </StyledInvestmentItem>
   );

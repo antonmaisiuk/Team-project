@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import Tile, {TileType} from "./components/Tile/Tile";
 import Layout from "./components/Layout/Layout";
 import Home from "./components/Home/Home";
@@ -26,10 +26,16 @@ export enum InvestmentType{
   metals
 }
 export type InvestmentItem ={
-  typeId: number
-  // title: string;
-  amount: number;
-  investType: InvestmentType;
+  typeId: number,
+  investInfo: {
+    id: number,
+    image: string,
+    name: string,
+  },
+  amount: number,
+  investType: InvestmentType,
+  pricePerPiece: number,
+  priceTotal: number,
 }
 
 export type CategoryItem ={

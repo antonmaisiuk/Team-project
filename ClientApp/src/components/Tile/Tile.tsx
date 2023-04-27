@@ -177,16 +177,16 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
         : type === TileType.investing_sum ?
           <>
             <StyledSum>
-              <h2>$ {investingSum}</h2>
+              <h2>$ {investingSum.toFixed(2)}</h2>
             </StyledSum>
           </>
         : type === TileType.investing_list ?
                 <><StyledList type={type} setInvesting={setInvesting}>
                   {investingList.map((invest) => {
-                    console.log('### Invest: ', invest);
+                    // console.log('### investingSum2: ', investingSum);
                     return (
                       <>
-                        <InvestmentsItem /*{title={invest.title}}*/ amount={invest.amount} typeId={invest.typeId} investType={investType} /*{investmentType={investType}}*/ />
+                        <InvestmentsItem /*{title={invest.title}}*/ pricePerPiece={invest.pricePerPiece} investInfo={invest.investInfo} amount={invest.amount} typeId={invest.typeId} investType={investType} priceTotal={invest.priceTotal} /*{investmentType={investType}}*/ />
                         <StyledLine/>
                       </>
                     );
