@@ -38,7 +38,7 @@ namespace Elaborate
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            string mySqlConnectionString = "server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=marcin";
+            string mySqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
             //services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<ApplicationDbContext>();
             

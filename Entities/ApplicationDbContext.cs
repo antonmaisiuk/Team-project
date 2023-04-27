@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Elaborate.Entities
 {
@@ -14,13 +15,12 @@ namespace Elaborate.Entities
     /// </summary>
     public class ApplicationDbContext : DbContext
     {
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(IConfiguration configuration, DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
+                        Configuration = configuration;
         }
 
-        public DbSet<Account> Accounts { get; set; }
+    public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransCategory> TransCategories { get; set; }
         public DbSet<InvestmentPreciousMetal> InvestmentsPreciousMetals { get; set; }
@@ -29,6 +29,7 @@ namespace Elaborate.Entities
         public DbSet<TypeCryptoCurrency> TypeCryptoCurrencies { get; set; }
         public DbSet<InvestmentStock> InvestmentStocks { get; set; }
         public DbSet<TypeStock> TypeStocks { get; set; }
+        public IConfiguration Configuration { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -149,7 +150,8 @@ namespace Elaborate.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=146.59.126.32;port=3306;uid=user;pwd=Yg5udzLxxw9ADsT;database=marcin");
+            string mySqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseMySQL(mySqlConnectionString);
         }
     }
 }
