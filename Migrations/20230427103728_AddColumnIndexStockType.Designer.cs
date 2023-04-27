@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Elaborate.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230323112431_wicia")]
-    partial class wicia
+    [Migration("20230427103728_AddColumnIndexStockType")]
+    partial class AddColumnIndexStockType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,24 +25,56 @@ namespace Elaborate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("varchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)")
-                        .HasMaxLength(30);
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(true);
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("text");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varchar(60)")
                         .HasMaxLength(60);
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)")
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -114,9 +146,6 @@ namespace Elaborate.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int?>("TypeCryptoCurrencyId")
-                        .HasColumnType("int");
-
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
 
@@ -124,7 +153,7 @@ namespace Elaborate.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("TypeCryptoCurrencyId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("InvestmentCryptoCurrencies");
                 });
@@ -144,14 +173,11 @@ namespace Elaborate.Migrations
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypePreciousMetalId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("TypePreciousMetalId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("InvestmentsPreciousMetals");
                 });
@@ -171,14 +197,11 @@ namespace Elaborate.Migrations
                     b.Property<int>("TypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeStockId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("TypeStockId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("InvestmentStocks");
                 });
@@ -227,6 +250,10 @@ namespace Elaborate.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<string>("Index")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(30)")
@@ -265,7 +292,9 @@ namespace Elaborate.Migrations
 
                     b.HasOne("Elaborate.Entities.TypeCryptoCurrency", "TypeCryptoCurrency")
                         .WithMany()
-                        .HasForeignKey("TypeCryptoCurrencyId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Elaborate.Entities.InvestmentPreciousMetal", b =>
@@ -278,7 +307,9 @@ namespace Elaborate.Migrations
 
                     b.HasOne("Elaborate.Entities.TypePreciousMetal", "TypePreciousMetal")
                         .WithMany()
-                        .HasForeignKey("TypePreciousMetalId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Elaborate.Entities.InvestmentStock", b =>
@@ -291,7 +322,9 @@ namespace Elaborate.Migrations
 
                     b.HasOne("Elaborate.Entities.TypeStock", "TypeStock")
                         .WithMany()
-                        .HasForeignKey("TypeStockId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
