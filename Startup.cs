@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Data.Entity;
 using User.Management.Service.Models;
 using User.Management.Service.Services;
+using System;
 
 namespace Elaborate
 {
@@ -80,6 +81,8 @@ namespace Elaborate
                 opts => opts.SignIn.RequireConfirmedEmail = true
                 );
 
+            //Walidacja tokenu przez 10h 
+            services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
             #endregion
 
 
