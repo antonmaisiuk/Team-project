@@ -95,8 +95,8 @@ namespace Elaborate.Controllers
                 user.EmailConfirmed = true; // zmiana wartości właściwości
                 _context.SaveChanges(); // zapisanie zmian w bazie danych
 
-                return StatusCode(StatusCodes.Status200OK,
-                    new { Status = "Success", Message = "Email Verified Successfully" });
+                var htmlContent = "<html><head><style> body { background: linear-gradient(116.82deg, #50489D 0%, #58AD60 100%)} .container { display: flex; justify-content: center; align-items: center; height: 100vh; } .tile { padding: 50px; background-color: white; border-radius: 10px; } </style></head><body><div class='container'><div class='tile'><h1>Weryfikacja pozytywna</h1></div></div></body></html>";
+                return Content(htmlContent, "text/html");
             }
 
             return StatusCode(StatusCodes.Status500InternalServerError,

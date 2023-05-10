@@ -24,6 +24,7 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
   const [password, setPassword] = useState('');
   const [redirect, setRedirect] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showEmailSentAlert, setShowEmailSentAlert] = useState(false); 
 
   const submit = async (e: SyntheticEvent, type: AuthType) => {
     e.preventDefault();
@@ -49,7 +50,8 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
           password,
         })
       })
-    if (response.ok) {
+      if (response.ok) {
+      setShowEmailSentAlert(true);
       setRedirect(true);
       // window.location.reload();
     } else {
@@ -103,7 +105,13 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
               <Alert key={'danger'} variant={'danger'}>
                 {errorMsg}
               </Alert>
-            </> : ``}
+                      </> : ``}
+
+                  {showEmailSentAlert &&
+                      <Alert key={'success'} variant={'success'}>
+                          Wiadomoœæ zosta³a wys³ana na adres {showEmailSentAlert}
+                      </Alert>
+                  }
 
           {/*<Form.Group className="mb-3 errorMsg">*/}
           {/*  <Form.Label className="danger">{errorMsg}</Form.Label>*/}
