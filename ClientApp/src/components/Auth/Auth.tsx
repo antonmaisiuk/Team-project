@@ -2,7 +2,8 @@ import React, {FC, HTMLAttributes, SyntheticEvent, useEffect, useState} from 're
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Alert, Button, Form} from "react-bootstrap";
 import {StyledForm, StyledAuthContainer, StyledTitle, StyledFormGroup} from './style';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 
 export enum AuthType {
@@ -113,11 +114,14 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
             {type === AuthType.login ?
               <>
                 <Button variant="primary" type="submit"> Login </Button>
-                <Button variant="primary" onClick={() => navigate('/register')}> Registration </Button>
+                              <Button variant="primary" onClick={() => navigate('/register')}> Registration </Button>
+                              <Link to="/forgot-password" className="btn btn-link">
+                                  Forgot Password?
+                              </Link>
               </>
               :
               <>
-                <Button variant="primary" type="submit"> Register </Button>
+                              <Button variant="primary" type="submit"> Register </Button>
               </>}
           </StyledFormGroup>
         </Form>
