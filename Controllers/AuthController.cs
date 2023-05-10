@@ -215,7 +215,7 @@ namespace Elaborate.Controllers
         [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPassword(string token, string email)
         {
-            var model = new ResetPassword { Token = token, Email = email };
+            var model = new ResetPasswordDto { Token = token, Email = email };
             return Ok(new
             {
                 model
@@ -225,7 +225,7 @@ namespace Elaborate.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
         {
             var user = await _userManager.FindByEmailAsync(resetPassword.Email);
             if (user != null)
