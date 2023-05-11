@@ -16,5 +16,7 @@ namespace Elaborate.Entities
         public string Name { get; set; }
         [Display(Name = "Id image")]
         public string image { get; set; }
+        [Required]
+        public string Index { get; set; }
     }
 }
