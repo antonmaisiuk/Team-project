@@ -15,6 +15,7 @@ import {InvestingTypeInterface} from "../PopUp/PopUp";
 
 const Investments = () => {
 
+
   const [investStocksList, setInvestStocksList] = useState<InvestmentItem[]>([
     // {typeId: 2,  amount: 5, investType: InvestmentType.stocks}
   ]);
@@ -60,23 +61,20 @@ const Investments = () => {
 
   async function getInvestingData() {
 
-    const controller = 'InvestmentStock';
-    const stocksResponse = await fetch(`api/${controller}/stocks`);
+    const stockController = 'InvestmentStock';
+    const stocksResponse = await fetch(`api/${stockController}/stocks`);
     if (stocksResponse.ok){
       const data = await stocksResponse.json();
 
       let sum = 0;
       const stocks = await Promise.all(data.map(async (item) => {
-        console.log('### STOCK ITEM: ', item);
-        const typeResponse = await fetch(`api/${controller}/types`);
+        // console.log('### STOCK ITEM: ', item);
+        const typeResponse = await fetch(`api/${stockController}/types`);
         if (typeResponse.ok) {
           const data = await typeResponse.json();
           const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
+          // console.log('### Data types: ', currentType[0].index);
 
-          // setInvestingType(currentType[0]);
-          // LBDPC773MDRPJ3YB
-
-          console.log('### Data types: ', currentType[0].index);
           const url = `https://realstonks.p.rapidapi.com/${currentType[0].index}`;
           const options = {
             method: 'GET',
@@ -89,19 +87,14 @@ const Investments = () => {
           try {
             const response = await fetch(url, options);
             const stockData = await response.json();
-            // console.log(result);
 
-          // const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=AAPL&apikey=LBDPC773MDRPJ3YB`);
-          // const stockData = await response.json();
-
-
-            console.log('### stockData: ', stockData);
+            // console.log('### stockData: ', stockData);
             sum += Number((item.amount * stockData.price).toFixed(2));
             return {
               typeId: item.typeId,
               investInfo: currentType[0],
               amount: item.amount,
-              pricePerPiece: stockData.price || 0,
+              pricePerPiece: stockData.price.toFixed(2) || 0,
               priceTotal: Number((item.amount * stockData.price).toFixed(2)),
             }
           } catch (error) {
@@ -115,17 +108,56 @@ const Investments = () => {
           alert("HTTP Error: " + typeResponse.status)
         }
       }))
-      console.log('### STOCKS: ', stocks);
+      // console.log('### STOCKS: ', stocks);
       setInvestStocksList(stocks);
       setStocksSum(sum);
     } else {
       alert("HTTP Error: " + stocksResponse.status)
     }
 
-    const cryptoResponse = await fetch('api/InvestmentCryptoCurrency/crypto');
+    const cryptoController = 'InvestmentCryptoCurrency';
+    const cryptoResponse = await fetch(`api/${cryptoController}/crypto`);
     if (cryptoResponse.ok){
       const data = await cryptoResponse.json();
-      setInvestCryptoList(data);
+
+      let sum = 0;
+      const crypto = await Promise.all(data.map(async (item) => {
+        // console.log('### CRYPTO ITEM: ', item);
+        const typeResponse = await fetch(`api/${cryptoController}/types`);
+        if (typeResponse.ok) {
+          const data = await typeResponse.json();
+          // console.log('### CRPTO DATA TYPR: ', data);
+          const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
+          // console.log('### Data types: ', currentType[0].index);
+
+          try {
+            const response = await fetch(`https://api.coinpaprika.com/v1/tickers/${currentType[0].index}`);
+            const cryptoData = await response.json();
+
+            // console.log('### cryptoData: ', cryptoData);
+            // console.log('### crypto price: ', cryptoData.quotes.USD.price);
+            sum += Number((item.amount * cryptoData.quotes.USD.price).toFixed(2));
+            return {
+              typeId: item.typeId,
+              investInfo: currentType[0],
+              amount: item.amount,
+              pricePerPiece: cryptoData.quotes.USD.price.toFixed(2) || 0,
+              priceTotal: Number((item.amount * cryptoData.quotes.USD.price).toFixed(2)),
+            }
+          } catch (error) {
+            console.error(error);
+          }
+
+          // stock.pricePerPiece = Number(stockData['Global Quote']['05. price']);
+          // stock.investingSum = stock
+          // setCurrentPrice(Number(stockData['Global Quote']['05. price']));
+        } else {
+          alert("HTTP Error: " + typeResponse.status)
+        }
+      }))
+      console.log('### crypto: ', crypto);
+      setInvestCryptoList(crypto);
+      setCryptoSum(sum);
     } else {
       alert("HTTP Error: " + cryptoResponse.status)
     }

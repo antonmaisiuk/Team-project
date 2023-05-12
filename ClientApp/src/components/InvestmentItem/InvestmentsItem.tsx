@@ -92,7 +92,7 @@ const InvestmentsItem:FC<InvestmentItem> = (
         <p className={"investment_value"}>{pricePerPiece} {currency}</p>
       </StyledTextDiv>
       <StyledValueDiv>
-        <p className={"investment_value"}>{priceTotal} {currency}</p>
+        <p className={"investment_value"}>{Number(priceTotal).toFixed(2)} {currency}</p>
 
       </StyledValueDiv>
     </StyledInvestmentItem>
