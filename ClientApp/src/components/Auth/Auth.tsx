@@ -17,7 +17,8 @@ export interface AuthInterface {
 
 const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
                                                                     type,
-                                                                    className = 'auth'
+                 
+    className = 'auth'
                                                                   }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');

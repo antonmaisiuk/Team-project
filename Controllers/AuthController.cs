@@ -193,12 +193,14 @@ namespace Elaborate.Controllers
                 new { Status = "Succes", Message = "Email Sent Succesfully" });
         }
 
-        [HttpPost]
+        [HttpPost("forgot-password")]
         [AllowAnonymous]
-        [Route("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var email = dto.Email;
+            var user = _repository.GetByEmail(dto.Email);
+
+            //var user = await _userManager.FindByEmailAsync(email);
             if (user != null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -222,9 +224,7 @@ namespace Elaborate.Controllers
             });
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("reset-password")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
         {
             var user = await _userManager.FindByEmailAsync(resetPassword.Email);

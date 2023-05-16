@@ -5,6 +5,8 @@ interface ForgotPasswordProps {
     className?: string;
 }
 
+
+
 const ForgotPassword: FC<ForgotPasswordProps> = ({ className }) => {
     const [email, setEmail] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
@@ -13,7 +15,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ className }) => {
     const handleSubmit = async (e: SyntheticEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('/api/forgot-password', {
+            const response = await fetch('api/forgot-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email }),
