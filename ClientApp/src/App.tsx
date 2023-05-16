@@ -71,7 +71,6 @@ const App = () => {
     <Router>
           <Routes>
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/Authentication/ResetPassword" element={<ResetPassword />} />
         <Route path="/login" element={<Auth type={AuthType.login} />}/>
               <Route path="/register" element={<Auth type={AuthType.register} />} />
         {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
