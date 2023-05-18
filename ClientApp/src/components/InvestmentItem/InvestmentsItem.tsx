@@ -46,6 +46,7 @@ const InvestmentsItem:FC<InvestmentItem> = (
         break;
     }
 
+    console.log('### Controller: ', controller);
     // const typeResponse = await fetch(`api/${controller}/types`);
     // if (typeResponse.ok) {
     //   const data = await typeResponse.json();

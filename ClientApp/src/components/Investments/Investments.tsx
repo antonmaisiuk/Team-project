@@ -68,12 +68,10 @@ const Investments = () => {
 
       let sum = 0;
       const stocks = await Promise.all(data.map(async (item) => {
-        // console.log('### STOCK ITEM: ', item);
         const typeResponse = await fetch(`api/${stockController}/types`);
         if (typeResponse.ok) {
           const data = await typeResponse.json();
           const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
-          // console.log('### Data types: ', currentType[0].index);
 
           const url = `https://realstonks.p.rapidapi.com/${currentType[0].index}`;
           const options = {
@@ -88,7 +86,6 @@ const Investments = () => {
             const response = await fetch(url, options);
             const stockData = await response.json();
 
-            // console.log('### stockData: ', stockData);
             sum += Number((item.amount * stockData.price).toFixed(2));
             return {
               typeId: item.typeId,
@@ -100,15 +97,10 @@ const Investments = () => {
           } catch (error) {
             console.error(error);
           }
-
-          // stock.pricePerPiece = Number(stockData['Global Quote']['05. price']);
-          // stock.investingSum = stock
-          // setCurrentPrice(Number(stockData['Global Quote']['05. price']));
         } else {
           alert("HTTP Error: " + typeResponse.status)
         }
       }))
-      // console.log('### STOCKS: ', stocks);
       setInvestStocksList(stocks);
       setStocksSum(sum);
     } else {
@@ -122,20 +114,15 @@ const Investments = () => {
 
       let sum = 0;
       const crypto = await Promise.all(data.map(async (item) => {
-        // console.log('### CRYPTO ITEM: ', item);
         const typeResponse = await fetch(`api/${cryptoController}/types`);
         if (typeResponse.ok) {
           const data = await typeResponse.json();
-          // console.log('### CRPTO DATA TYPR: ', data);
           const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
-          // console.log('### Data types: ', currentType[0].index);
 
           try {
             const response = await fetch(`https://api.coinpaprika.com/v1/tickers/${currentType[0].index}`);
             const cryptoData = await response.json();
 
-            // console.log('### cryptoData: ', cryptoData);
-            // console.log('### crypto price: ', cryptoData.quotes.USD.price);
             sum += Number((item.amount * cryptoData.quotes.USD.price).toFixed(2));
             return {
               typeId: item.typeId,
@@ -147,25 +134,54 @@ const Investments = () => {
           } catch (error) {
             console.error(error);
           }
-
-          // stock.pricePerPiece = Number(stockData['Global Quote']['05. price']);
-          // stock.investingSum = stock
-          // setCurrentPrice(Number(stockData['Global Quote']['05. price']));
         } else {
           alert("HTTP Error: " + typeResponse.status)
         }
       }))
-      console.log('### crypto: ', crypto);
       setInvestCryptoList(crypto);
       setCryptoSum(sum);
     } else {
       alert("HTTP Error: " + cryptoResponse.status)
     }
 
-    const metalsResponse = await fetch('api/InvestmentPreciousMetal/metals');
+    const metalsController = 'InvestmentPreciousMetal';
+    const metalsResponse = await fetch(`api/${metalsController}/metals`);
     if (metalsResponse.ok){
       const data = await metalsResponse.json();
-      setInvestMetalsList(data);
+
+      console.log('### Metal Data: ', data);
+      let sum = 0;
+      const metals = await Promise.all(data.map(async (item) => {
+        const typeResponse = await fetch(`api/${metalsController}/types`);
+        if (typeResponse.ok) {
+          const data = await typeResponse.json();
+          console.log('### Metal types: ', data);
+          const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
+
+          try {
+            console.log('### Metal type: ', currentType[0].index);
+            const response = await fetch(`https://api.currencybeacon.com/v1/latest?api_key=407ce20e80bde2fd714142bc8b5047bb&base=${currentType[0].index}&symbols=USD`);
+            const metalsData = await response.json();
+
+            sum += Number((item.amount * metalsData.response.rates.USD).toFixed(2));
+            return {
+              typeId: item.typeId,
+              investInfo: currentType[0],
+              amount: item.amount,
+              pricePerPiece: metalsData.response.rates.USD.toFixed(2) || 0,
+              priceTotal: Number((item.amount * metalsData.response.rates.USD).toFixed(2)),
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        } else {
+          alert("HTTP Error: " + typeResponse.status)
+        }
+      }))
+      setInvestMetalsList(metals);
+      console.log('### Metals: ', investMetalsList);
+      setMetalsSum(sum);
+      console.log('### Metals sum: ', metalsSum);
     } else {
       alert("HTTP Error: " + metalsResponse.status)
     }

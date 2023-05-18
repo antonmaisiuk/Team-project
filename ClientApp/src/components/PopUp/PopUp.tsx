@@ -189,6 +189,80 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     if (response.ok){
       const data:[[], number] = await response.json();
       console.log(data);
+
+      let sum = 0;
+      const investments = await Promise.all(data[0].map(async (item) => {
+        // console.log('### CRYPTO ITEM: ', item);
+        // console.log('### CRPTO DATA TYPR: ', data);
+        const currentType = investingTypes.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
+        // console.log('### Data types: ', currentType[0].index);
+
+        try {
+          switch (controller) {
+            case 'InvestmentStock':
+              const url = `https://realstonks.p.rapidapi.com/${currentType[0].index}`;
+              const options = {
+                method: 'GET',
+                headers: {
+                  'content-type': 'application/octet-stream',
+                  'X-RapidAPI-Key': 'b7f693bd5bmsh15d4fb4def8fb20p1cd336jsn6a66c0245a0c',
+                  'X-RapidAPI-Host': 'realstonks.p.rapidapi.com'
+                }
+              };
+
+              const stockResponse = await fetch(url, options);
+              const stockData = await stockResponse.json();
+
+              // console.log('### stockData: ', stockData);
+              sum += Number((item.amount * stockData.price).toFixed(2));
+              return {
+                typeId: item.typeId,
+                investInfo: currentType[0],
+                amount: item.amount,
+                pricePerPiece: stockData.price.toFixed(2) || 0,
+                priceTotal: Number((item.amount * stockData.price).toFixed(2)),
+              }
+
+              break;
+            case 'InvestmentCryptoCurrency':
+              const cryptoResponse = await fetch(`https://api.coinpaprika.com/v1/tickers/${currentType[0].index}`);
+              const cryptoData = await cryptoResponse.json();
+
+              sum += Number((item.amount * cryptoData.quotes.USD.price).toFixed(2));
+              return {
+                typeId: item.typeId,
+                investInfo: currentType[0],
+                amount: item.amount,
+                pricePerPiece: cryptoData.quotes.USD.price.toFixed(2) || 0,
+                priceTotal: Number((item.amount * cryptoData.quotes.USD.price).toFixed(2)),
+              }
+
+              break;
+            case 'InvestmentPreciousMetal':
+
+              break;
+          }
+
+
+          // console.log('### cryptoData: ', cryptoData);
+          // console.log('### crypto price: ', cryptoData.quotes.USD.price);
+
+        } catch (error) {
+          console.error(error);
+        }
+      }))
+
+      // @ts-ignore
+
+      console.log('### INVEST AFTER ADD', investments);
+      setInvestments(investments)
+      setInvestingSum(sum)
+
+          // stock.pricePerPiece = Number(stockData['Global Quote']['05. price']);
+          // stock.investingSum = stock
+          // setCurrentPrice(Number(stockData['Global Quote']['05. price']));
+
+
       // data[0].map(item => item.typeId = (investingTypes.filter(type => type.id === item.typeId).pop() || {}).name);
       setInvestments(data[0]);
       setInvestingSum(data[1]);
