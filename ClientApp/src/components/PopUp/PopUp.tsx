@@ -72,12 +72,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 }) => {
 
   const [investingTypes, setInvestingTypes] = useState<InvestingTypeInterface[]>([]);
-  // const [value, setValue] = useState(0);
-  // const [date, setDate] = useState(getCurrentDate());
-  // const [comment, setComment] = useState('');
 
   let controller = '', cat = '';
-  // console.log('### INVEST TYPE: ', investType);
   switch (investType){
     case InvestmentType.stocks:
       controller = 'InvestmentStock';
@@ -157,26 +153,9 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
     const {investCount, investmentName} = event.target as typeof event.target & {
       investCount: {value: number},
-      // date: {value: string},
       investmentName: {value: HTMLSelectElement},
     }
 
-    // if (date.value === '') {
-    //   date.value = getCurrentDate();
-    // }
-    // let url = '';
-    // switch (investType){
-    //   case InvestmentType.stocks:
-    //     url = 'api/InvestmentStock/addStock';
-    //     break;
-    //   case InvestmentType.crypto:
-    //     url = 'api/InvestmentCryptoCurrency/addCryptoCurrency';
-    //     break;
-    //   case InvestmentType.metals:
-    //     url = 'api/InvestmentPreciousMetal/addMetals';
-    //     break;
-    // }
-    // console.log('### investmentName: ', investmentName);
     const response = await fetch(`api/${controller}/Add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json'},
@@ -239,7 +218,17 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
               break;
             case 'InvestmentPreciousMetal':
+              const response = await fetch(`https://api.currencybeacon.com/v1/latest?api_key=407ce20e80bde2fd714142bc8b5047bb&base=${currentType[0].index}&symbols=USD`);
+              const metalsData = await response.json();
 
+              sum += Number((item.amount * metalsData.response.rates.USD).toFixed(2));
+              return {
+                typeId: item.typeId,
+                investInfo: currentType[0],
+                amount: item.amount,
+                pricePerPiece: metalsData.response.rates.USD.toFixed(2) || 0,
+                priceTotal: Number((item.amount * metalsData.response.rates.USD).toFixed(2)),
+              }
               break;
           }
 
@@ -255,6 +244,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       // @ts-ignore
 
       console.log('### INVEST AFTER ADD', investments);
+      console.log('### INVEST SUM AFTER ADD', sum);
       setInvestments(investments)
       setInvestingSum(sum)
 
@@ -264,8 +254,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
 
       // data[0].map(item => item.typeId = (investingTypes.filter(type => type.id === item.typeId).pop() || {}).name);
-      setInvestments(data[0]);
-      setInvestingSum(data[1]);
+      // setInvestments(data[0]);
+      // setInvestingSum(data[1]);
       setActive(false);
     } else {
       console.error('Error with response');
@@ -273,19 +263,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   }
 
   async function getInvestingTypes() {
-    // let controller;
-    // switch (investType){
-    //   case InvestmentType.stocks:
-    //     controller = 'InvestmentStock';
-    //     break;
-    //   case InvestmentType.crypto:
-    //     controller = 'InvestmentCryptoCurrency';
-    //     break;
-    //   case InvestmentType.metals:
-    //     controller = 'InvestmentPreciousMetal';
-    //     break;
-    // }
-
     const typeResponse = await fetch(`api/${controller}/types`);
     if (typeResponse.ok) {
       const data = await typeResponse.json();
@@ -423,7 +400,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                           // onChange={(e)=> console.log(e.currentTarget.value)}
                             id={'investCount'}
                         />
-                        <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'g' : 'pcs'}</StyledLabel>
+                        <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</StyledLabel>
                       {/*<input type={"number"} />*/}
                     </StyledFormItem>
                     {/*<StyledLine/>*/}

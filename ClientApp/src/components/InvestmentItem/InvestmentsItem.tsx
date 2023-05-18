@@ -89,7 +89,7 @@ const InvestmentsItem:FC<InvestmentItem> = (
       <StyledTextDiv>
         <h3 className={"investment_title"}>{investInfo.name}</h3>
         {/*<p className={"investment_type"}>{investType}</p>*/}
-        <p className={"investment_count"}>{amount} psc</p>
+        <p className={"investment_count"}>{amount} {investType === InvestmentType.metals ? 'oz' : 'pcs'}</p>
         <p className={"investment_value"}>{pricePerPiece} {currency}</p>
       </StyledTextDiv>
       <StyledValueDiv>
