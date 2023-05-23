@@ -204,30 +204,40 @@ namespace Elaborate.Controllers
             if (user != null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var forgotPasswordlink = Url.Action(nameof(ResetPassword), "Authentication", new { token, email = user.Email }, Request.Scheme);
+                var forgotPasswordlink = Url.Action(nameof(ResetPassword), "api", new { token, email = user.Email }, Request.Scheme);
                 var message = new Message(new string[] { user.Email! }, "Forgot Password link", forgotPasswordlink!);
+
                 _emailService.SendEmail(message);
                 return StatusCode(StatusCodes.Status200OK,
                     new { Status = "Success", Message = $"Password Changed request is sent on Email {user.Email}. Please Open your email & click the link" });
             }
+
             return StatusCode(StatusCodes.Status400BadRequest,
                     new { Status = "Error", Message = $"Could not send link to email, please try again." });
         }
 
-        [HttpGet("reset-password")]
+        [HttpGet("ResetPassword")]
         public async Task<IActionResult> ResetPassword(string token, string email)
         {
-            var model = new ResetPasswordDto { Token = token, Email = email };
+            //Przepisywanie token i email do konkretnego konta
+            var model = new ResetPasswordDto { 
+                Token = token, 
+                Email = email 
+            };
+
             return Ok(new
             {
                 model
             });
         }
 
-        [HttpPost("reset-password")]
+        [AllowAnonymous]
+        [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
-        {
-            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+        {         
+            var user = _repository.GetByEmail(resetPassword.Email);
+            //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            //Problem z tokenem, bez niego działa 
             if (user != null)
             {
                 var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
