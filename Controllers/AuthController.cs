@@ -240,15 +240,17 @@ namespace Elaborate.Controllers
             //Problem z tokenem, bez niego działa 
             if (user != null)
             {
-                var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
-                if (!resetPassResult.Succeeded)
+                //var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+                try
                 {
-                    foreach (var error in resetPassResult.Errors)
-                    {
-                        ModelState.AddModelError(error.Code, error.Description);
-                    }
-                    return Ok(ModelState);
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(resetPassword.Password);
+                    _context.SaveChanges();
                 }
+                catch
+                {
+                    throw;
+                }
+      
                 return StatusCode(StatusCodes.Status200OK,
                     new { Status = "Success", Message = $"Password has been changed" });
 
