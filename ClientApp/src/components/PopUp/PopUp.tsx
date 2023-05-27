@@ -13,11 +13,13 @@ import {
 } from './style';
 import Input, {InputEnum} from "../ui/Input/Input";
 import {CategoryItem, InvestmentItem, InvestmentType, TransactionItem} from "../../App";
+import InvestmentsItem from "../InvestmentItem/InvestmentsItem";
 
 export enum PopUpType{
   addTransaction,
   addCategory,
-  addInvestment
+  addInvestment,
+  details,
 }
 
 export interface InvestingTypeInterface{
@@ -27,13 +29,18 @@ export interface InvestingTypeInterface{
 
 export interface PopUpBaseInterface {
   active: boolean,
+  index?: number,
   type: PopUpType,
   investType?: InvestmentType,
+  investInfo?: InvestmentItem,
   setActive: Dispatch<SetStateAction<boolean>>
   setTransactions?: Dispatch<SetStateAction<TransactionItem[]>>,
+  transactionsList?: TransactionItem[],
   setInvestments?: Dispatch<SetStateAction<InvestmentItem[]>>,
+  investingList?: InvestmentItem[],
   setCategories?: Dispatch<SetStateAction<CategoryItem[]>>,
-  setInvestingSum?: Dispatch<SetStateAction<number>>
+  categoriesList?: CategoryItem[],
+  setInvestingSum?: Dispatch<SetStateAction<number>>,
   setSpendingSum?: Dispatch<SetStateAction<number>>
 }
 
@@ -43,11 +50,34 @@ export interface PopUpCategoryInterface extends PopUpBaseInterface{
   setCategories: Dispatch<SetStateAction<CategoryItem[]>>,
 }
 
+export interface PopUpInvestmentDetailsInterface extends PopUpBaseInterface{
+  index: number,
+  active: boolean,
+  setActive: Dispatch<SetStateAction<boolean>>,
+  investInfo: InvestmentItem,
+  investingList: InvestmentItem[],
+  setInvestments: Dispatch<SetStateAction<InvestmentItem[]>>,
+  setInvestingSum: Dispatch<SetStateAction<number>>,
+  // setSpendingSum: Dispatch<SetStateAction<number>>
+}
+export interface PopUpTransactionDetailsInterface extends PopUpBaseInterface{
+  active: boolean,
+  setActive: Dispatch<SetStateAction<boolean>>,
+  // setCategories: Dispatch<SetStateAction<CategoryItem[]>>,
+  transactionsList: TransactionItem[],
+  setTransactions: Dispatch<SetStateAction<TransactionItem[]>>,
+  // investingList: InvestmentItem[],
+  // setInvestments: Dispatch<SetStateAction<InvestmentItem[]>>,
+  // setInvestingSum: Dispatch<SetStateAction<number>>,
+  setSpendingSum: Dispatch<SetStateAction<number>>
+}
+
 export interface PopUpTransactionInterface extends PopUpBaseInterface{
   active: boolean,
   setActive: Dispatch<SetStateAction<boolean>>,
   setTransactions: Dispatch<SetStateAction<TransactionItem[]>>,
-  setSpendingSum: Dispatch<SetStateAction<number>>
+  setSpendingSum: Dispatch<SetStateAction<number>>,
+  categoriesList: CategoryItem[],
 }
 export interface PopUpInvestmentInterface extends PopUpBaseInterface{
   active: boolean,
@@ -57,9 +87,10 @@ export interface PopUpInvestmentInterface extends PopUpBaseInterface{
   setInvestingSum: Dispatch<SetStateAction<number>>
 }
 
-type PopUpInterface = PopUpTransactionInterface | PopUpCategoryInterface | PopUpInvestmentInterface;
+type PopUpInterface = PopUpTransactionInterface | PopUpCategoryInterface | PopUpInvestmentInterface | PopUpInvestmentDetailsInterface | PopUpTransactionDetailsInterface;
 
 const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
+  index = 0,
   type,
   active,
   setActive,
@@ -68,7 +99,11 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   setInvestments = ()=>{},
   setCategories= ()=>{},
   setSpendingSum = () => {},
+  categoriesList = [],
   setInvestingSum = () => {},
+  investingList= [],
+  transactionsList = [],
+  investInfo,
 }) => {
 
   const [investingTypes, setInvestingTypes] = useState<InvestingTypeInterface[]>([]);
@@ -93,8 +128,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     event.preventDefault();
 
     const {value, date, comment} = event.target as typeof event.target & {
-      // id : {value: number},
-      // title: {value: string},
       value: {value: number},
       date: {value: string},
       comment: {value: string},
@@ -108,16 +141,14 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       method: "POST",
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({
-        // id: 1,
         title: comment.value,
         value: value.value,
         date: date.value,
-        // comment: comment.value,
       })
     })
     console.log(response);
     if (response.ok){
-      const data:[[], number] = await response.json(); //odbieranie aktualnej listy transakcji
+      const data:[[], number] = await response.json();
       console.log(data);
       setTransactions(data[0]);
       setSpendingSum(data[1]);
@@ -289,6 +320,177 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     }
   }, [active]);
 
+  const renderAddTransaction = () => (
+    <StyledForm onSubmit={e => sendTransactionForm(e)}>
+      <StyledFormContent>
+        <StyledFormItem >
+          <Input
+            type={InputEnum.number}
+            placeholder={"0"}
+            // onChange={(e)=> console.log(e.currentTarget.value)}
+            id={"value"}
+          />
+          <StyledLabel htmlFor={"value"}>$</StyledLabel>
+          {/*<input type={"number"} />*/}
+        </StyledFormItem>
+        <StyledLine/>
+        <StyledFormItem>
+          <label htmlFor={"date"}>Date:</label>
+          <Input
+            type={InputEnum.date}
+            id={"date"}
+            // value={"02-12-2022"}
+            // onChange={(e)=> setDate(e.currentTarget.value)}
+            // defaultValue={"02-12-2022"}
+          />
+          {/*<input type={"date"} id={"date"}/>*/}
+        </StyledFormItem>
+        <StyledLine/>
+        <StyledFormItem>
+          <label htmlFor={"comment"}>Comment:</label>
+          <Input
+            type={InputEnum.text}
+            id={"comment"}
+            placeholder={"Type your comment here"}
+            // onChange={(e)=> setComment(e.currentTarget.value)}
+          />
+          {/*<input type={"text"} id={"comment"}/>*/}
+        </StyledFormItem>
+        <StyledLine/>
+      </StyledFormContent>
+
+      <StyledSendingForm>
+        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
+        <StyledSubmitButton type={"submit"}>Add</StyledSubmitButton>
+      </StyledSendingForm>
+    </StyledForm>
+  );
+
+  const renderAddInvestment = () => (
+    <StyledForm onSubmit={e => sendInvestmentForm(e)}>
+      <StyledFormContent>
+        <StyledFormItem >
+          <Input
+            type={InputEnum.number}
+            placeholder={'0'}
+            // onChange={(e)=> console.log(e.currentTarget.value)}
+            id={'investCount'}
+          />
+          <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</StyledLabel>
+          {/*<input type={"number"} />*/}
+        </StyledFormItem>
+        {/*<StyledLine/>*/}
+        {/*<StyledFormItem>*/}
+        {/*    <label htmlFor={"date"}>Date:</label>*/}
+        {/*    <Input*/}
+        {/*        type={InputEnum.date}*/}
+        {/*        id={'date'}*/}
+        {/*      // value={"02-12-2022"}*/}
+        {/*      // onChange={(e)=> setDate(e.currentTarget.value)}*/}
+        {/*      // defaultValue={"02-12-2022"}*/}
+        {/*    />*/}
+        {/*  /!*<input type={"date"} id={"date"}/>*!/*/}
+        {/*</StyledFormItem>*/}
+        <StyledLine/>
+        <StyledFormItem>
+          <label htmlFor={'investmentName'}>
+            {investType === InvestmentType.stocks ? 'Select stock index' :
+              investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
+          </label>
+          <select id={'investmentName'}>
+            {investingTypes.map((type) => (
+              <option value={type.id}>{type.name}</option>
+            ))}
+            {/*<option>Gold</option>*/}
+            {/*<option>Bitcoin</option>*/}
+          </select>
+          {/*<Input*/}
+          {/*    type={InputEnum.text}*/}
+          {/*    id={"investment-title"}*/}
+          {/*    placeholder={"Type your comment here"}*/}
+          {/*  // onChange={(e)=> setComment(e.currentTarget.value)}*/}
+          {/*/>*/}
+          {/*<input type={"text"} id={"comment"}/>*/}
+        </StyledFormItem>
+        <StyledLine/>
+      </StyledFormContent>
+
+      <StyledSendingForm>
+        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
+        <StyledSubmitButton type={'submit'}>Add</StyledSubmitButton>
+      </StyledSendingForm>
+    </StyledForm>
+  );
+
+  const renderAddCategory = () => (
+    <StyledForm onSubmit={e => sendCategoryForm(e)}>
+      <StyledFormContent>
+        <StyledFormItem >
+          <Input
+            type={InputEnum.text}
+            placeholder={"Category name"}
+            // onChange={(e)=> console.log(e.currentTarget.value)}
+            id={"name"}
+          />
+          {/*<StyledLabel htmlFor={"value"}>$</StyledLabel>*/}
+          {/*<input type={"number"} />*/}
+        </StyledFormItem>
+        <StyledLine/>
+        <StyledFormItem>
+          <label htmlFor={"image_link"}>Image link:</label>
+          <Input
+            type={InputEnum.text}
+            id={"image_link"}
+            placeholder={"Image link"}
+            // value={"02-12-2022"}
+            // onChange={(e)=> setDate(e.currentTarget.value)}
+            // defaultValue={"02-12-2022"}
+          />
+          {/*<input type={"date"} id={"date"}/>*/}
+        </StyledFormItem>
+        <StyledLine/>
+        {/*<StyledFormItem>*/}
+        {/*    <label htmlFor={"comment"}>Comment:</label>*/}
+        {/*    <Input*/}
+        {/*        type={InputEnum.text}*/}
+        {/*        id={"comment"}*/}
+        {/*        placeholder={"Type your comment here"}*/}
+        {/*      // onChange={(e)=> setComment(e.currentTarget.value)}*/}
+        {/*    />*/}
+        {/*  /!*<input type={"text"} id={"comment"}/>*!/*/}
+        {/*</StyledFormItem>*/}
+        {/*<StyledLine/>*/}
+      </StyledFormContent>
+
+      <StyledSendingForm>
+        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
+        <StyledSubmitButton type={"submit"}>Add</StyledSubmitButton>
+      </StyledSendingForm>
+    </StyledForm>
+  );
+
+  const renderDetails = () => (
+    <StyledFormContent>
+      <h2>{investingList[index].investInfo.name}</h2>
+    </StyledFormContent>
+  );
+
+  const renderView = () => {
+    switch (type) {
+      case PopUpType.addTransaction :
+        return renderAddTransaction();
+      case PopUpType.addInvestment:
+        return renderAddInvestment();
+      case PopUpType.details:
+        return renderDetails();
+      case PopUpType.addCategory:
+        return renderAddCategory();
+      default:
+        return null;
+    }
+  };
+
+
   return (
     <StyledPopUpContainer
       className={active ? 'add_container active' : 'add_container'}
@@ -299,152 +501,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
       setTransactions={setTransactions}
     >
       <StyledPopUpContent className={"add_content"} onClick={e => e.stopPropagation()}>
-        {type === PopUpType.addTransaction &&
-            <StyledForm onSubmit={e => sendTransactionForm(e)}>
-                <StyledFormContent>
-                    <StyledFormItem >
-                        <Input
-                            type={InputEnum.number}
-                            placeholder={"0"}
-                          // onChange={(e)=> console.log(e.currentTarget.value)}
-                            id={"value"}
-                        />
-                        <StyledLabel htmlFor={"value"}>$</StyledLabel>
-                      {/*<input type={"number"} />*/}
-                    </StyledFormItem>
-                    <StyledLine/>
-                    <StyledFormItem>
-                        <label htmlFor={"date"}>Date:</label>
-                        <Input
-                            type={InputEnum.date}
-                            id={"date"}
-                          // value={"02-12-2022"}
-                          // onChange={(e)=> setDate(e.currentTarget.value)}
-                          // defaultValue={"02-12-2022"}
-                        />
-                      {/*<input type={"date"} id={"date"}/>*/}
-                    </StyledFormItem>
-                    <StyledLine/>
-                    <StyledFormItem>
-                        <label htmlFor={"comment"}>Comment:</label>
-                        <Input
-                            type={InputEnum.text}
-                            id={"comment"}
-                            placeholder={"Type your comment here"}
-                          // onChange={(e)=> setComment(e.currentTarget.value)}
-                        />
-                      {/*<input type={"text"} id={"comment"}/>*/}
-                    </StyledFormItem>
-                    <StyledLine/>
-                </StyledFormContent>
 
-                <StyledSendingForm>
-                    <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
-                    <StyledSubmitButton type={"submit"}>Add</StyledSubmitButton>
-                </StyledSendingForm>
-            </StyledForm>
-        }
-        {type === PopUpType.addCategory &&
-            <StyledForm onSubmit={e => sendCategoryForm(e)}>
-                <StyledFormContent>
-                    <StyledFormItem >
-                        <Input
-                            type={InputEnum.text}
-                            placeholder={"Category name"}
-                          // onChange={(e)=> console.log(e.currentTarget.value)}
-                            id={"name"}
-                        />
-                        {/*<StyledLabel htmlFor={"value"}>$</StyledLabel>*/}
-                      {/*<input type={"number"} />*/}
-                    </StyledFormItem>
-                    <StyledLine/>
-                    <StyledFormItem>
-                        <label htmlFor={"image_link"}>Image link:</label>
-                        <Input
-                            type={InputEnum.text}
-                            id={"image_link"}
-                            placeholder={"Image link"}
-                          // value={"02-12-2022"}
-                          // onChange={(e)=> setDate(e.currentTarget.value)}
-                          // defaultValue={"02-12-2022"}
-                        />
-                      {/*<input type={"date"} id={"date"}/>*/}
-                    </StyledFormItem>
-                    <StyledLine/>
-                    {/*<StyledFormItem>*/}
-                    {/*    <label htmlFor={"comment"}>Comment:</label>*/}
-                    {/*    <Input*/}
-                    {/*        type={InputEnum.text}*/}
-                    {/*        id={"comment"}*/}
-                    {/*        placeholder={"Type your comment here"}*/}
-                    {/*      // onChange={(e)=> setComment(e.currentTarget.value)}*/}
-                    {/*    />*/}
-                    {/*  /!*<input type={"text"} id={"comment"}/>*!/*/}
-                    {/*</StyledFormItem>*/}
-                    {/*<StyledLine/>*/}
-                </StyledFormContent>
-
-                <StyledSendingForm>
-                    <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
-                    <StyledSubmitButton type={"submit"}>Add</StyledSubmitButton>
-                </StyledSendingForm>
-            </StyledForm>
-        }
-        {type === PopUpType.addInvestment &&
-            <StyledForm onSubmit={e => sendInvestmentForm(e)}>
-                <StyledFormContent>
-                    <StyledFormItem >
-                        <Input
-                            type={InputEnum.number}
-                            placeholder={'0'}
-                          // onChange={(e)=> console.log(e.currentTarget.value)}
-                            id={'investCount'}
-                        />
-                        <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</StyledLabel>
-                      {/*<input type={"number"} />*/}
-                    </StyledFormItem>
-                    {/*<StyledLine/>*/}
-                    {/*<StyledFormItem>*/}
-                    {/*    <label htmlFor={"date"}>Date:</label>*/}
-                    {/*    <Input*/}
-                    {/*        type={InputEnum.date}*/}
-                    {/*        id={'date'}*/}
-                    {/*      // value={"02-12-2022"}*/}
-                    {/*      // onChange={(e)=> setDate(e.currentTarget.value)}*/}
-                    {/*      // defaultValue={"02-12-2022"}*/}
-                    {/*    />*/}
-                    {/*  /!*<input type={"date"} id={"date"}/>*!/*/}
-                    {/*</StyledFormItem>*/}
-                    <StyledLine/>
-                    <StyledFormItem>
-                        <label htmlFor={'investmentName'}>
-                          {investType === InvestmentType.stocks ? 'Select stock index' :
-                            investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
-                        </label>
-                        <select id={'investmentName'}>
-                          {investingTypes.map((type) => (
-                            <option value={type.id}>{type.name}</option>
-                          ))}
-                            {/*<option>Gold</option>*/}
-                            {/*<option>Bitcoin</option>*/}
-                        </select>
-                        {/*<Input*/}
-                        {/*    type={InputEnum.text}*/}
-                        {/*    id={"investment-title"}*/}
-                        {/*    placeholder={"Type your comment here"}*/}
-                        {/*  // onChange={(e)=> setComment(e.currentTarget.value)}*/}
-                        {/*/>*/}
-                      {/*<input type={"text"} id={"comment"}/>*/}
-                    </StyledFormItem>
-                    <StyledLine/>
-                </StyledFormContent>
-
-                <StyledSendingForm>
-                    <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
-                    <StyledSubmitButton type={'submit'}>Add</StyledSubmitButton>
-                </StyledSendingForm>
-            </StyledForm>
-        }
+        {renderView()}
 
       </StyledPopUpContent>
     </StyledPopUpContainer>
