@@ -127,15 +127,18 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   const sendTransactionForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const {value, date, comment} = event.target as typeof event.target & {
+      const { value, date, comment, category } = event.target as typeof event.target & {
       value: {value: number},
       date: {value: string},
-      comment: {value: string},
+        comment: { value: string },
+        category: { value: number },
     }
 
     if (date.value === '') {
          date.value = getCurrentDate();
     }
+
+      console.log(category.value);
 
     const response = await fetch('api/Transaction/addTransaction', {
       method: "POST",
@@ -144,6 +147,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         title: comment.value,
         value: value.value,
         date: date.value,
+        transCategoryId: category.value,
       })
     })
     console.log(response);
@@ -320,6 +324,10 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     }
   }, [active]);
 
+    //const handleCategoryChange = (e) => {
+    //    setSelectedCategory(e.target.value);
+    //};
+
   const renderAddTransaction = () => (
     <StyledForm onSubmit={e => sendTransactionForm(e)}>
       <StyledFormContent>
@@ -356,7 +364,19 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
           />
           {/*<input type={"text"} id={"comment"}/>*/}
         </StyledFormItem>
-        <StyledLine/>
+              <StyledLine />
+              <StyledFormItem>
+                  <label htmlFor="category">Category:</label>
+                  <select id="category" /*value={selectedCategory} onChange={handleCategoryChange}*/>
+                      <option value="">Select a category</option>
+                      {categoriesList.map((category) => (
+                          <option key={category.id} value={category.id}>
+                              {category.name}
+                          </option>
+                      ))}
+                  </select>
+              </StyledFormItem>
+              <StyledLine />
       </StyledFormContent>
 
       <StyledSendingForm>
