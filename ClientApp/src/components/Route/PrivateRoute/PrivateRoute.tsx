@@ -22,7 +22,7 @@ const PrivateRoute = () => {
           })
           if (response.ok) {
             const content = await response.json();
-            console.log('### Responce is OK', content);
+            // console.log('### Responce is OK', content);
             setJwt(content);
             // setUserName(content.name);
             // setUserId(content.id);

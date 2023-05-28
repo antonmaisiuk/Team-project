@@ -111,7 +111,10 @@ namespace Elaborate.Controllers
             var userId = int.Parse(token.Issuer);
             transaction.AccountId = userId;
 
-            transaction.TransCategoryId = 1;
+            if(transaction.TransCategoryId == null)
+            {
+                transaction.TransCategoryId = 1;
+            }
             //transaction.Account = dto.Account;
             //transaction.Title = dto.Title;
             _dbContext.Transactions.Add(transaction);

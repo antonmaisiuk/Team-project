@@ -1,7 +1,7 @@
 import React, {Dispatch, FC, SetStateAction, useEffect, useState} from 'react';
-import {StyledTextDiv, StyledValueDiv} from "./styled";
+import {StyledInvestmentItem, StyledTextDiv, StyledValueDiv} from "./styled";
 import {InvestmentItem, InvestmentType} from "../../App";
-import { StyledInvestmentItem } from './styled';
+import PopUp, {PopUpType} from "../PopUp/PopUp";
 // import yahooFinance from 'yahoo-finance2';
 // import {CategoryItem} from "../../Transactions/Transactions";
 
@@ -12,15 +12,30 @@ type InvestingType = {
   image: string,
 }
 
+export interface InvestItemDetailsInterface{
+  invest: InvestmentItem,
+  setInvestments: Dispatch<SetStateAction<InvestmentItem[]>>,
+  setInvestingSum: Dispatch<SetStateAction<number>>,
+}
 
-const InvestmentsItem:FC<InvestmentItem> = (
+type InvestmentsItemInterface = InvestItemDetailsInterface & InvestmentItem;
+
+
+const InvestmentsItem:FC<InvestmentsItemInterface> = (
   {
-    typeId,
+    // active,
+    // setActive,
+    // typeId,
+    // type,
     amount,
     investType,
     pricePerPiece,
     investInfo,
+    invest,
     priceTotal,
+    setInvestments = ()=>{},
+    setInvestingSum = () => {},
+    // investingList= [],
   }
 ) => {
   const [investingType, setInvestingType] = useState<InvestingType>({
@@ -31,6 +46,8 @@ const InvestmentsItem:FC<InvestmentItem> = (
   });
   const [currentPrice, setCurrentPrice] = useState(0);
   const [currency, setCurrency] = useState('USD');
+  const [isDetailsModalActive, setDetailsModalActive] = useState(false);
+
 
   async function getInvestingTypes() {
     let controller;
@@ -46,6 +63,7 @@ const InvestmentsItem:FC<InvestmentItem> = (
         break;
     }
 
+    console.log('### Controller: ', controller);
     // const typeResponse = await fetch(`api/${controller}/types`);
     // if (typeResponse.ok) {
     //   const data = await typeResponse.json();
@@ -83,19 +101,36 @@ const InvestmentsItem:FC<InvestmentItem> = (
   // }
 
 
+  // function renderDetails() {
+  //   return (
+  //
+  //   )
+  // }
+
   return (
-    <StyledInvestmentItem>
+    <><StyledInvestmentItem onClick={() => {
+      setDetailsModalActive(true);
+    }}>
       <StyledTextDiv>
         <h3 className={"investment_title"}>{investInfo.name}</h3>
         {/*<p className={"investment_type"}>{investType}</p>*/}
-        <p className={"investment_count"}>{amount} psc</p>
+        <p className={"investment_count"}>{amount} {investType === InvestmentType.metals ? 'oz' : 'pcs'}</p>
         <p className={"investment_value"}>{pricePerPiece} {currency}</p>
       </StyledTextDiv>
       <StyledValueDiv>
-        <p className={"investment_value"}>{priceTotal} {currency}</p>
+        <p className={"investment_value"}>{Number(priceTotal).toFixed(2)} {currency}</p>
 
       </StyledValueDiv>
+
     </StyledInvestmentItem>
+      <PopUp
+      type={PopUpType.investDetails}
+      active={isDetailsModalActive}
+      setActive={setDetailsModalActive}
+      // investingList={investingList}
+      setInvestments={setInvestments}
+      setInvestingSum={setInvestingSum}
+      invest={invest}/></>
   );
 };
 

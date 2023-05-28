@@ -25,6 +25,11 @@ export const StyledPopUpContainer = styled.div<PopUpBaseInterface>`
 `;
 export const StyledPopUpContent = styled.div`
   //position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  
   width: 40%;
   max-width: 577px;
   //height: 100%;
@@ -53,6 +58,78 @@ export const StyledFormContent = styled.div`
   border-radius: 18px;
   
   
+`;
+
+export const StyledDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  font-family: 'Inter', sans-serif;
+  
+  
+  .details_title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+`;
+export const StyledDetailsContent = styled.div`
+  background-color: white;
+  padding: 20px 30px;
+
+  -webkit-border-radius: 18px;
+  -moz-border-radius: 18px;
+  border-radius: 18px;
+
+  .details_title-p {
+    text-align: center;
+  }
+
+  .details_title-img{
+    text-align: center;
+    margin: 7px 0;
+  }
+  
+  .details_title-img img{
+    width: 48px;
+    height: 48px;
+  }
+  
+  .details_title-value {
+    text-align: center;
+    //font-weight: bold;
+    font-size: 3em;
+  }
+
+  .details_info {
+    font-weight: bold;
+    font-size: 1.7em;
+  }
+
+  .invest_info {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5em;
+  }
+
+  .invest_info-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+
+    p:first-child {
+      color: rgba(0, 0, 0, 0.38);
+    }
+    p:last-child {
+      font-weight: bolder;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
 `;
 
 export const StyledLabel = styled.label`
@@ -129,7 +206,7 @@ export const StyledLine = styled.span`
   padding: 0;
   width: 100%;
   height: 1px;
-  background-color: #9D9D9D;
+  background-color: #C7C7C7;
   //background-color: black;
 `;
 
