@@ -216,7 +216,7 @@ namespace Elaborate.Controllers
                     new { Status = "Error", Message = $"Could not send link to email, please try again." });
         }
 
-        [HttpGet("ResetPassword")]
+        [HttpGet("reset-password")]
         public async Task<IActionResult> ResetPassword(string token, string email)
         {
             //Przepisywanie token i email do konkretnego konta
@@ -232,7 +232,7 @@ namespace Elaborate.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("ResetPassword")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
         {         
             var user = _repository.GetByEmail(resetPassword.Email);

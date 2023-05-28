@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Button, Form } from "react-bootstrap";
 
 
+
 export const StyledAuthContainer = styled.div`
   display: flex;
   //flex-direction: column;
