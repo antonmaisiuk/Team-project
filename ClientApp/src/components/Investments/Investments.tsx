@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, HTMLAttributes, SetStateAction, useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Container, {ContainerType} from "../Container/Container";
 import Layout, {LayoutType} from "../Layout/Layout";
 import Tile, {TileType} from "../Tile/Tile";
@@ -17,7 +17,18 @@ const Investments = () => {
 
 
   const [investStocksList, setInvestStocksList] = useState<InvestmentItem[]>([
-    // {typeId: 2,  amount: 5, investType: InvestmentType.stocks}
+    // {
+    //   investInfo:{
+    //     id: 2,
+    //     image: "https://static.vecteezy.com/system/resources/thumbnails/008/505/801/small_2x/bitcoin-logo-color-illustration-png.png",
+    //     name: "Apple"
+    //   },
+    //   amount: 20,
+    //   investType: InvestmentType.stocks,
+    //   pricePerPiece: 175.52,
+    //   priceTotal: 3510.4,
+    //   typeId: 2,
+    // }
   ]);
   const [investCryptoList, setInvestCryptoList] = useState<InvestmentItem[]>([
     // {title:'Bitcoin', investmentType: InvestmentType.crypto, count:2}
@@ -101,6 +112,7 @@ const Investments = () => {
           alert("HTTP Error: " + typeResponse.status)
         }
       }))
+      // console.log('### stocks: ', stocks);
       setInvestStocksList(stocks);
       setStocksSum(sum);
     } else {
@@ -149,17 +161,17 @@ const Investments = () => {
     if (metalsResponse.ok){
       const data = await metalsResponse.json();
 
-      console.log('### Metal Data: ', data);
+      // console.log('### Metal Data: ', data);
       let sum = 0;
       const metals = await Promise.all(data.map(async (item) => {
         const typeResponse = await fetch(`api/${metalsController}/types`);
         if (typeResponse.ok) {
           const data = await typeResponse.json();
-          console.log('### Metal types: ', data);
+          // console.log('### Metal types: ', data);
           const currentType = data.filter((typeItem: { id: number }) => typeItem.id === item.typeId);
 
           try {
-            console.log('### Metal type: ', currentType[0].index);
+            // console.log('### Metal type: ', currentType[0].index);
             const response = await fetch(`https://api.currencybeacon.com/v1/latest?api_key=407ce20e80bde2fd714142bc8b5047bb&base=${currentType[0].index}&symbols=USD`);
             const metalsData = await response.json();
 
@@ -179,9 +191,9 @@ const Investments = () => {
         }
       }))
       setInvestMetalsList(metals);
-      console.log('### Metals: ', investMetalsList);
+      // console.log('### Metals: ', investMetalsList);
       setMetalsSum(sum);
-      console.log('### Metals sum: ', metalsSum);
+      // console.log('### Metals sum: ', metalsSum);
     } else {
       alert("HTTP Error: " + metalsResponse.status)
     }

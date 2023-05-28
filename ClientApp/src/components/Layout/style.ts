@@ -13,18 +13,20 @@ export const StyledLayout = styled.div<ContainerInterface>`
     grid-template-rows: 30% 60%;
     justify-content: space-between;
     gap: 3.33%;
+    height: 100%;
   `}
 
   ${props => props.type === LayoutType.transactions &&`
-    grid-template-columns: auto auto;
-    column-count: 2;
-    column-gap: 34px;
-    //padding: 82px 51px 35px 51px;
-    margin-bottom: 30px;
-    height: calc(100% - 150px);
+    display:grid;
+    grid-template:
+    [main-left] "sum  trans" 250px [main-right]
+    [footer-left] "cat  trans" [footer-right]
+    / 40% 56%;
+    justify-content: space-between;
+    gap: 3.33%;
+    height: 80%;
   `}
   
-  height: 100%;
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
   //background: linear-gradient(116.82deg, #50489D 0%, #58AD60 100%);
 

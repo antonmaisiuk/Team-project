@@ -1,6 +1,6 @@
 import React, {Dispatch, FC, FormEvent, HTMLAttributes, SetStateAction, useEffect, useState} from 'react';
 import {
-  StyledCancelButton,
+  StyledCancelButton, StyledDetails, StyledDetailsContent,
   StyledForm,
   StyledFormContent,
   StyledFormItem,
@@ -19,7 +19,8 @@ export enum PopUpType{
   addTransaction,
   addCategory,
   addInvestment,
-  details,
+  investDetails,
+  transDetails,
 }
 
 export interface InvestingTypeInterface{
@@ -29,10 +30,10 @@ export interface InvestingTypeInterface{
 
 export interface PopUpBaseInterface {
   active: boolean,
-  index?: number,
   type: PopUpType,
   investType?: InvestmentType,
-  investInfo?: InvestmentItem,
+  invest?: InvestmentItem,
+  transaction?: TransactionItem,
   setActive: Dispatch<SetStateAction<boolean>>
   setTransactions?: Dispatch<SetStateAction<TransactionItem[]>>,
   transactionsList?: TransactionItem[],
@@ -51,20 +52,17 @@ export interface PopUpCategoryInterface extends PopUpBaseInterface{
 }
 
 export interface PopUpInvestmentDetailsInterface extends PopUpBaseInterface{
-  index: number,
   active: boolean,
   setActive: Dispatch<SetStateAction<boolean>>,
-  investInfo: InvestmentItem,
-  investingList: InvestmentItem[],
+  invest: InvestmentItem,
+  // investingList: InvestmentItem[],
   setInvestments: Dispatch<SetStateAction<InvestmentItem[]>>,
   setInvestingSum: Dispatch<SetStateAction<number>>,
-  // setSpendingSum: Dispatch<SetStateAction<number>>
 }
 export interface PopUpTransactionDetailsInterface extends PopUpBaseInterface{
   active: boolean,
   setActive: Dispatch<SetStateAction<boolean>>,
-  // setCategories: Dispatch<SetStateAction<CategoryItem[]>>,
-  transactionsList: TransactionItem[],
+  transaction: TransactionItem,
   setTransactions: Dispatch<SetStateAction<TransactionItem[]>>,
   // investingList: InvestmentItem[],
   // setInvestments: Dispatch<SetStateAction<InvestmentItem[]>>,
@@ -90,7 +88,6 @@ export interface PopUpInvestmentInterface extends PopUpBaseInterface{
 type PopUpInterface = PopUpTransactionInterface | PopUpCategoryInterface | PopUpInvestmentInterface | PopUpInvestmentDetailsInterface | PopUpTransactionDetailsInterface;
 
 const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
-  index = 0,
   type,
   active,
   setActive,
@@ -103,7 +100,19 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   setInvestingSum = () => {},
   investingList= [],
   transactionsList = [],
-  investInfo,
+  invest = {
+    investInfo:{
+      id: 2,
+      image: "https://assets.stickpng.com/images/580b57fcd9996e24bc43c516.png",
+      name: "Apple"
+    },
+    amount: 20,
+    investType: InvestmentType.stocks,
+    pricePerPiece: 175.52,
+    priceTotal: 3510.4,
+    typeId: 2,
+  },
+  transaction = {title: 'Second transaction', transCategoryId: 1, value: 1520.2}
 }) => {
 
   const [investingTypes, setInvestingTypes] = useState<InvestingTypeInterface[]>([]);
@@ -278,8 +287,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
       // @ts-ignore
 
-      console.log('### INVEST AFTER ADD', investments);
-      console.log('### INVEST SUM AFTER ADD', sum);
+      // console.log('### INVEST AFTER ADD', investments);
+      // console.log('### INVEST SUM AFTER ADD', sum);
       setInvestments(investments)
       setInvestingSum(sum)
 
@@ -489,10 +498,93 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     </StyledForm>
   );
 
-  const renderDetails = () => (
-    <StyledFormContent>
-      <h2>{investingList[index].investInfo.name}</h2>
-    </StyledFormContent>
+  const renderInvestDetails = () => (
+    <>
+      <StyledDetails>
+        <StyledDetailsContent className={'details_title'}>
+          <p className={'details_title-p'}>Investment Details</p>
+          <div className={'details_title-img'}>
+            <img  src={invest.investInfo.image} alt={'logo'}/>
+          </div>
+          <h2 className={'details_title-value'}>$ {invest.priceTotal}</h2>
+        </StyledDetailsContent>
+        <StyledDetailsContent>
+          <p className={'details_info'}>Investment Information</p>
+          <div className={'invest_info'}>
+            <div className="invest_info-line">
+              <p>Name</p>
+              <p>{invest.investInfo.name}</p>
+            </div>
+            <StyledLine/>
+            <div className="invest_info-line">
+              <p>Price</p>
+              <p>$ {invest.pricePerPiece}</p>
+            </div>
+            <StyledLine/>
+            <div className="invest_info-line">
+              <p>Count</p>
+              <p>{invest.amount} {investType === InvestmentType.metals ? 'oz' : 'pcs'}</p>
+            </div>
+            <StyledLine/>
+            <div className="invest_info-line">
+              <p>Total value</p>
+              <p>$ {invest.priceTotal}</p>
+            </div>
+          </div>
+        </StyledDetailsContent>
+      </StyledDetails>
+      <StyledSendingForm>
+        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Delete</StyledCancelButton>
+        <StyledSubmitButton type={"submit"}>Edit</StyledSubmitButton>
+      </StyledSendingForm>
+    </>
+  );
+
+  const renderTransDetails = () => (
+    <>
+      <StyledDetails>
+        <StyledDetailsContent className={'details_title'}>
+          <p className={'details_title-p'}>Transaction Details</p>
+          <div className={'details_title-img'}>
+            {/*<img  src={transaction.investInfo.image} alt={'logo'}/>*/}
+          </div>
+          <h2 className={'details_title-value'}>$ {transaction.value}</h2>
+        </StyledDetailsContent>
+        <StyledDetailsContent>
+          <p className={'details_info'}>Transaction Information</p>
+          <div className={'invest_info'}>
+            <div className="invest_info-line">
+              <p>Title</p>
+              <p>{transaction.title}</p>
+            </div>
+            <StyledLine/>
+            <div className="invest_info-line">
+              <p>Comment</p>
+              <p>*text*</p>
+            </div>
+            <StyledLine/>
+            <div className="invest_info-line">
+              <p>Value</p>
+              <p>$ {transaction.value}</p>
+            </div>
+            {/*<StyledLine/>*/}
+            {/*<div className="invest_info-line">*/}
+            {/*  <p>Count</p>*/}
+            {/*  <p>{invest.amount} {investType === InvestmentType.metals ? 'oz' : 'pcs'}</p>*/}
+            {/*</div>*/}
+            {/*<StyledLine/>*/}
+            {/*<div className="invest_info-line">*/}
+            {/*  <p>Total value</p>*/}
+            {/*  <p>$ {invest.priceTotal}</p>*/}
+            {/*</div>*/}
+          </div>
+        </StyledDetailsContent>
+      </StyledDetails>
+      <StyledSendingForm>
+        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Delete</StyledCancelButton>
+        <StyledSubmitButton type={"submit"}>Edit</StyledSubmitButton>
+      </StyledSendingForm>
+    </>
   );
 
   const renderView = () => {
@@ -501,8 +593,10 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         return renderAddTransaction();
       case PopUpType.addInvestment:
         return renderAddInvestment();
-      case PopUpType.details:
-        return renderDetails();
+      case PopUpType.investDetails:
+        return renderInvestDetails();
+      case PopUpType.transDetails:
+        return renderTransDetails();
       case PopUpType.addCategory:
         return renderAddCategory();
       default:
@@ -510,6 +604,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     }
   };
 
+  // console.log('### INDEX: ', index);
 
   return (
     <StyledPopUpContainer

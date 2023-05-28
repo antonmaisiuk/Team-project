@@ -111,15 +111,6 @@ const Transactions = () => {
           />
 
           <Tile
-            className={"categories_list"}
-            title={"Categories"}
-            type={TileType.categories_list}
-            transactionsList={transactionsList}
-            categoriesList={categoriesList}
-            setCategories={setCategories}
-          />
-
-          <Tile
             className={"transactions_list"}
             title={"Transactions"}
             setSpendingSum={setSpendingSum}
@@ -128,6 +119,17 @@ const Transactions = () => {
             categoriesList={categoriesList}
             setTransactions={setTransactions}
           />
+
+          <Tile
+            className={"categories_list"}
+            title={"Categories"}
+            type={TileType.categories_list}
+            transactionsList={transactionsList}
+            categoriesList={categoriesList}
+            setCategories={setCategories}
+          />
+
+
         </Layout>
         <NavBar>
                   <Button onClick={() => navigate('/')} >Home</Button>

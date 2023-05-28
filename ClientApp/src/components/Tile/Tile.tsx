@@ -6,6 +6,7 @@ import PopUp, {PopUpType} from "../PopUp/PopUp";
 import {CategoryItem, InvestmentItem, InvestmentType, TransactionItem} from "../../App";
 import CategoriesItem from "../Category/CategoriesItem/CategoriesItem";
 import InvestmentsItem from '../InvestmentItem/InvestmentsItem';
+import transactions from "../Transactions/Transactions";
 
 
 // const options = [
@@ -140,8 +141,15 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
             {transactionsList.map((transaction) => {
               return (
                 <>
-                  <TransactionsItem title={transaction.title} value={transaction.value}
-                                    category={categoriesList.find(cat => cat.id === transaction.transCategoryId) || {id: 0, name: 'Other', image: 'url'}}/>
+                  <TransactionsItem
+                    transaction={transaction}
+                    setTransactions={setTransactions}
+                    // categoriesList={categoriesList}
+                    setSpendingSum={setSpendingSum}
+                    // title={transaction.title}
+                    // value={transaction.value}
+                    category={categoriesList.find(cat => cat.id === transaction.transCategoryId) || {id: 0, name: 'Other', image: 'url'}}
+                  />
                   <StyledLine/>
                 </>
               );
@@ -195,28 +203,30 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
                           // key={key}
                           pricePerPiece={invest.pricePerPiece}
                           investInfo={invest.investInfo}
+                          invest={invest}
                           amount={invest.amount}
                           typeId={invest.typeId}
                           investType={investType}
                           priceTotal={invest.priceTotal}
                           // active={modalIsActive}
-                          setActive={setModalActive}
-                          // setInvestments={setInvesting}
-                          // setInvestingSum={setInvestingSum}
-                          // type={PopUpType.details}
-                        />
-                        <PopUp
-                          type={PopUpType.details}
-                          index={index}
-                          active={modalIsActive}
-                          setActive={setModalActive}
-                          investInfo={invest}
-                          // setTransactions={setTransactions}
-                          // setSpendingSum={setSpendingSum}
+                          // setActive={setModalActive}
                           setInvestments={setInvesting}
                           setInvestingSum={setInvestingSum}
-                          investingList={investingList}
+                          // investingList={investingList}
+                          // type={PopUpType.details}
                         />
+                        {/*<PopUp*/}
+                        {/*  type={PopUpType.details}*/}
+                        {/*  index={index}*/}
+                        {/*  active={modalIsActive}*/}
+                        {/*  setActive={setModalActive}*/}
+                        {/*  investInfo={invest}*/}
+                        {/*  // setTransactions={setTransactions}*/}
+                        {/*  // setSpendingSum={setSpendingSum}*/}
+                        {/*  setInvestments={setInvesting}*/}
+                        {/*  setInvestingSum={setInvestingSum}*/}
+                        {/*  investingList={investingList}*/}
+                        {/*/>*/}
                         <StyledLine/>
                       </>
                     );
@@ -225,9 +235,9 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
                 </StyledList>
                 <PopUp
                     type={PopUpType.addInvestment}
-                    active={isDetailsModalActive}
+                    active={modalIsActive}
                     investType={investType}
-                    setActive={setDetailsModalActive}
+                    setActive={setModalActive}
                     setInvestments={setInvesting}
                     setInvestingSum={setInvestingSum}/>
                 </>

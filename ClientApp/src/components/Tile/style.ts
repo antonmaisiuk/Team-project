@@ -6,19 +6,22 @@ export const StyledTile = styled.div<TileBaseInterface>`
   //grid-template-rows: 1fr auto;
   
   ${props => props.type === TileType.spending_sum && `
-    margin-bottom: 34px;
+    // margin-bottom: 34px;
     // max-height: 30%;
-    grid-row: 1 / 1 ;
+    // grid-row: 1 / 1 ;
+    grid-area: sum;
   `}
   ${props => props.type === TileType.categories_list && `
     // margin-bottom: 10px;
-    max-height: 68%;
-    grid-row: 1 / 1 ;
+    // max-height: 68%;
+    // grid-row: 1 / 1 ;
+    grid-area: cat;
   `}
   ${props => props.type === TileType.transactions_list && `
     // margin-bottom: 10px;
-    height: auto;
-    grid-row: 1 / 4 ;
+    // height: auto;
+    // grid-row: 1 / 3 ;
+    grid-area: trans;
   `}
   
   break-inside: avoid;
@@ -81,10 +84,10 @@ export const StyledList = styled.div<TileBaseInterface>`
   justify-content: space-between;
   //padding-right: 15px;
   ${props => props.type === TileType.transactions_list && `
-    max-height: 300px;
+    // max-height: 300px;
   `}
   ${props => props.type === TileType.categories_list && `
-    max-height: 100px;
+    // max-height: 100px;
   `}
   
   overflow-y: scroll;
