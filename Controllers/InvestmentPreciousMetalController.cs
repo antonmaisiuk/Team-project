@@ -111,10 +111,10 @@ namespace Elaborate.Controllers
             return Ok(investmentToUpdate);
         }
 
-        [HttpPost]
-        public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentPreciousMetalId)
+        [HttpDelete("DeleteInvestment/{id}")]
+        public ActionResult<InvestmentPreciousMetal> DeleteInvestment([FromRoute] int id)
         {
-            var investmentPreciousMetalToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentPreciousMetalId);
+            var investmentPreciousMetalToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == id);
 
             if (investmentPreciousMetalToDelete != null)
             {
@@ -122,7 +122,7 @@ namespace Elaborate.Controllers
                 _dbContext.SaveChanges();
                 return Ok(investmentPreciousMetalToDelete);
             }
-            else return NotFound(investmentPreciousMetalId);
+            else return NotFound(id);
         }
 
         [HttpGet("types")]

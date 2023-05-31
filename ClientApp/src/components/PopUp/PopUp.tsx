@@ -285,7 +285,6 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         }
       }))
 
-      // @ts-ignore
 
       // console.log('### INVEST AFTER ADD', investments);
       // console.log('### INVEST SUM AFTER ADD', sum);
@@ -304,7 +303,77 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     } else {
       console.error('Error with response');
     }
-  }
+    }
+
+    const deleteTransaction = async (id: number | undefined) => {
+        const response = await fetch(`api/Transaction/DeleteTransaction/${id}`, {
+            method: "DELETE",
+        });
+        console.log(id);
+        if (response.ok) {
+            console.log("Transaction deleted Succesfully!")
+        } else {
+            alert("HTTP Error: " + response.status);
+        }
+    };
+
+    function deleteInvestment(invest: InvestmentItem, investType: InvestmentType | undefined) {
+        console.log(investType)
+        switch (investType) {
+            case InvestmentType.stocks:
+                // Usuñ inwestycjê typu akcje
+                deleteStocksInvestment(invest.investInfo.id);
+                break;
+            case InvestmentType.crypto:
+                // Usuñ inwestycjê typu obligacje
+                deleteCryptoInvestment(invest.investInfo.id);
+                break;
+            case InvestmentType.metals:
+                // Usuñ inwestycjê typu nieruchomoœæ
+                deleteMetalsInvestment(invest.investInfo.id);
+                break;
+            default:
+                console.log('Nieznany typ inwestycji');
+        }
+    }
+
+    const deleteStocksInvestment = async (id: number | undefined) => {
+        const response = await fetch(`api/InvestmentStock/DeleteInvestment/${id}`, {
+            method: "DELETE",
+        });
+        console.log(id);
+        if (response.ok) {
+            console.log("Investment deleted Succesfully!")
+        } else {
+            alert("HTTP Error: " + response.status);
+        }
+    };
+
+    const deleteCryptoInvestment = async (id: number | undefined) => {
+        const response = await fetch(`api/InvestmentCryptoCurrency/DeleteInvestment/${id}`, {
+            method: "DELETE",
+        });
+        console.log(id);
+        if (response.ok) {
+            console.log("Investment deleted Succesfully!")
+        } else {
+            alert("HTTP Error: " + response.status);
+        }
+    };
+
+    const deleteMetalsInvestment = async (id: number | undefined) => {
+        const response = await fetch(`api/InvestmentPreciousMetal/DeleteInvestment/${id}`, {
+            method: "DELETE",
+        });
+        console.log(id);
+        if (response.ok) {
+            console.log("Investment deleted Succesfully!")
+        } else {
+            alert("HTTP Error: " + response.status);
+        }
+    };
+
+  
 
   async function getInvestingTypes() {
     const typeResponse = await fetch(`api/${controller}/types`);
@@ -498,7 +567,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     </StyledForm>
   );
 
-  const renderInvestDetails = () => (
+    const renderInvestDetails = () => (
     <>
       <StyledDetails>
         <StyledDetailsContent className={'details_title'}>
@@ -533,8 +602,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
           </div>
         </StyledDetailsContent>
       </StyledDetails>
-      <StyledSendingForm>
-        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Delete</StyledCancelButton>
+          <StyledSendingForm>
+              <StyledCancelButton onClick={() => deleteInvestment(invest, investType)}>Delete</StyledCancelButton>
         <StyledSubmitButton type={"submit"}>Edit</StyledSubmitButton>
       </StyledSendingForm>
     </>
@@ -581,7 +650,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         </StyledDetailsContent>
       </StyledDetails>
       <StyledSendingForm>
-        <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Delete</StyledCancelButton>
+              <StyledCancelButton onClick={() => deleteTransaction(transaction.id)}>Delete</StyledCancelButton>
         <StyledSubmitButton type={"submit"}>Edit</StyledSubmitButton>
       </StyledSendingForm>
     </>

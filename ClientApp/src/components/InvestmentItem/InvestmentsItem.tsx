@@ -126,7 +126,8 @@ const InvestmentsItem:FC<InvestmentsItemInterface> = (
       <PopUp
       type={PopUpType.investDetails}
       active={isDetailsModalActive}
-      setActive={setDetailsModalActive}
+              setActive={setDetailsModalActive}
+              investType={investType}
       // investingList={investingList}
       setInvestments={setInvestments}
       setInvestingSum={setInvestingSum}

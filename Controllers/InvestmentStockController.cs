@@ -42,10 +42,10 @@ namespace Elaborate.Controllers
             return Ok(investmentStocks);
         }
 
-        [HttpPost]
-        public ActionResult<InvestmentStock> DeleteStock(int stockId)
+        [HttpDelete("DeleteInvestment/{id}")]
+        public ActionResult<InvestmentStock> DeleteStock([FromRoute] int id)
         {
-            var stockToDelete = _dbContext.InvestmentStocks.SingleOrDefault(t => t.Id == stockId);
+            var stockToDelete = _dbContext.InvestmentStocks.SingleOrDefault(t => t.Id == id);
 
             if (stockToDelete != null)
             {
@@ -53,7 +53,7 @@ namespace Elaborate.Controllers
                 _dbContext.SaveChanges();
                 return Ok(stockToDelete);
             }
-            else return NotFound(stockId);
+            else return NotFound(id);
         }
 
         [HttpPost("Add")]

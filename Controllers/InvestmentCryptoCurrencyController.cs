@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Controllers
 {
-    [Route("api/[controller]")] // Pytanie czy to jest potrzebne ??? 
+    [Route("api/[controller]")] 
     public class InvestmentCryptoCurrencyController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -43,10 +43,10 @@ namespace Elaborate.Controllers
             return Ok(investmentCryptoCurrency);
         }
 
-        [HttpPost]
-        public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency(int cryptoCurrencyId)
+        [HttpDelete("DeleteInvestment/{id}")]
+        public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency([FromRoute] int id)
         {
-            var cryptoCurrencyToDelete = _dbContext.InvestmentCryptoCurrencies.SingleOrDefault(t => t.Id == cryptoCurrencyId);
+            var cryptoCurrencyToDelete = _dbContext.InvestmentCryptoCurrencies.SingleOrDefault(t => t.Id == id);
 
             if (cryptoCurrencyToDelete != null)
             {
@@ -54,7 +54,7 @@ namespace Elaborate.Controllers
                 _dbContext.SaveChanges();
                 return Ok(cryptoCurrencyToDelete);
             }
-            else return NotFound(cryptoCurrencyId);
+            else return NotFound(id);
         }
 
         [HttpPost("Add")]

@@ -156,10 +156,10 @@ namespace Elaborate.Controllers
             return Ok(transactionToUpdate);
         }
 
-        [HttpPost]
-        public ActionResult<Transaction> DeleteTransaction(int transactionId)
+        [HttpDelete("DeleteTransaction/{id}")]
+        public ActionResult<Transaction> DeleteTransaction([FromRoute] int id)
         {
-            var transactionToDelete = _dbContext.Transactions.SingleOrDefault(t => t.Id == transactionId);
+            var transactionToDelete = _dbContext.Transactions.SingleOrDefault(t => t.Id == id);
 
             if (transactionToDelete != null)
             {
@@ -167,7 +167,7 @@ namespace Elaborate.Controllers
                 _dbContext.SaveChanges();
                 return Ok(transactionToDelete);
             }
-            else return NotFound(transactionId);
+            else return NotFound(id);
         }
 
 

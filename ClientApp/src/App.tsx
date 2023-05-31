@@ -15,7 +15,8 @@ import Investments from "./components/Investments/Investments";
 // ];
 
 
-export type TransactionItem ={
+export type TransactionItem = {
+    id: number;
   title: string;
   transCategoryId: number;
   value: number
@@ -71,10 +72,10 @@ const App = () => {
         <Route path="/login" element={<Auth type={AuthType.login} />}/>
         <Route path="/register" element={<Auth type={AuthType.register} />}/>
         {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
-        {/*<Route element={<PrivateRoute/>}>*/}
+        <Route element={<PrivateRoute/>}>
           <Route path="/transactions" element={<Transactions/>}/>
           <Route path="/investments" element={<Investments/>}/>
-        {/*</Route>*/}
+        </Route>
         {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
         <Route path="/" element={<Home />}/>
       </Routes>
