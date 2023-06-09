@@ -111,6 +111,38 @@ namespace Elaborate.Controllers
             }
         }
 
+        [HttpPut("EditInvestment/{typeId}")]
+        public async Task<ActionResult> EditInvestment([FromRoute] int typeId, [FromBody] InvestmentCryptoCurrency dto)
+        {
+            var jwt = Request.Cookies["jwt"];
+
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+
+            var investmentToEdit = _dbContext.InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).FirstOrDefault(i => i.TypeId == typeId);
+
+            if (investmentToEdit is null)
+            {
+                return NotFound("Nie znaleziono inwestycji o podanym id");
+            }
+
+
+            if (dto.Amount > 0 && dto.Amount < decimal.MaxValue)
+            {
+                investmentToEdit.Amount = dto.Amount;
+            }
+            else
+            {
+                return BadRequest("Nieodpowiednia ilość");
+            }
+
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(investmentToEdit);
+        }
+
         [HttpGet("types")]
         public ActionResult<IEnumerable<InvestmentCryptoCurrency>> GetUniqueCryptocurrencies()
         {
