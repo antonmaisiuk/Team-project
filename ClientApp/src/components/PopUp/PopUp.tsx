@@ -318,7 +318,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     };
 
     function deleteInvestment(invest: InvestmentItem, investType: InvestmentType | undefined) {
-        console.log(investType)
+        console.log(invest)
         switch (investType) {
             case InvestmentType.stocks:
                 // Usuñ inwestycjê typu akcje

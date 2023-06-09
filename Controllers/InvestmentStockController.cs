@@ -42,10 +42,15 @@ namespace Elaborate.Controllers
             return Ok(investmentStocks);
         }
 
-        [HttpDelete("DeleteInvestment/{id}")]
-        public ActionResult<InvestmentStock> DeleteStock([FromRoute] int id)
+        [HttpDelete("DeleteInvestment/{typeId}")]
+        public ActionResult<InvestmentStock> DeleteStock([FromRoute] int typeId)
         {
-            var stockToDelete = _dbContext.InvestmentStocks.SingleOrDefault(t => t.Id == id);
+            var jwt = Request.Cookies["jwt"];
+
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+            var stockToDelete = _dbContext.InvestmentStocks.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
 
             if (stockToDelete != null)
             {
@@ -53,7 +58,7 @@ namespace Elaborate.Controllers
                 _dbContext.SaveChanges();
                 return Ok(stockToDelete);
             }
-            else return NotFound(id);
+            else return NotFound(typeId);
         }
 
         [HttpPost("Add")]

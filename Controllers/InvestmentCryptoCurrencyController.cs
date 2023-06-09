@@ -43,18 +43,23 @@ namespace Elaborate.Controllers
             return Ok(investmentCryptoCurrency);
         }
 
-        [HttpDelete("DeleteInvestment/{id}")]
-        public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency([FromRoute] int id)
+        [HttpDelete("DeleteInvestment/{typeId}")]
+        public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency([FromRoute] int typeId)
         {
-            var cryptoCurrencyToDelete = _dbContext.InvestmentCryptoCurrencies.SingleOrDefault(t => t.Id == id);
+            var jwt = Request.Cookies["jwt"];
 
-            if (cryptoCurrencyToDelete != null)
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+            var investmentToDelete = _dbContext.InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
+
+            if (investmentToDelete != null)
             {
-                _dbContext.InvestmentCryptoCurrencies.Remove(cryptoCurrencyToDelete);
+                _dbContext.InvestmentCryptoCurrencies.Remove(investmentToDelete);
                 _dbContext.SaveChanges();
-                return Ok(cryptoCurrencyToDelete);
+                return Ok(investmentToDelete);
             }
-            else return NotFound(id);
+            else return NotFound(typeId);
         }
 
         [HttpPost("Add")]

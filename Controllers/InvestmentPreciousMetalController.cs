@@ -111,18 +111,23 @@ namespace Elaborate.Controllers
             return Ok(investmentToUpdate);
         }
 
-        [HttpDelete("DeleteInvestment/{id}")]
-        public ActionResult<InvestmentPreciousMetal> DeleteInvestment([FromRoute] int id)
+        [HttpDelete("DeleteInvestment/{typeId}")]
+        public ActionResult<InvestmentPreciousMetal> DeleteInvestment([FromRoute] int typeId)
         {
-            var investmentPreciousMetalToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == id);
+            var jwt = Request.Cookies["jwt"];
 
-            if (investmentPreciousMetalToDelete != null)
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+            var investmentToDelete = _dbContext.InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
+
+            if (investmentToDelete != null)
             {
-                _dbContext.InvestmentsPreciousMetals.Remove(investmentPreciousMetalToDelete);
+                _dbContext.InvestmentsPreciousMetals.Remove(investmentToDelete);
                 _dbContext.SaveChanges();
-                return Ok(investmentPreciousMetalToDelete);
+                return Ok(investmentToDelete);
             }
-            else return NotFound(id);
+            else return NotFound(typeId);
         }
 
         [HttpGet("types")]
