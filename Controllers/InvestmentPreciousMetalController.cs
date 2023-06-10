@@ -122,7 +122,15 @@ namespace Elaborate.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(investmentToEdit);
+            var list = _dbContext
+                    .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
+                    .ToList();
+            double sum = _dbContext
+            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+            Object[] resultArr = new Object[] { list, sum };
+
+            return Ok(resultArr);
         }
 
         [HttpDelete("DeleteInvestment/{typeId}")]
@@ -139,7 +147,16 @@ namespace Elaborate.Controllers
             {
                 _dbContext.InvestmentsPreciousMetals.Remove(investmentToDelete);
                 _dbContext.SaveChanges();
-                return Ok(investmentToDelete);
+
+                var list = _dbContext
+                    .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
+                    .ToList();
+                double sum = _dbContext
+                .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
             else return NotFound(typeId);
         }

@@ -176,8 +176,6 @@ export const StyledSubmitButton = styled.button`
   line-height: 30px;
 `;
 
-
-
 export const StyledCancelButton = styled.button`
   width: 46%;
   height: 60px;
@@ -199,6 +197,31 @@ export const StyledSendingForm = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+
+export const StyledEditSpan = styled.span`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const StyledErrorInfo = styled.p`
+  color: #e33a3a;
+  font-weight: bold;
+  font-size: 0.8em;
+  text-align: center;
+  margin: 0;
+`;
+
+export const StyledEditInput = styled.input`
+  width: 40%;
+  margin-bottom: 0;
+  margin-right: 10px;
+`;
+export const StyledEditSelect = styled.select`
+  margin-bottom: 0;
+  margin-right: 10px;
+`;
+
 
 export const StyledLine = styled.span`
   display: inline-block;

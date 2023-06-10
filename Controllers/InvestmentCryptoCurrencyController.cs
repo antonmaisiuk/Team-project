@@ -47,17 +47,25 @@ namespace Elaborate.Controllers
         public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency([FromRoute] int typeId)
         {
             var jwt = Request.Cookies["jwt"];
-
             var token = _jwtService.Verify(jwt);
-
             int userId = int.Parse(token.Issuer);
+
             var investmentToDelete = _dbContext.InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
 
             if (investmentToDelete != null)
             {
                 _dbContext.InvestmentCryptoCurrencies.Remove(investmentToDelete);
                 _dbContext.SaveChanges();
-                return Ok(investmentToDelete);
+
+                var list = _dbContext
+                    .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+                    .ToList();
+                decimal sum = _dbContext
+                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
             else return NotFound(typeId);
         }
@@ -140,7 +148,15 @@ namespace Elaborate.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(investmentToEdit);
+            var list = _dbContext
+                    .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+                    .ToList();
+            decimal sum = _dbContext
+            .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+            Object[] resultArr = new Object[] { list, sum };
+
+            return Ok(resultArr);
         }
 
         [HttpGet("types")]

@@ -16,10 +16,11 @@ import Investments from "./components/Investments/Investments";
 
 
 export type TransactionItem = {
-    id: number;
+  id: number;
   title: string;
   transCategoryId: number;
-  value: number
+  comment: string;
+  value: number;
 }
 export enum InvestmentType{
   stocks,

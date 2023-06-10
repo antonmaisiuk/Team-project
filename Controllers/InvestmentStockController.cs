@@ -56,7 +56,17 @@ namespace Elaborate.Controllers
             {
                 _dbContext.InvestmentStocks.Remove(stockToDelete);
                 _dbContext.SaveChanges();
-                return Ok(stockToDelete);
+
+                var stockList = _dbContext
+                    .InvestmentStocks.Where(r => r.Account.Id == userId)
+                    .ToList();
+
+                double stocksSum = _dbContext
+                .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { stockList, stocksSum };
+
+                return Ok(resultArr);
             }
             else return NotFound(typeId);
         }
@@ -123,9 +133,7 @@ namespace Elaborate.Controllers
         public async Task<ActionResult> EditInvestment([FromRoute] int typeId, [FromBody] InvestmentStock dto)
         {
             var jwt = Request.Cookies["jwt"];
-
             var token = _jwtService.Verify(jwt);
-
             int userId = int.Parse(token.Issuer);
 
             var investmentToEdit = _dbContext.InvestmentStocks.Where(r => r.Account.Id == userId).FirstOrDefault(i => i.TypeId == typeId);
@@ -148,7 +156,18 @@ namespace Elaborate.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(investmentToEdit);
+            var stockList = _dbContext
+                    .InvestmentStocks.Where(r => r.Account.Id == userId)
+                    .ToList();
+
+            double stocksSum = _dbContext
+            .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+            Object[] resultArr = new Object[] { stockList, stocksSum };
+
+            return Ok(resultArr);
+
+            //return Ok(investmentToEdit);
         }
 
         [HttpGet("types")]
