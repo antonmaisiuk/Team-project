@@ -1,7 +1,7 @@
 import React, { FC, useState, SyntheticEvent, useEffect } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { StyledAdd } from '../ui/AddButton/style';
 import { StyledAuthContainer, StyledForm } from './style';
+import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
@@ -9,37 +9,36 @@ const ResetPassword = () => {
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
     const [resetData, setResetData] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         const email = urlParams.get('email');
 
-
         // Wywo³anie ¿¹dania GET do /reset-password na serwerze
         fetch(`https://localhost:44375/api/reset-password?token=${token}&email=${email}`)
             .then(response => response.json())
             .then(data => {
-                // Przetwarzanie danych o resetowaniu has³a
                 setResetData(data);
             })
             .catch(error => {
-                // Obs³uga b³êdu ¿¹dania
                 console.error(error);
             });
     }, []);
 
-    const handleResetPassword = async () => {
+    const handleResetPassword = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         // Sprawdzanie, czy has³o i powtórzone has³o s¹ zgodne
         if (password !== confirmPassword) {
             setErrorMsg('Passwords do not match');
-            return;
+            return 0;
         }
 
         if (resetData === null) {
             // Obs³uga przypadku, gdy resetData ma wartoœæ null
             console.error('Reset data is null');
-            return;
+            return 0;
         }
 
         // Wywo³anie ¿¹dania POST do /reset-password na serwerze
@@ -55,9 +54,9 @@ const ResetPassword = () => {
             }),
         });
 
-
         if (response.ok) {
             const data = await response.json();
+            setErrorMsg('');
             setSuccessMsg('Success');
             console.log(data);
         } else {
@@ -70,26 +69,41 @@ const ResetPassword = () => {
     return (
         <StyledAuthContainer>
             <StyledForm>
-        <div>
+                <div>
                     <h1>Reset Password</h1>
                     <Form onSubmit={handleResetPassword}>
                         <Form.Group>
                             <Form.Label>New Password</Form.Label>
-                            <Form.Control type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <Form.Control
+                                type="password"
+                                placeholder="New Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Confirm New Password</Form.Label>
-                            <Form.Control type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                            <Form.Control
+                                type="password"
+                                placeholder="Confirm New Password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
                         </Form.Group>
                         {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
                         {successMsg && <Alert variant="success">{successMsg}</Alert>}
+                        {successMsg && (
+                            <Button variant="primary" onClick={() => navigate('/login')}>
+                                Go to Home
+                            </Button>
+                        )}
                         <Button variant="primary" type="submit">
-                    Reset Password
-                </Button>
-            </Form>
+                            Reset Password
+                        </Button>
+                    </Form>
                 </div>
             </StyledForm>
-            </StyledAuthContainer>
+        </StyledAuthContainer>
     );
 };
 

@@ -62,7 +62,6 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
       console.log(errorMsg.message);
     }
   }
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (redirect) {
