@@ -15,7 +15,6 @@ export const StyledAuthContainer = styled.div`
 
 export const StyledForm = styled.div`
   background-color: #fff;
-
   display: flex;
   flex-direction: column;
   justify-content: center;

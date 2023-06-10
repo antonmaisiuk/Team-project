@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { FC, useState, SyntheticEvent, useEffect } from 'react';
+import { Form, Button, Alert } from 'react-bootstrap';
+import { StyledAdd } from '../ui/AddButton/style';
+import { StyledAuthContainer, StyledForm } from './style';
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
+    const [successMsg, setSuccessMsg] = useState('');
     const [resetData, setResetData] = useState(null);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
         const email = urlParams.get('email');
+
 
         // Wywo³anie ¿¹dania GET do /reset-password na serwerze
         fetch(`https://localhost:44375/api/reset-password?token=${token}&email=${email}`)
@@ -27,7 +32,7 @@ const ResetPassword = () => {
     const handleResetPassword = async () => {
         // Sprawdzanie, czy has³o i powtórzone has³o s¹ zgodne
         if (password !== confirmPassword) {
-            setErrorMessage('Passwords do not match');
+            setErrorMsg('Passwords do not match');
             return;
         }
 
@@ -53,41 +58,38 @@ const ResetPassword = () => {
 
         if (response.ok) {
             const data = await response.json();
-            // Wyœwietlanie informacji o powodzeniu resetowania has³a
+            setSuccessMsg('Success');
             console.log(data);
         } else {
             const errorData = await response.json();
-            // Wyœwietlanie informacji o b³êdzie resetowania has³a
+            setErrorMsg('Something went wrong');
             console.error(errorData);
         }
     };
 
     return (
+        <StyledAuthContainer>
+            <StyledForm>
         <div>
-            <h1>Reset Password</h1>
-            <form>
-                <div>
-                    <label>New Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div>
-                    <label>Confirm Password:</label>
-                    <input
-                        type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                </div>
-                {errorMessage && <p>{errorMessage}</p>}
-                <button type="button" onClick={handleResetPassword}>
+                    <h1>Reset Password</h1>
+                    <Form onSubmit={handleResetPassword}>
+                        <Form.Group>
+                            <Form.Label>New Password</Form.Label>
+                            <Form.Control type="password" placeholder="New Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Confirm New Password</Form.Label>
+                            <Form.Control type="password" placeholder="Confirm New Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                        </Form.Group>
+                        {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
+                        {successMsg && <Alert variant="success">{successMsg}</Alert>}
+                        <Button variant="primary" type="submit">
                     Reset Password
-                </button>
-            </form>
-        </div>
+                </Button>
+            </Form>
+                </div>
+            </StyledForm>
+            </StyledAuthContainer>
     );
 };
 

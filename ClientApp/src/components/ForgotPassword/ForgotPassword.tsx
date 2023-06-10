@@ -1,5 +1,7 @@
 import React, { FC, useState, SyntheticEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { StyledAdd } from '../ui/AddButton/style';
+import { StyledAuthContainer, StyledForm } from './style';
 
 interface ForgotPasswordProps {
     className?: string;
@@ -33,6 +35,8 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ className }) => {
     };
 
     return (
+        <StyledAuthContainer>
+            <StyledForm>
         <div className={className}>
             <h1>Forgot Password</h1>
             <Form onSubmit={handleSubmit}>
@@ -46,7 +50,9 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ className }) => {
                     Submit
                 </Button>
             </Form>
-        </div>
+                </div>
+            </StyledForm>
+            </StyledAuthContainer>
     );
 };
 

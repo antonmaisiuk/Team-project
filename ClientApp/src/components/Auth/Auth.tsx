@@ -122,11 +122,17 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
           <StyledFormGroup className="mb-3" controlId="formBasicButtons" type={type}>
             {type === AuthType.login ?
               <>
-                <Button variant="primary" type="submit"> Login </Button>
-                              <Button variant="primary" onClick={() => navigate('/register')}> Registration </Button>
-                              <Link to="/forgot-password" className="btn btn-link">
-                                  Forgot Password?
-                              </Link>
+                              <div>
+                                  <div>
+                                      <Button variant="primary" type="submit">Login    </Button>
+                                      <Button variant="primary" onClick={() => navigate('/register')}>Registration</Button>
+                                  </div>
+                                  <div>
+                                      <Link to="/forgot-password" className="btn btn-link">
+                                          Forgot Password?
+                                      </Link>
+                                  </div>
+                              </div>
               </>
               :
               <>
