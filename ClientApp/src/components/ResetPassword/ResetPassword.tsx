@@ -94,7 +94,7 @@ const ResetPassword = () => {
                         {successMsg && <Alert variant="success">{successMsg}</Alert>}
                         {successMsg && (
                             <Button variant="primary" onClick={() => navigate('/login')}>
-                                Go to Home
+                                Login
                             </Button>
                         )}
                         <Button variant="primary" type="submit">
