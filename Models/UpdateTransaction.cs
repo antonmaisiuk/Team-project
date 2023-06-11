@@ -23,5 +23,7 @@ namespace Elaborate.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
+
+        public int TransCategoryId { get; set; }
     }
 }

@@ -138,9 +138,13 @@ namespace Elaborate.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateTransaction(int id, [FromBody] UpdateTransaction updateTransaction)
+        public async Task<ActionResult> UpdateTransaction([FromRoute] int id, [FromBody] UpdateTransaction updateTransaction)
         {
             var transactionToUpdate = _dbContext.Transactions.FirstOrDefault(t => t.Id == id);
+
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            var userId = int.Parse(token.Issuer);
 
             if (transactionToUpdate is null)
                 return NotFound("Nie znaleziono transakcji o podanym id");
@@ -148,26 +152,48 @@ namespace Elaborate.Controllers
             transactionToUpdate.Title = updateTransaction.Title;
             transactionToUpdate.Value = updateTransaction.Value;
             transactionToUpdate.Date = updateTransaction.Date;
+            transactionToUpdate.Comment = updateTransaction.Comment;
+            transactionToUpdate.TransCategoryId = updateTransaction.TransCategoryId;
 
             //transactionToUpdate.Title = updateTransaction.Title;
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(transactionToUpdate);
+            var transactions = _dbContext
+            .Transactions.Where(r => r.Account.Id == userId)
+            .ToList();
+
+            decimal transactionSum = transactions.Sum(t => t.Value);
+
+            Object[] resultArr = new Object[] { transactions, transactionSum };
+
+            return Ok(resultArr);
         }
 
-        [HttpPost]
-        public ActionResult<Transaction> DeleteTransaction(int transactionId)
+        [HttpDelete("DeleteTransaction/{id}")]
+        public ActionResult<Transaction> DeleteTransaction([FromRoute] int id)
         {
-            var transactionToDelete = _dbContext.Transactions.SingleOrDefault(t => t.Id == transactionId);
+            var transactionToDelete = _dbContext.Transactions.SingleOrDefault(t => t.Id == id);
 
             if (transactionToDelete != null)
             {
+                var jwt = Request.Cookies["jwt"];
+                var token = _jwtService.Verify(jwt);
+                var userId = int.Parse(token.Issuer);
+
                 _dbContext.Transactions.Remove(transactionToDelete);
                 _dbContext.SaveChanges();
-                return Ok(transactionToDelete);
+                var transactions = _dbContext
+                    .Transactions.Where(r => r.Account.Id == userId)
+                    .ToList();
+
+                decimal transactionSum = transactions.Sum(t => t.Value);
+
+                Object[] resultArr = new Object[] { transactions, transactionSum };
+
+                return Ok(resultArr);
             }
-            else return NotFound(transactionId);
+            else return NotFound(id);
         }
 
 

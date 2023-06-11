@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Elaborate.Controllers
 {
-    [Route("api/[controller]")] // Pytanie czy to jest potrzebne ??? 
+    [Route("api/[controller]")] 
     public class InvestmentCryptoCurrencyController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -43,18 +43,31 @@ namespace Elaborate.Controllers
             return Ok(investmentCryptoCurrency);
         }
 
-        [HttpPost]
-        public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency(int cryptoCurrencyId)
+        [HttpDelete("DeleteInvestment/{typeId}")]
+        public ActionResult<InvestmentCryptoCurrency> DeleteCryptoCurrency([FromRoute] int typeId)
         {
-            var cryptoCurrencyToDelete = _dbContext.InvestmentCryptoCurrencies.SingleOrDefault(t => t.Id == cryptoCurrencyId);
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            int userId = int.Parse(token.Issuer);
 
-            if (cryptoCurrencyToDelete != null)
+            var investmentToDelete = _dbContext.InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
+
+            if (investmentToDelete != null)
             {
-                _dbContext.InvestmentCryptoCurrencies.Remove(cryptoCurrencyToDelete);
+                _dbContext.InvestmentCryptoCurrencies.Remove(investmentToDelete);
                 _dbContext.SaveChanges();
-                return Ok(cryptoCurrencyToDelete);
+
+                var list = _dbContext
+                    .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+                    .ToList();
+                decimal sum = _dbContext
+                .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
-            else return NotFound(cryptoCurrencyId);
+            else return NotFound(typeId);
         }
 
         [HttpPost("Add")]
@@ -104,6 +117,46 @@ namespace Elaborate.Controllers
 
                 return Ok(resultArr);
             }
+        }
+
+        [HttpPut("EditInvestment/{typeId}")]
+        public async Task<ActionResult> EditInvestment([FromRoute] int typeId, [FromBody] InvestmentCryptoCurrency dto)
+        {
+            var jwt = Request.Cookies["jwt"];
+
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+
+            var investmentToEdit = _dbContext.InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).FirstOrDefault(i => i.TypeId == typeId);
+
+            if (investmentToEdit is null)
+            {
+                return NotFound("Nie znaleziono inwestycji o podanym id");
+            }
+
+
+            if (dto.Amount > 0 && dto.Amount < decimal.MaxValue)
+            {
+                investmentToEdit.Amount = dto.Amount;
+            }
+            else
+            {
+                return BadRequest("Nieodpowiednia ilość");
+            }
+
+
+            await _dbContext.SaveChangesAsync();
+
+            var list = _dbContext
+                    .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId)
+                    .ToList();
+            decimal sum = _dbContext
+            .InvestmentCryptoCurrencies.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+            Object[] resultArr = new Object[] { list, sum };
+
+            return Ok(resultArr);
         }
 
         [HttpGet("types")]

@@ -93,36 +93,72 @@ namespace Elaborate.Controllers
         }
 
 
-        [HttpPut("updateMetals")]
-        public async Task<ActionResult> UpdateTransaction(int id, [FromBody] InvestmentPreciousMetal dto)
+        [HttpPut("EditInvestment/{typeId}")]
+        public async Task<ActionResult> EditInvestment([FromRoute] int typeId, [FromBody] InvestmentPreciousMetal dto)
         {
-            var investmentToUpdate = _dbContext.InvestmentsPreciousMetals.FirstOrDefault(i => i.Id == id);
+            var jwt = Request.Cookies["jwt"];
 
-            if (investmentToUpdate is null)
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+
+            var investmentToEdit = _dbContext.InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).FirstOrDefault(i => i.TypeId == typeId);
+
+            if (investmentToEdit is null)
+            {
                 return NotFound("Nie znaleziono inwestycji o podanym id");
+            }
+                
 
             if (dto.Amount > 0 && dto.Amount < double.MaxValue)
-                investmentToUpdate.Amount = dto.Amount;
-            investmentToUpdate.AccountId = dto.AccountId;
-            investmentToUpdate.TypeId = dto.TypeId;
+            { 
+                investmentToEdit.Amount = dto.Amount; 
+            }
+            else
+            {
+                return BadRequest("Nieodpowiednia ilość");
+            }
+
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok(investmentToUpdate);
+            var list = _dbContext
+                    .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
+                    .ToList();
+            double sum = _dbContext
+            .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+            Object[] resultArr = new Object[] { list, sum };
+
+            return Ok(resultArr);
         }
 
-        [HttpPost]
-        public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentPreciousMetalId)
+        [HttpDelete("DeleteInvestment/{typeId}")]
+        public ActionResult<InvestmentPreciousMetal> DeleteInvestment([FromRoute] int typeId)
         {
-            var investmentPreciousMetalToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentPreciousMetalId);
+            var jwt = Request.Cookies["jwt"];
 
-            if (investmentPreciousMetalToDelete != null)
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+            var investmentToDelete = _dbContext.InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
+
+            if (investmentToDelete != null)
             {
-                _dbContext.InvestmentsPreciousMetals.Remove(investmentPreciousMetalToDelete);
+                _dbContext.InvestmentsPreciousMetals.Remove(investmentToDelete);
                 _dbContext.SaveChanges();
-                return Ok(investmentPreciousMetalToDelete);
+
+                var list = _dbContext
+                    .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId)
+                    .ToList();
+                double sum = _dbContext
+                .InvestmentsPreciousMetals.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { list, sum };
+
+                return Ok(resultArr);
             }
-            else return NotFound(investmentPreciousMetalId);
+            else return NotFound(typeId);
         }
 
         [HttpGet("types")]

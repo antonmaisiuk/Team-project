@@ -4,6 +4,7 @@ import NavBar from "../NavBar/NavBar";
 import Layout from "../Layout/Layout";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import LogoIcon from '../../assets/Icons/LogoIcon/LogoIcon';
 
 // export interface HomeInterface {
 //   userName: string;
@@ -55,10 +56,17 @@ const Home:FC<HTMLAttributes<HTMLDivElement>> = ({
       {/*  /!*{userName ? 'Hi '+ userName : 'You are not logged('}*!/*/}
       {/*</Layout>*/}
       <NavBar>
-        <Button onClick={() => navigate('/transactions')} >Transactions</Button>
-        <Button onClick={() => navigate('/investments')} >Investments</Button>
-        <Button onClick={() => navigate('/login')} >Login</Button>
-        <Button onClick={() => logout()} >Logout</Button>
+        <div>
+          <h1>Elaborate</h1>
+        </div>
+        <div>
+          <Button onClick={() => navigate('/transactions')} >Transactions</Button>
+          <Button onClick={() => navigate('/investments')} >Investments</Button>
+        </div>
+        <div>
+          <Button onClick={() => navigate('/login')} >Login</Button>
+          <Button onClick={() => logout()} >Logout</Button>
+        </div>
       </NavBar>
     </Container>
   );

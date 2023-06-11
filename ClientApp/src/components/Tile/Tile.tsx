@@ -148,7 +148,8 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
                     setSpendingSum={setSpendingSum}
                     // title={transaction.title}
                     // value={transaction.value}
-                    category={categoriesList.find(cat => cat.id === transaction.transCategoryId) || {id: 0, name: 'Other', image: 'url'}}
+                    // category={categoriesList.find(cat => cat.id === transaction.transCategoryId) || {id: 0, name: 'Other', image: 'url'}}
+                    categoriesList={categoriesList}
                   />
                   <StyledLine/>
                 </>

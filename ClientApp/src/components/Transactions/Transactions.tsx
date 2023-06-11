@@ -4,14 +4,16 @@ import Layout, {LayoutType} from "../Layout/Layout";
 import NavBar from "../NavBar/NavBar";
 import Container, {ContainerType} from "../Container/Container";
 import {Button} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { TransactionItem } from '../../App';
 
 
-export type TransactionItem ={
-  title: string;
-  transCategoryId: number;
-  value: number
-}
+//export type TransactionItem = {
+//    id: number;
+//  title: string;
+//  transCategoryId: number;
+//  value: number
+//}
 
 export type CategoryItem ={
   id: number;
@@ -62,11 +64,13 @@ const Transactions = () => {
     const response = await fetch('api/Transaction/transactions');
 
     if (response.ok){
-      const data = await response.json();
-      setTransactions(data);
+        const data = await response.json();
+        console.log(data);
+        setTransactions(data);
     } else {
       alert("HTTP Error: " + response.status)
-    }
+      }
+
   }
   async function categoriesData() {
     const response = await fetch('api/Category/categories');
@@ -132,9 +136,16 @@ const Transactions = () => {
 
         </Layout>
         <NavBar>
-                  <Button onClick={() => navigate('/')} >Home</Button>
-                  <Button onClick={() => navigate('/investments')} >Investments</Button>
-                  <Button onClick={() => logout()} >Logout</Button>
+          <div>
+            <h1>Elaborate</h1>
+          </div>
+          <div>
+            <Button onClick={() => navigate('/')} >Home</Button>
+            <Button onClick={() => navigate('/investments')} >Investments</Button>
+          </div>
+          <div>
+            <Button onClick={() => logout()} >Logout</Button>
+          </div>
         </NavBar>
       </Container>
     </>

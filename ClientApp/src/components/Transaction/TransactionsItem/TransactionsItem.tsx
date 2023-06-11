@@ -8,7 +8,7 @@ import {InvestmentItem} from "../../../App";
 type TransactionsItemType = {
   transaction: TransactionItem,
   // title: string;
-  category: CategoryItem;
+  // category: CategoryItem;
   // value: number;
 }
 
@@ -16,7 +16,7 @@ export interface TransItemDetailsInterface{
   // transaction: TransactionItem,
   setTransactions: Dispatch<SetStateAction<TransactionItem[]>>,
   setSpendingSum: Dispatch<SetStateAction<number>>,
-  // categoriesList: CategoryItem[],
+  categoriesList: CategoryItem[],
 }
 
 type TransItemInterface = TransItemDetailsInterface & TransactionsItemType;
@@ -28,7 +28,7 @@ const TransactionsItem:FC<TransItemInterface> = (
     setTransactions= ()=>{},
     setSpendingSum = ()=>{},
     // title,
-    category,
+    categoriesList,
     // value,
   }
 ) => {
@@ -41,9 +41,12 @@ const TransactionsItem:FC<TransItemInterface> = (
       <StyledTransactionsItem onClick={() => {
         setDetailsModalActive(true);
       }}>
+        {/*<div className={'transaction_img'}>*/}
+        {/*  <img  src={(categoriesList.find(cat => cat.id === transaction.transCategoryId) || {name: 'Inne'}).image} alt={'logo'}/>*/}
+        {/*</div>*/}
         <StyledTextDiv>
           <h3 className={"transaction_title"}>{transaction.title}</h3>
-          <p className={"transaction_category"}>Category: {category.name}</p>
+          <p className={"transaction_category"}>Category: {(categoriesList.find(cat => cat.id === transaction.transCategoryId) || {name: 'Other'}).name}</p>
         </StyledTextDiv>
         <StyledValueDiv>
           <p className={"transaction_value"}>$ {transaction.value}</p>
@@ -55,7 +58,9 @@ const TransactionsItem:FC<TransItemInterface> = (
         setActive={setDetailsModalActive}
         setTransactions={setTransactions}
         setSpendingSum={setSpendingSum}
-        transaction={transaction}/>
+        transaction={transaction}
+        categoriesList={categoriesList}
+      />
     </>
   );
 };

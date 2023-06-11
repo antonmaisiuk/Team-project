@@ -42,18 +42,33 @@ namespace Elaborate.Controllers
             return Ok(investmentStocks);
         }
 
-        [HttpPost]
-        public ActionResult<InvestmentStock> DeleteStock(int stockId)
+        [HttpDelete("DeleteInvestment/{typeId}")]
+        public ActionResult<InvestmentStock> DeleteStock([FromRoute] int typeId)
         {
-            var stockToDelete = _dbContext.InvestmentStocks.SingleOrDefault(t => t.Id == stockId);
+            var jwt = Request.Cookies["jwt"];
+
+            var token = _jwtService.Verify(jwt);
+
+            int userId = int.Parse(token.Issuer);
+            var stockToDelete = _dbContext.InvestmentStocks.Where(r => r.Account.Id == userId).SingleOrDefault(t => t.TypeId == typeId);
 
             if (stockToDelete != null)
             {
                 _dbContext.InvestmentStocks.Remove(stockToDelete);
                 _dbContext.SaveChanges();
-                return Ok(stockToDelete);
+
+                var stockList = _dbContext
+                    .InvestmentStocks.Where(r => r.Account.Id == userId)
+                    .ToList();
+
+                double stocksSum = _dbContext
+                .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+                Object[] resultArr = new Object[] { stockList, stocksSum };
+
+                return Ok(resultArr);
             }
-            else return NotFound(stockId);
+            else return NotFound(typeId);
         }
 
         [HttpPost("Add")]
@@ -112,6 +127,47 @@ namespace Elaborate.Controllers
 
                 return Ok(resultArr);
             }
+        }
+
+        [HttpPut("EditInvestment/{typeId}")]
+        public async Task<ActionResult> EditInvestment([FromRoute] int typeId, [FromBody] InvestmentStock dto)
+        {
+            var jwt = Request.Cookies["jwt"];
+            var token = _jwtService.Verify(jwt);
+            int userId = int.Parse(token.Issuer);
+
+            var investmentToEdit = _dbContext.InvestmentStocks.Where(r => r.Account.Id == userId).FirstOrDefault(i => i.TypeId == typeId);
+
+            if (investmentToEdit is null)
+            {
+                return NotFound("Nie znaleziono inwestycji o podanym id");
+            }
+
+
+            if (dto.Amount > 0 && dto.Amount < double.MaxValue)
+            {
+                investmentToEdit.Amount = dto.Amount;
+            }
+            else
+            {
+                return BadRequest("Nieodpowiednia ilość");
+            }
+
+
+            await _dbContext.SaveChangesAsync();
+
+            var stockList = _dbContext
+                    .InvestmentStocks.Where(r => r.Account.Id == userId)
+                    .ToList();
+
+            double stocksSum = _dbContext
+            .InvestmentStocks.Where(r => r.Account.Id == userId).Sum(c => c.Amount);
+
+            Object[] resultArr = new Object[] { stockList, stocksSum };
+
+            return Ok(resultArr);
+
+            //return Ok(investmentToEdit);
         }
 
         [HttpGet("types")]

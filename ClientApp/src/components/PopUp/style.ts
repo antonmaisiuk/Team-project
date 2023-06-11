@@ -165,16 +165,9 @@ export const StyledSubmitButton = styled.button`
   background-color: #FFF;
   font-family: 'Inter', sans-serif;
   font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 22px;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  
-  &:hover {
-    background-color: #E5E5E5;
-  }
+  font-weight: 800;
+  font-size: 25px;
+  line-height: 30px;
 `;
 
 export const StyledCancelButton = styled.button`
@@ -185,8 +178,8 @@ export const StyledCancelButton = styled.button`
   border-radius: 10px;
   font-family: 'Inter', sans-serif;
   font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 800;
+  font-size: 25px;
   color: #FFF;
   line-height: 22px;
   background-color: #C20007;
@@ -202,6 +195,31 @@ export const StyledSendingForm = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+
+export const StyledEditSpan = styled.span`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const StyledErrorInfo = styled.p`
+  color: #e33a3a;
+  font-weight: bold;
+  font-size: 0.8em;
+  text-align: center;
+  margin: 0;
+`;
+
+export const StyledEditInput = styled.input`
+  width: 40%;
+  margin-bottom: 0;
+  margin-right: 10px;
+`;
+export const StyledEditSelect = styled.select`
+  margin-bottom: 0;
+  margin-right: 10px;
+`;
+
 
 export const StyledLine = styled.span`
   display: inline-block;
