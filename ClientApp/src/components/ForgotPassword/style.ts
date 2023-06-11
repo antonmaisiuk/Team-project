@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import {Button, Form} from "react-bootstrap";
-import { AuthType } from "./Auth";
+import { Button, Form } from "react-bootstrap";
 
 
 
@@ -16,7 +15,6 @@ export const StyledAuthContainer = styled.div`
 
 export const StyledForm = styled.div`
   background-color: #fff;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,8 +34,4 @@ export const StyledTitle = styled.h1`
 export const StyledFormGroup = styled(Form.Group)`
   display: flex;
   flex-direction: row;
-  ${props => props.type === AuthType.login 
-          ? `justify-content: space-between;` 
-          : 'justify-content: center;'}
-  
 `;

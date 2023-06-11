@@ -13,6 +13,8 @@ using System.Data.Entity;
 using User.Management.Service.Services;
 using User.Management.Service.Models;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Elaborate.Controllers
 {
@@ -77,10 +79,10 @@ namespace Elaborate.Controllers
                 var message = new Message(new string[] { account.Email! }, "Confirmation email link", confirmationLink!);
                 _emailService.SendEmail(message);
 
-                
+
 
                 return StatusCode(StatusCodes.Status200OK,
-                   new  { Status = "Success", Message = $"User created & Email Sent to {account.Email} SuccessFully" });
+                   new { Status = "Success", Message = $"User created & Email Sent to {account.Email} SuccessFully" });
             }
 
             return View(dto);
@@ -89,7 +91,7 @@ namespace Elaborate.Controllers
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            var user =  _context.Accounts.FirstOrDefault(u => u.Email == email);
+            var user = _context.Accounts.FirstOrDefault(u => u.Email == email);
             if (user != null)
             {
                 user.EmailConfirmed = true; // zmiana wartości właściwości
@@ -182,14 +184,79 @@ namespace Elaborate.Controllers
         [HttpGet]
         public IActionResult TestEmail()
         {
-            var message = new Message(new string[] 
+            var message = new Message(new string[]
             { "fabgkamil@gmail.com" }, "Test", "<h1>Subscibe to my channel!<h1>");
-            
+
 
             _emailService.SendEmail(message);
             return StatusCode(StatusCodes.Status200OK,
                 new { Status = "Succes", Message = "Email Sent Succesfully" });
         }
 
+        [HttpPost("forgot-password")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
+        {
+            var email = dto.Email;
+            var user = _repository.GetByEmail(dto.Email);
+
+            //var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var forgotPasswordlink = Url.Action(nameof(ResetPassword), "api", new { token, email = user.Email }, Request.Scheme);
+                var message = new Message(new string[] { user.Email! }, "Forgot Password link", forgotPasswordlink!);
+
+                _emailService.SendEmail(message);
+                return StatusCode(StatusCodes.Status200OK,
+                    new { Status = "Success", Message = $"Password Changed request is sent on Email {user.Email}. Please Open your email & click the link" });
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest,
+                    new { Status = "Error", Message = $"Could not send link to email, please try again." });
+        }
+
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            //Przepisywanie token i email do konkretnego konta
+            var model = new ResetPasswordDto { 
+                Token = token, 
+                Email = email 
+            };
+
+            return Ok(new
+            {
+                model
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
+        {         
+            var user = _repository.GetByEmail(resetPassword.Email);
+            //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            //Problem z tokenem, bez niego działa 
+            if (user != null)
+            {
+                //var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+                try
+                {
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(resetPassword.Password);
+                    _context.SaveChanges();
+                }
+                catch
+                {
+                    throw;
+                }
+      
+                return StatusCode(StatusCodes.Status200OK,
+                    new { Status = "Success", Message = $"Password has been changed" });
+
+            }
+            return StatusCode(StatusCodes.Status400BadRequest,
+                    new { Status = "Error", Message = $"Could not send link to email, please try again." });
+        }
     }
 }

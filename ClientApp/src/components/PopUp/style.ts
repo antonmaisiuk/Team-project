@@ -50,15 +50,12 @@ export const StyledForm = styled.form`
 `;
 
 export const StyledFormContent = styled.div`
-  background-color: white;
+  background-color: #F4F4F4;
   padding: 20px 30px;  
-
-  -webkit-border-radius: 18px;
-  -moz-border-radius: 18px;
-  border-radius: 18px;
-  
-  
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `;
+
 
 export const StyledDetails = styled.div`
   display: flex;
@@ -147,13 +144,13 @@ export const StyledLabel = styled.label`
 `;
 
 export const StyledFormItem = styled.div`
-
   display: flex;
   
-  &:first-child{
-    margin: 0 0 15px 0;
+  &:first-child {
+    margin-bottom: 15px;
   }
-  margin: 15px 0;
+  
+  margin-bottom: 15px;
   padding: 0;
   border: none;
 `;
@@ -162,14 +159,11 @@ export const StyledFormItem = styled.div`
 export const StyledSubmitButton = styled.button`
   width: 46%;
   height: 60px;
-  
   max-width: 241px;
   border: none;
-  -webkit-border-radius: 18px;-moz-border-radius: 18px;border-radius: 18px;
-  
+  border-radius: 10px;
   background-color: #FFF;
-
-  font-family: 'Inter',sans-serif;
+  font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 800;
   font-size: 25px;
@@ -181,16 +175,20 @@ export const StyledCancelButton = styled.button`
   height: 60px;
   max-width: 241px;
   border: none;
-  -webkit-border-radius: 18px;-moz-border-radius: 18px;border-radius: 18px;
-
-  font-family: 'Inter',sans-serif;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: 800;
   font-size: 25px;
   color: #FFF;
-  line-height: 30px;
-
+  line-height: 22px;
   background-color: #C20007;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #9A0006;
+  }
 `;
 
 export const StyledSendingForm = styled.div`
@@ -230,6 +228,5 @@ export const StyledLine = styled.span`
   width: 100%;
   height: 1px;
   background-color: #C7C7C7;
-  //background-color: black;
 `;
 

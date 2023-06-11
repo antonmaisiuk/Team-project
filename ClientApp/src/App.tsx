@@ -7,7 +7,8 @@ import Auth, {AuthType} from "./components/Auth/Auth";
 import Transactions from "./components/Transactions/Transactions";
 import PrivateRoute from "./components/Route/PrivateRoute/PrivateRoute";
 import Investments from "./components/Investments/Investments";
-
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import ResetPassword from './components/ResetPassword/ResetPassword';
 // const transactionsList = [
 //   {title: 'First transaction', category: 'Eat', value: 766.2},
 //   {title: 'Second transaction', category: 'Car', value: 1520.2},
@@ -69,16 +70,18 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
+          <Routes>
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/api/ResetPassword" element={<ResetPassword/>} />
         <Route path="/login" element={<Auth type={AuthType.login} />}/>
-        <Route path="/register" element={<Auth type={AuthType.register} />}/>
+              <Route path="/register" element={<Auth type={AuthType.register} />} />
         {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
         <Route element={<PrivateRoute/>}>
           <Route path="/transactions" element={<Transactions/>}/>
           <Route path="/investments" element={<Investments/>}/>
         </Route>
         {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
-        <Route path="/" element={<Home />}/>
+              <Route path="/" element={<Home />} />
       </Routes>
     </Router>
   );
