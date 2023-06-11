@@ -10,7 +10,6 @@ export const StyledNavBar = styled.nav`
     font-size: 1.5em;
     color: #4ef04e;
     margin: 0;
-    //padding: 5px;
   }
   
   display: flex;
