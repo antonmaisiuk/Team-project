@@ -171,7 +171,7 @@ export const StyledSubmitButton = styled.button`
 
   font-family: 'Inter',sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 800;
   font-size: 25px;
   line-height: 30px;
 `;
@@ -185,7 +185,7 @@ export const StyledCancelButton = styled.button`
 
   font-family: 'Inter',sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 800;
   font-size: 25px;
   color: #FFF;
   line-height: 30px;

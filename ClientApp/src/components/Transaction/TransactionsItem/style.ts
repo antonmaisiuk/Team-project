@@ -11,6 +11,16 @@ export const StyledTransactionsItem = styled.div`
 
   padding: 10px 10px 10px 0;
 
+  //.transaction_img{
+  //  text-align: center;
+  //  margin: 7px 0;
+  //}
+  //
+  //.transaction_img img{
+  //  width: 48px;
+  //  height: 48px;
+  //}
+  
   .transaction_title{
     margin: 0;
     font-family: 'Inter', sans-serif; 

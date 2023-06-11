@@ -41,6 +41,9 @@ const TransactionsItem:FC<TransItemInterface> = (
       <StyledTransactionsItem onClick={() => {
         setDetailsModalActive(true);
       }}>
+        {/*<div className={'transaction_img'}>*/}
+        {/*  <img  src={(categoriesList.find(cat => cat.id === transaction.transCategoryId) || {name: 'Inne'}).image} alt={'logo'}/>*/}
+        {/*</div>*/}
         <StyledTextDiv>
           <h3 className={"transaction_title"}>{transaction.title}</h3>
           <p className={"transaction_category"}>Category: {(categoriesList.find(cat => cat.id === transaction.transCategoryId) || {name: 'Other'}).name}</p>

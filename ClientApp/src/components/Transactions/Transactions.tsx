@@ -70,7 +70,7 @@ const Transactions = () => {
     } else {
       alert("HTTP Error: " + response.status)
       }
-    
+
   }
   async function categoriesData() {
     const response = await fetch('api/Category/categories');
@@ -136,9 +136,16 @@ const Transactions = () => {
 
         </Layout>
         <NavBar>
-                  <Button onClick={() => navigate('/')} >Home</Button>
-                  <Button onClick={() => navigate('/investments')} >Investments</Button>
-                  <Button onClick={() => logout()} >Logout</Button>
+          <div>
+            <h1>Elaborate</h1>
+          </div>
+          <div>
+            <Button onClick={() => navigate('/')} >Home</Button>
+            <Button onClick={() => navigate('/investments')} >Investments</Button>
+          </div>
+          <div>
+            <Button onClick={() => logout()} >Logout</Button>
+          </div>
         </NavBar>
       </Container>
     </>

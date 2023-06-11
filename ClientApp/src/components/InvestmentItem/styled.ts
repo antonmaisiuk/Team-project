@@ -40,7 +40,23 @@ export const StyledInvestmentItem = styled.div`
 `;
 
 export const StyledTextDiv = styled.div`
+  p{
+    padding: 0;
+    margin: 0;
+  }
+  
+  //.investment_title{
+  //  font-weight: bold;
+  //}
 `;
 
 export const StyledValueDiv = styled.div`
+  p{
+    padding: 0;
+    margin: 0;
+  }
+  .investment_value{
+    font-size: 1.5em;
+    //font-weight: bold;
+  }
 `;

@@ -271,9 +271,17 @@ const Investments = () => {
           />
         </Layout>
         <NavBar>
-                  <Button onClick={() => navigate('/')}>Home</Button>
-                  <Button onClick={() => navigate('/transactions')} >Transactions</Button>
-                  <Button onClick={() => logout()} >Logout</Button>
+          <div>
+            <h1>Elaborate</h1>
+          </div>
+          <div>
+            <Button onClick={() => navigate('/')}>Home</Button>
+            <Button onClick={() => navigate('/transactions')} >Transactions</Button>
+          </div>
+          <div>
+            <Button onClick={() => logout()} >Logout</Button>
+          </div>
+
         </NavBar>
       </Container>
     </>

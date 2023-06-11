@@ -678,7 +678,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         <StyledDetailsContent className={'details_title'}>
           <p className={'details_title-p'}>Transaction Details</p>
           <div className={'details_title-img'}>
-            {/*<img  src={transaction.investInfo.image} alt={'logo'}/>*/}
+            <img  src={(categoriesList.find(cat => cat.id === transaction.transCategoryId) || {name: 'Inne'}).image} alt={'logo'}/>
           </div>
           <h2 className={'details_title-value'}>$ {transaction.value}</h2>
         </StyledDetailsContent>
