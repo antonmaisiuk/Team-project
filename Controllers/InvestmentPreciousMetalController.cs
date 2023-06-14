@@ -28,7 +28,6 @@ namespace Elaborate.Controllers
         }
 
         [HttpGet("metals")]
-        //[Route("metals")]
         public ActionResult<IEnumerable<InvestmentPreciousMetal>> GetAll()
         {
             var jwt = Request.Cookies["jwt"];
@@ -165,15 +164,11 @@ namespace Elaborate.Controllers
         public ActionResult<IEnumerable<InvestmentPreciousMetal>> GetUniquePreciousMetals()
         {
             var preciousMetals = _dbContext.TypesPreciousMetals.ToList();
-                //.Select(t => new { PreciousMetal = t.TypePreciousMetal })
-                //.Distinct()
-                //.ToList();
 
             return Ok(preciousMetals);
         }
 
         [HttpGet("metalsSum")]
-        //[Route("investmentsPreciousMetalSum")]
         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestmentsPreciousMetal()
         {
             var jwt = Request.Cookies["jwt"];
@@ -185,29 +180,6 @@ namespace Elaborate.Controllers
 
             return Ok(metalsSum);
         }
-        //[HttpPost]
-        //public ActionResult<InvestmentPreciousMetal> DeleteInvestment(int investmentId)
-        //{
-        //    var InvestmentToDelete = _dbContext.InvestmentsPreciousMetals.SingleOrDefault(t => t.Id == investmentId);
-
-        //    if (InvestmentToDelete != null)
-        //    {
-        //        _dbContext.InvestmentsPreciousMetals.Remove(InvestmentToDelete);
-        //        _dbContext.SaveChanges();
-        //        return Ok(InvestmentToDelete);
-        //    }
-        //    else return NotFound(investmentId);
-        //}
-        /*[HttpGet("InvestmentSum")]
-         public ActionResult<InvestmentPreciousMetal> GetSumOfInvestments()
-         {
-             decimal InvestmentSum = _dbContext
-                 .InvestmentsPreciousMetals;
-             return Ok(InvestmentSum);
-         }*/
-
-
-
     }
 
 }

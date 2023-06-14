@@ -26,8 +26,7 @@ namespace Elaborate.Controllers
             _jwtService = jwtService;
         }
 
-        [HttpGet("crypto")] // Zmiana w kodzie zamiast Route jest HttpGGet
-        //[Route("cryptocurrencies")]
+        [HttpGet("crypto")] 
         public ActionResult<IEnumerable<InvestmentCryptoCurrency>> GetAll()
         {
             var jwt = Request.Cookies["jwt"];
@@ -163,9 +162,6 @@ namespace Elaborate.Controllers
         public ActionResult<IEnumerable<InvestmentCryptoCurrency>> GetUniqueCryptocurrencies()
         {
             var cryptocurrencies = _dbContext.TypeCryptoCurrencies.ToList();
-                //.Select(t => new { Cryptocurrency = t.TypeCryptoCurrency })
-                //.Distinct()
-                //.ToList();
 
             return Ok(cryptocurrencies);
         }

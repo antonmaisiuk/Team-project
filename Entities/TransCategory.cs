@@ -33,6 +33,5 @@ namespace Elaborate.Elaborate.Entities
 
             return sum;
         }
-        //  public ICollection<Transaction> Transactions { get; set; }
     }
 }

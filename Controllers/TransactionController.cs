@@ -14,7 +14,6 @@ using System.Threading.Tasks;
 namespace Elaborate.Controllers
 {
 
-    //[Route("api/transaction")]
     [Route("api/[controller]")]
     public class TransactionController : ControllerBase
     {
@@ -28,13 +27,11 @@ namespace Elaborate.Controllers
             _mapper = mapper;
             _jwtService = jwtService;
         }
-        //[HttpGet]
         /// <summary>
         /// Pobranie listy transakcji
         /// </summary>
         /// <returns>Listę transakcji</returns>
         [HttpGet("transactions")]
-        //[Route("transactions")]
         public ActionResult<IEnumerable<Transaction>> GetAll()
         {
             var jwt = Request.Cookies["jwt"];
@@ -49,49 +46,6 @@ namespace Elaborate.Controllers
 
             return Ok(transactions);
         }
-        /// <summary>
-        /// Pobranie transakcji po Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>transakcje</returns>
-    //[HttpPost("{id}")]
-        //public ActionResult<Transaction> Get([FromBody] int id)
-        //{
-        //    var transaction = _dbContext
-        //        .Transactions
-        //        .FirstOrDefault(r => r.Id == id);
-
-        //    if (transaction is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(transaction);
-        //}
-
-        //[HttpGet("filterById")]
-        //public ActionResult<Transaction> FilterByCateId([FromRoute] int id)
-        //{
-        //    var transactions = _dbContext
-        //        .Transactions
-        //        .Where(r => r.TransCategoryId == id)
-        //        .ToList();
-
-        //    return Ok(transactions);
-        //}
-
-        //public int GetNewId()
-        //{
-        //    int newId = 0;
-        //    try
-        //    {
-        //        newId = _dbContext.Accounts.Max(u => u.Id);
-        //    }
-        //    catch (Exception ex) { }
-
-        //    return newId;
-        //}
-
 
         /// <summary>
         /// Tworzenie transakcji
@@ -99,7 +53,6 @@ namespace Elaborate.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         /// 
-        //[Route("addTransactions")]
         [HttpPost("addTransaction")]
         public ActionResult CreateTransaction([FromBody] CreateTransactionDto dto)
         {
@@ -115,8 +68,7 @@ namespace Elaborate.Controllers
             {
                 transaction.TransCategoryId = 1;
             }
-            //transaction.Account = dto.Account;
-            //transaction.Title = dto.Title;
+
             _dbContext.Transactions.Add(transaction);
             _dbContext.SaveChanges();
 
@@ -130,7 +82,6 @@ namespace Elaborate.Controllers
 
             return Ok(resultArr);
 
-            //return Created($"/api/transaction/{transaction.Id}", null);
         }
 
         /// <summary>
@@ -155,7 +106,6 @@ namespace Elaborate.Controllers
             transactionToUpdate.Comment = updateTransaction.Comment;
             transactionToUpdate.TransCategoryId = updateTransaction.TransCategoryId;
 
-            //transactionToUpdate.Title = updateTransaction.Title;
 
             await _dbContext.SaveChangesAsync();
 
@@ -170,6 +120,11 @@ namespace Elaborate.Controllers
             return Ok(resultArr);
         }
 
+        /// <summary>
+        /// Metoda do usuwania transakcji
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("DeleteTransaction/{id}")]
         public ActionResult<Transaction> DeleteTransaction([FromRoute] int id)
         {
@@ -196,36 +151,8 @@ namespace Elaborate.Controllers
             else return NotFound(id);
         }
 
-
-        //[HttpGet]
-        //public ActionResult<IEnumerable<Transaction>> GetAll()
-        //{
-        //    var transactions = _dbContext
-        //        .Transactions
-        //        .ToList();
-
-        //    var transactionsDtos = _mapper.Map<List<>  //Zaczęto robić mapowanie
-
-        //    return Ok(transactions);
-        //}
-
-        //[HttpGet("{id}")]
-        //public ActionResult<Transaction> Get([FromRoute] int id)
-        //{
-        //    var transaction = _dbContext
-        //        .Transactions
-        //        .FirstOrDefault(r => r.Id == id);
-
-        //    if (transaction is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(transaction);
-        //}
-
+        //Czy to potrzebne?
         [HttpGet("transactionsSum")]
-        //[Route("transactionsSum")]
         public ActionResult<Transaction> GetSumOfTransactions()
         {
             var jwt = Request.Cookies["jwt"];
@@ -238,27 +165,6 @@ namespace Elaborate.Controllers
             return Ok(transactionSum);
         }
 
-        //[HttpPost]
-        //public ActionResult<IEnumerable<Transaction>> Add(Transaction trans)
-        //{
-        //    if (_dbContext.Database.CanConnect())
-        //    {
-        //        _dbContext.Transactions.Add(trans);
-        //        _dbContext.SaveChanges();
-        //    }
-        //    return Ok(trans);
-        //}
-
-        //[HttpPost("filterByMonth")]
-        //public ActionResult<Transaction> FilterByMonth([FromBody] DateTime date)
-        //{
-        //    var transactions = _dbContext
-        //        .Transactions
-        //        .Where(r => r.Date.Month == date.Month)
-        //        .ToList();
-
-        //    return Ok(transactions);
-        //}
 
     }
 

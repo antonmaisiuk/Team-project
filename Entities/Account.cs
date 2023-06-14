@@ -29,10 +29,6 @@ namespace Elaborate.Elaborate.Entities
         [JsonIgnore]
         public string PasswordHash { get; set; }
 
-        //[Required]
-        //public Boolean IsConfirmed { get; set; }
-
-       // public virtual List<Investment> ListOfInvestments { get; set; }
         public virtual List<Transaction> ListOfTransactions { get; set; }
     }
 }

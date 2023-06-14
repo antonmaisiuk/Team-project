@@ -25,7 +25,6 @@ namespace Elaborate.Controllers
             _jwtService = jwtService;
         }
 
-        //[Route("categories")]
         [HttpGet("categories")]
         public ActionResult<IEnumerable<TransCategory>> GetAll()
         {
@@ -36,20 +35,6 @@ namespace Elaborate.Controllers
             return Ok(categories);
         }
 
-        //[HttpGet("{id}")]
-        //public ActionResult<TransCategory> Get([FromRoute] int id)
-        //{
-        //    var categories = _dbContext
-        //        .TransCategories
-        //        .FirstOrDefault(r => r.Id == id);
-
-        //    if (categories is null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(categories);
-        //}
 
         [HttpPost("addTransCategory")]
         public ActionResult CreateTransactionCategory([FromBody] TransCategoryDto dto)
@@ -61,8 +46,6 @@ namespace Elaborate.Controllers
             var categoriesList = _dbContext
                .TransCategories
                .ToList();
-
-            //Object[] resultArr = new Object[] { categoriesList,  };
 
             return Ok(categoriesList);
         }
@@ -87,16 +70,5 @@ namespace Elaborate.Controllers
 
             return Ok(CategorynToDelete);
         }
-
-        //[HttpPost]
-        //public ActionResult<IEnumerable<TransCategory>> Add(TransCategory transCategory)
-        //{
-        //    if (_dbContext.Database.CanConnect())
-        //    {
-        //        _dbContext.TransCategories.Add(transCategory);
-        //        _dbContext.SaveChanges();
-        //    }
-        //    return Ok(transCategory);
-        //}
     }
 }

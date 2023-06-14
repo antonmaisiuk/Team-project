@@ -73,7 +73,7 @@ namespace Elaborate.Controllers
                 //Tworzenie użytkownika i zapisywanie do bazy danych
                 _repository.Create(account);
 
-                //Add Token to Verify the email....
+                //Dodanie tokenu do weryfikacji email
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(account);
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "api", new { token, email = account.Email }, Request.Scheme);
                 var message = new Message(new string[] { account.Email! }, "Confirmation email link", confirmationLink!);
@@ -236,11 +236,10 @@ namespace Elaborate.Controllers
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPassword)
         {         
             var user = _repository.GetByEmail(resetPassword.Email);
-            //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            //Problem z tokenem, bez niego działa 
+
             if (user != null)
             {
-                //var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.Password);
+              
                 try
                 {
                     user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(resetPassword.Password);

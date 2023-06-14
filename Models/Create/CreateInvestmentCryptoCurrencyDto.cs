@@ -12,9 +12,6 @@ namespace Elaborate.Models
         [Range(0, (double)decimal.MaxValue)]
         [Required]
         public decimal Amount { get; set; }
-        /// <summary>
-        /// Id konta do którego należy inwestycja
-        /// </summary>
         public int AccountId { get; set; }
         public virtual Account Account { get; set; }
         [Display(Name = "Nazwa Kryptowaluty")]

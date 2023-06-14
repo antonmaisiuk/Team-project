@@ -82,16 +82,6 @@ namespace Elaborate.Controllers
             stock.AccountId = userId;
 
 
-            //Jeśli nie otrzymamy Id rodzaju to wstawiamy domyślnie Id 0
-            //if (typeId == null)
-            //{
-            //    stock.TypeStockId = 0;
-            //}
-            //else
-            //{
-            //    stock.TypeStockId = typeId; 
-            //}
-
             //Sprawdzenie czy istnieje w bazie inwestycja o takiej kategorii
             var existingStock = _dbContext.InvestmentStocks
     .FirstOrDefault(c => c.TypeId == stock.TypeId && c.AccountId == userId);
@@ -174,8 +164,6 @@ namespace Elaborate.Controllers
         public ActionResult<IEnumerable<InvestmentStock>> GetUniqueStocks()
         {
             var stocks = _dbContext.TypeStocks.ToList();
-            //.Select(t => new { Stock = t.TypeStock })
-            //.Distinct()
 
             return Ok(stocks);
         }
