@@ -1,21 +1,26 @@
-import React, {Dispatch, FC, HTMLAttributes, SetStateAction, useEffect, useState} from 'react';
+import React, {Dispatch, FC, HTMLAttributes, SetStateAction, useState} from 'react';
 import Container, {ContainerType} from "../Container/Container";
 import NavBar from "../NavBar/NavBar";
-import Layout from "../Layout/Layout";
+import Layout, {LayoutType} from "../Layout/Layout";
 import {Button} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import LogoIcon from '../../assets/Icons/LogoIcon/LogoIcon';
+import logoIcon from '../../assets/Icons/LogoIcon/pig.png';
+import Tile, {TileType} from "../Tile/Tile";
+import Cookies from 'js-cookie';
+import {PopUpType} from "../PopUp/PopUp";
+import {StyledLogoWithText} from "./style";
 
-// export interface HomeInterface {
-//   userName: string;
-//   setUserName: Dispatch<SetStateAction<string>>
-// }
+export interface HomeInterface {
+  setIsLogged: Dispatch<SetStateAction<boolean>>
+  isLogged: boolean,
+}
 
-const Home:FC<HTMLAttributes<HTMLDivElement>> = ({
+const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
+  setIsLogged,
+  isLogged
 }) => {
   const navigate = useNavigate();
-
-  // const [userName, setUserName] = useState('');
+  console.log('isLogged: ', isLogged);
   // const [userId, setUserId] = useState(0);
   //
   // useEffect(() => {
@@ -45,28 +50,42 @@ const Home:FC<HTMLAttributes<HTMLDivElement>> = ({
       headers: {'Content-Type': 'application/json'},
       credentials: 'include',
     })
+    setIsLogged(false);
+    console.log('### logout',);
     // setUserName('');
 
-    navigate('/login');
+    navigate('/');
   }
 
+
+
   return (
+
     <Container type={ContainerType.home}>
-      {/*<Layout > */}
-      {/*  /!*{userName ? 'Hi '+ userName : 'You are not logged('}*!/*/}
-      {/*</Layout>*/}
+      <Layout type={LayoutType.main_screen} >
+        <Tile
+          type={TileType.main_sreen}
+        />
+      </Layout>
       <NavBar>
+        <StyledLogoWithText className={'main_screen-logoWithName'}>
+          <img src={logoIcon} alt={'Logo'} width={'96px'}/>
+          <h2>Elaborate™</h2>
+        </StyledLogoWithText>
+
         <div>
-          <h1>Elaborate</h1>
+          since 2023
         </div>
-        <div>
-          <Button onClick={() => navigate('/transactions')} >Transactions</Button>
-          <Button onClick={() => navigate('/investments')} >Investments</Button>
-        </div>
-        <div>
-          <Button onClick={() => navigate('/login')} >Login</Button>
-          <Button onClick={() => logout()} >Logout</Button>
-        </div>
+        {/*<div>*/}
+        {/*  <Button onClick={() => navigate('/transactions')} >Transactions</Button>*/}
+        {/*  <Button onClick={() => navigate('/investments')} >Investments</Button>*/}
+        {/*</div>*/}
+        {/*<div>*/}
+        {/*  {isLogged ?*/}
+        {/*    <Button onClick={() => logout()} >Logout</Button> :*/}
+        {/*    <Button onClick={() => navigate('/login')} >Login</Button>*/}
+        {/*  }*/}
+        {/*</div>*/}
       </NavBar>
     </Container>
   );

@@ -7,6 +7,7 @@ import {Button} from "react-bootstrap";
 import NavBar from "../NavBar/NavBar";
 import {useNavigate} from "react-router-dom";
 import {InvestingTypeInterface} from "../PopUp/PopUp";
+import logoIcon from "../../assets/Icons/LogoIcon/pig.png";
 
 // export interface InvestingTypeInterface{
 //   id: number,
@@ -217,7 +218,7 @@ const Investments = () => {
         })
         // setUserName('');
 
-        navigate('/login');
+        navigate('/');
     }
 
   return (
@@ -272,7 +273,7 @@ const Investments = () => {
         </Layout>
         <NavBar>
           <div>
-            <h1>Elaborate</h1>
+            <img src={logoIcon} alt={'Logo'} width={'96px'}/>
           </div>
           <div>
             <Button onClick={() => navigate('/')}>Home</Button>

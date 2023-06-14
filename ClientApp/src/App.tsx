@@ -50,6 +50,7 @@ export type CategoryItem ={
 const App = () => {
 
   const [name, setName] = useState('');
+  const [isLogged, setIsLogged] = useState(false);
 
 
   useEffect(() => {
@@ -70,18 +71,17 @@ const App = () => {
 
   return (
     <Router>
-          <Routes>
+      <Routes>
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/api/ResetPassword" element={<ResetPassword/>} />
-        <Route path="/login" element={<Auth type={AuthType.login} />}/>
-              <Route path="/register" element={<Auth type={AuthType.register} />} />
+        <Route path="/login" element={<Auth setIsLogged={setIsLogged} type={AuthType.login} />}/>
+              <Route path="/register" element={<Auth setIsLogged={setIsLogged} type={AuthType.register} />} />
         {/*<PrivateRoute path="/transactions" element={<Transactions/>} exact/>*/}
         <Route element={<PrivateRoute/>}>
           <Route path="/transactions" element={<Transactions/>}/>
           <Route path="/investments" element={<Investments/>}/>
         </Route>
-        {/*<Route path="/home" element={<Home userName={name} setUserName={setName} />}/>*/}
-              <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isLogged={isLogged} setIsLogged={setIsLogged} />} />
       </Routes>
     </Router>
   );

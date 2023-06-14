@@ -41,6 +41,31 @@ export const StyledTile = styled.div<TileBaseInterface>`
 export const StyledInvestTile = styled.div<TileBaseInterface>`
 `;
 
+export const StyledMainScreen = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  
+  button{
+    margin-top: 10%;
+    padding: 20px 45px;
+    background-color: #4abb22;
+    font-size: 2em;
+    //color: #5d3c3c;
+    font-weight: bold;
+    border: none;
+  }
+`;
+
+export const StyledHomeTitle = styled.h1`
+  text-align: center;
+  color: #fff;
+  font-size: 6em;
+  font-weight: bold;
+`;
+
 export const StyledTileTitle = styled.div`
   display: flex;
   flex-direction: row;

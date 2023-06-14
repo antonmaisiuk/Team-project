@@ -313,15 +313,15 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         console.log(invest)
         switch (investType) {
             case InvestmentType.stocks:
-                // Usuñ inwestycjê typu akcje
+                // Usuï¿½ inwestycjï¿½ typu akcje
                 deleteStocksInvestment(invest.investInfo.id);
                 break;
             case InvestmentType.crypto:
-                // Usuñ inwestycjê typu obligacje
+                // Usuï¿½ inwestycjï¿½ typu obligacje
                 deleteCryptoInvestment(invest.investInfo.id);
                 break;
             case InvestmentType.metals:
-                // Usuñ inwestycjê typu nieruchomoœæ
+                // Usuï¿½ inwestycjï¿½ typu nieruchomoï¿½ï¿½
                 deleteMetalsInvestment(invest.investInfo.id);
                 break;
             default:
@@ -398,7 +398,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
     switch (type){
       case 'number':
         const numericValue = Number(value);
-        if (isNaN(numericValue) || value.trim() === ''){
+        if (isNaN(numericValue) || value.trim() === '' || numericValue < 0){
           setValidationError(`Invalid ${field} input value`);
           return false;
         } else {
@@ -528,6 +528,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
           <Input
             type={InputEnum.number}
             placeholder={'0'}
+            onChange={(e) => validateInput(e.target.value, 'number', 'count')}
             id={'investCount'}
           />
           <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</StyledLabel>
@@ -543,6 +544,8 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
               <option value={type.id}>{type.name}</option>
             ))}
           </select>
+          {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
+          
         </StyledFormItem>
         <StyledLine/>
       </StyledFormContent>
