@@ -1,5 +1,13 @@
-import React, {Dispatch, FC, HTMLAttributes, SetStateAction, useState} from 'react';
-import {StyledSum, StyledLine, StyledList, StyledTile, StyledTileTitle} from './style';
+import React, {Dispatch, FC, FormEvent, HTMLAttributes, SetStateAction, useState} from 'react';
+import {
+  StyledSum,
+  StyledLine,
+  StyledList,
+  StyledTile,
+  StyledTileTitle,
+  StyledHomeTitle,
+  StyledMainScreen
+} from './style';
 import TransactionsItem from "../Transaction/TransactionsItem/TransactionsItem";
 import AddButton from "../ui/AddButton/AddButton";
 import PopUp, {PopUpType} from "../PopUp/PopUp";
@@ -7,6 +15,17 @@ import {CategoryItem, InvestmentItem, InvestmentType, TransactionItem} from "../
 import CategoriesItem from "../Category/CategoriesItem/CategoriesItem";
 import InvestmentsItem from '../InvestmentItem/InvestmentsItem';
 import transactions from "../Transactions/Transactions";
+import {
+  StyledCancelButton,
+  StyledForm,
+  StyledFormContent,
+  StyledFormItem,
+  StyledLabel,
+  StyledSendingForm, StyledSubmitButton
+} from "../PopUp/style";
+import Input, {InputEnum} from "../ui/Input/Input";
+import {Button} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
 
 // const options = [
@@ -26,7 +45,8 @@ export enum TileType {
   transactions_list,
   categories_list,
   investing_sum,
-  investing_list
+  investing_list,
+  main_sreen
 }
 
 // export interface TileInterface{
@@ -78,7 +98,11 @@ export interface TileInvestingSumInterface extends TileBaseInterface{
   type: TileType,
   investingSum: number;
 }
-type TileInterface = TileCategoryInterface | TileTransactionInterface | TileSpendingSumInterface | TileInvestingInterface | TileInvestingSumInterface;
+
+export interface TileMainScreenInterface extends TileBaseInterface{
+  type: TileType,
+}
+type TileInterface = TileCategoryInterface | TileTransactionInterface | TileSpendingSumInterface | TileInvestingInterface | TileInvestingSumInterface | TileMainScreenInterface;
 
 
 const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
@@ -100,6 +124,7 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
 
   const [modalIsActive, setModalActive] = useState(false);
   const [isDetailsModalActive, setDetailsModalActive] = useState(false);
+  const navigate = useNavigate();
 
   // function getCategoryId(categoriesList: CategoryItem[], category:CategoryItem) {
   //   categoriesList.forEach((item) => {
@@ -123,21 +148,105 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
       .reduce((partialSum, a) => partialSum + a.value, 0);
   }
 
-  // console.log('### investList: ', investingList);
-  return (
+  const renderMainScreen = () => (
+    <StyledMainScreen>
+      <StyledHomeTitle>You control, <br/> Your money</StyledHomeTitle>
+      <Button className={'btn-success'} onClick={() => navigate('/transactions')} >Let's go!</Button>
+
+    </StyledMainScreen>
+  );
+
+  const renderCategoryList = () => (
     <StyledTile className={className} type={type}>
       <StyledTileTitle>
         <h2>{title}</h2>
         {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
       </StyledTileTitle>
+      <StyledList type={type} transactionsList={transactionsList} setTransactions={setTransactions}>
+        {categoriesList.map((category) => {
 
-      {type === TileType.spending_sum ?
-        <StyledSum>
-          <h2>$ {spendingSum}</h2>
-        </StyledSum>
+          return (
+            <>
+              <CategoriesItem name={category.name} category_sum={getCategorySum(transactionsList, categoriesList, category)} image_link={'0'}/>
+              <StyledLine/>
+            </>
+          );
+        })}
+      </StyledList>
 
-        : type === TileType.transactions_list ?
-          <><StyledList type={type} setTransactions={setTransactions}>
+      <PopUp
+        type={PopUpType.addCategory}
+        active={modalIsActive}
+        setActive={setModalActive}
+        setCategories={setCategories}
+      />
+    </StyledTile>
+  );
+
+  // const renderTileHeader = () => (
+  //   <StyledTile className={className} type={type}>
+  //     <StyledTileTitle>
+  //       <h2>{title}</h2>
+  //       {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
+  //     </StyledTileTitle>
+  // );
+
+  const renderInvestingSum = () => (
+    <StyledTile className={className} type={type}>
+      <StyledTileTitle>
+        <h2>{title}</h2>
+        {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
+      </StyledTileTitle>
+      <StyledSum>
+        <h2>$ {investingSum.toFixed(2)}</h2>
+      </StyledSum>
+    </StyledTile>
+  );
+
+  const renderInvestingList = () => (
+      <StyledTile className={className} type={type}>
+        <StyledTileTitle>
+          <h2>{title}</h2>
+          {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
+        </StyledTileTitle>
+        <StyledList type={type} setInvesting={setInvesting}>
+        {investingList.map((invest, index) => {
+          return (
+            <>
+              <InvestmentsItem
+                pricePerPiece={invest.pricePerPiece}
+                investInfo={invest.investInfo}
+                invest={invest}
+                amount={invest.amount}
+                typeId={invest.typeId}
+                investType={investType}
+                priceTotal={invest.priceTotal}
+                setInvestments={setInvesting}
+                setInvestingSum={setInvestingSum}
+              />
+              <StyledLine/>
+            </>
+          );
+        })}
+      </StyledList>
+        <PopUp
+          type={PopUpType.addInvestment}
+          active={modalIsActive}
+          investType={investType}
+          setActive={setModalActive}
+          setInvestments={setInvesting}
+          setInvestingSum={setInvestingSum}
+        />
+      </StyledTile>
+  );
+
+  const renderTransactionsList = () => (
+        <StyledTile className={className} type={type}>
+          <StyledTileTitle>
+            <h2>{title}</h2>
+            {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
+          </StyledTileTitle>
+          <StyledList type={type} setTransactions={setTransactions}>
             {transactionsList.map((transaction) => {
               return (
                 <>
@@ -156,98 +265,50 @@ const Tile: FC<TileInterface  & HTMLAttributes<HTMLDivElement>> = ({
               );
             })}
 
-            </StyledList>
-            <PopUp
-              type={PopUpType.addTransaction}
-              active={modalIsActive}
-              setActive={setModalActive}
-              setTransactions={setTransactions}
-              setSpendingSum={setSpendingSum}
-              categoriesList={categoriesList}
-            />
-          </>
-        : type === TileType.categories_list ?
-          <>
-            <StyledList type={type} transactionsList={transactionsList} setTransactions={setTransactions}>
-              {categoriesList.map((category) => {
+          </StyledList>
+          <PopUp
+            type={PopUpType.addTransaction}
+            active={modalIsActive}
+            setActive={setModalActive}
+            setTransactions={setTransactions}
+            setSpendingSum={setSpendingSum}
+            categoriesList={categoriesList}
+          />
+        </StyledTile>
+  );
 
-                return (
-                  <>
-                    <CategoriesItem name={category.name} category_sum={getCategorySum(transactionsList, categoriesList, category)} image_link={'0'}/>
-                    <StyledLine/>
-                  </>
-                );
-              })}
-            </StyledList>
-
-            <PopUp
-              type={PopUpType.addCategory}
-              active={modalIsActive}
-              setActive={setModalActive}
-              setCategories={setCategories}
-            />
-          </>
-        : type === TileType.investing_sum ?
-          <>
-            <StyledSum>
-              <h2>$ {investingSum.toFixed(2)}</h2>
-            </StyledSum>
-          </>
-        : type === TileType.investing_list ?
-                <><StyledList type={type} setInvesting={setInvesting}>
-                  {investingList.map((invest, index) => {
-                    // console.log('### investingSum2: ', investingSum);
-                    // const key = index;
-                    return (
-                      <>
-                        <InvestmentsItem
-                          // key={key}
-                          pricePerPiece={invest.pricePerPiece}
-                          investInfo={invest.investInfo}
-                          invest={invest}
-                          amount={invest.amount}
-                          typeId={invest.typeId}
-                          investType={investType}
-                          priceTotal={invest.priceTotal}
-                          // active={modalIsActive}
-                          // setActive={setModalActive}
-                          setInvestments={setInvesting}
-                          setInvestingSum={setInvestingSum}
-                          // investingList={investingList}
-                          // type={PopUpType.details}
-                        />
-                        {/*<PopUp*/}
-                        {/*  type={PopUpType.details}*/}
-                        {/*  index={index}*/}
-                        {/*  active={modalIsActive}*/}
-                        {/*  setActive={setModalActive}*/}
-                        {/*  investInfo={invest}*/}
-                        {/*  // setTransactions={setTransactions}*/}
-                        {/*  // setSpendingSum={setSpendingSum}*/}
-                        {/*  setInvestments={setInvesting}*/}
-                        {/*  setInvestingSum={setInvestingSum}*/}
-                        {/*  investingList={investingList}*/}
-                        {/*/>*/}
-                        <StyledLine/>
-                      </>
-                    );
-                  })}
-
-                </StyledList>
-                <PopUp
-                    type={PopUpType.addInvestment}
-                    active={modalIsActive}
-                    investType={investType}
-                    setActive={setModalActive}
-                    setInvestments={setInvesting}
-                    setInvestingSum={setInvestingSum}/>
-                </>
-        :''
-      }
+  const renderSpendingSum = () => (
+    <StyledTile className={className} type={type}>
+      <StyledTileTitle>
+        <h2>{title}</h2>
+          {(type === TileType.transactions_list || type === TileType.investing_list) && <AddButton setActive={setModalActive} />}
+      </StyledTileTitle>
+      <StyledSum>
+        <h2>$ {spendingSum}</h2>
+      </StyledSum>
     </StyledTile>
-    // <StyledInvestTile>
-    //
-    // </StyledInvestTile>
+  );
+
+  const renderView = () => {
+    switch (type) {
+      case TileType.main_sreen :
+        return renderMainScreen();
+      case TileType.categories_list:
+        return renderCategoryList();
+      case TileType.investing_sum:
+        return renderInvestingSum();
+      case TileType.investing_list:
+        return renderInvestingList();
+      case TileType.transactions_list:
+        return renderTransactionsList();
+      case TileType.spending_sum:
+        return renderSpendingSum();
+      default:
+        return null;
+    }
+  };
+  return (
+    renderView()
   );
 };
 

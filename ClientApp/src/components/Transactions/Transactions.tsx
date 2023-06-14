@@ -6,6 +6,7 @@ import Container, {ContainerType} from "../Container/Container";
 import {Button} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { TransactionItem } from '../../App';
+import logoIcon from "../../assets/Icons/LogoIcon/pig.png";
 
 
 //export type TransactionItem = {
@@ -100,7 +101,7 @@ const Transactions = () => {
         })
         // setUserName('');
 
-        navigate('/login');
+        navigate('/');
     }
 
   return (
@@ -137,7 +138,7 @@ const Transactions = () => {
         </Layout>
         <NavBar>
           <div>
-            <h1>Elaborate</h1>
+            <img src={logoIcon} alt={'Logo'} width={'96px'}/>
           </div>
           <div>
             <Button onClick={() => navigate('/')} >Home</Button>

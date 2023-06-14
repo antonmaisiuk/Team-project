@@ -50,7 +50,7 @@ export const StyledForm = styled.form`
 `;
 
 export const StyledFormContent = styled.div`
-  background-color: #F4F4F4;
+  background-color: #fff;
   padding: 20px 30px;  
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -165,7 +165,7 @@ export const StyledSubmitButton = styled.button`
   background-color: #FFF;
   font-family: 'Inter', sans-serif;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 25px;
   line-height: 30px;
 `;
@@ -178,7 +178,7 @@ export const StyledCancelButton = styled.button`
   border-radius: 10px;
   font-family: 'Inter', sans-serif;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 25px;
   color: #FFF;
   line-height: 22px;

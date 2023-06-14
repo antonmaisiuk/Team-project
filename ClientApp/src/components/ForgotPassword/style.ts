@@ -19,9 +19,9 @@ export const StyledForm = styled.div`
   flex-direction: column;
   justify-content: center;
   //align-items: center;
-  padding: 20px;
+  padding: 20px 45px;
   border-radius: 18px;
-  //width: 30%;
+  width: 30%;
   //background-color: #b4b4b4;
 `;
 

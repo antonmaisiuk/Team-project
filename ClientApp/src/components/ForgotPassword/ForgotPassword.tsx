@@ -40,9 +40,9 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ className }) => {
         <div className={className}>
             <h1>Forgot Password</h1>
             <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="email">
+                <Form.Group controlId="email" className={'mb-3'}>
                     <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <Form.Control type="email" required placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Form.Group>
                 {errorMsg && <Alert variant="danger">{errorMsg}</Alert>}
                 {successMsg && <Alert variant="success">{successMsg}</Alert>}

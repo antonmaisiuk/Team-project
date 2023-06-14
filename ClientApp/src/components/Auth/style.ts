@@ -21,9 +21,10 @@ export const StyledForm = styled.div`
   flex-direction: column;
   justify-content: center;
   //align-items: center;
-  padding: 20px;
+  padding: 20px 45px;
   border-radius: 18px;
-  //width: 30%;
+  width: 25%;
+  min-width: 340px;
   //background-color: #b4b4b4;
 `;
 
@@ -35,7 +36,16 @@ export const StyledTitle = styled.h1`
 
 export const StyledFormGroup = styled(Form.Group)`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  .auth-buttons{
+    display: flex;
+    justify-content: space-between;
+    button{
+      //display: flex;
+      //justify-content: space-between;
+    }
+  }
+  
   ${props => props.type === AuthType.login 
           ? `justify-content: space-between;` 
           : 'justify-content: center;'}
