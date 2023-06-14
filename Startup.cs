@@ -40,7 +40,6 @@ namespace Elaborate
         {
             services.AddCors();
             string mySqlConnectionString = Configuration.GetConnectionString("DefaultConnection");
-            //services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(mySqlConnectionString));
             services.AddDbContext<ApplicationDbContext>();
             
             services.AddAutoMapper(this.GetType().Assembly);
@@ -50,7 +49,6 @@ namespace Elaborate
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<JwtService>();
 
-            services.AddScoped<ApiService>();
 
             services.AddDbContext<AccountContext>(opt => opt.UseMySQL(mySqlConnectionString));
             services.AddControllers(); //Kod z Tutoriala Antona który wydaje siê byæ na razie nie potzebny poniewa¿ mamy ju¿ to
