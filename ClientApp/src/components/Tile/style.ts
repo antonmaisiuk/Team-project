@@ -24,6 +24,19 @@ export const StyledTile = styled.div<TileBaseInterface>`
     grid-area: trans;
   `}
   
+  // ${props => props.type === TileType.investing_list && `
+  //   // margin-bottom: 10px;
+  //   // height: auto;
+  //   // grid-row: 1 / 3 ;
+  //   grid-area: investList;
+  // `}
+  // ${props => props.type === TileType.investing_sum && `
+  //   // margin-bottom: 10px;
+  //   // height: auto;
+  //   // grid-row: 1 / 3 ;
+  //   grid-area: investSum;
+  // `}
+  
   break-inside: avoid;
 
   background-color: white;

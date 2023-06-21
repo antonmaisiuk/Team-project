@@ -469,50 +469,74 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
   const renderAddTransaction = () => (
     <StyledForm onSubmit={e => sendTransactionForm(e)}>
-      <StyledFormContent>
-        <StyledFormItem >
-          <Input
-            type={InputEnum.number}
-            placeholder={"0"}
-            // onChange={(e)=> console.log(e.currentTarget.value)}
-            id={"value"}
-          />
-          <StyledLabel htmlFor={"value"}>$</StyledLabel>
-          {/*<input type={"number"} />*/}
-        </StyledFormItem>
-        <StyledLine/>
-        <StyledFormItem>
-          <label htmlFor={"title"}>Title:</label>
-          <Input
-            type={InputEnum.text}
-            id={'title'}
-            placeholder={'Transaction title'}
-
-          />
-        </StyledFormItem>
-        <StyledLine/>
-        <StyledFormItem>
-          <label htmlFor={'comment'}>Comment:</label>
-          <Input
-            type={InputEnum.text}
-            id={'comment'}
-            placeholder={'Type your comment here'}
-          />
-        </StyledFormItem>
-              <StyledLine />
-              <StyledFormItem>
-                  <label htmlFor="category">Category:</label>
-                  <select id="category">
-                      <option value="">Select a category</option>
-                      {categoriesList.map((category) => (
-                          <option key={category.id} value={category.id}>
-                              {category.name}
-                          </option>
-                      ))}
-                  </select>
-              </StyledFormItem>
-              <StyledLine />
-      </StyledFormContent>
+      <div>
+        <StyledFormContent className={'form_title'}>
+          <p className={'form_title-p'}>New Transaction</p>
+          <div className={'form_title-img'}>
+            <img  src={'https://cdn-icons-png.flaticon.com/512/679/679745.png'}/>
+          </div>
+        </StyledFormContent>
+        <StyledFormContent>
+          <p className={'form_info'}>Transaction info</p>
+          <StyledFormItem className="form-line" >
+            <p>Value:</p>
+            {/*<label htmlFor={"value"}>Value</label>*/}
+            <StyledEditSpan>
+              <p>$</p>
+              <Input
+                type={InputEnum.number}
+                placeholder={"0"}
+                min={-10000.00}
+                isRequired={true}
+                // onChange={(e)=> console.log(e.currentTarget.value)}
+                id={"value"}
+              />
+            </StyledEditSpan>
+            {/*<input type={"number"} />*/}
+          </StyledFormItem>
+          {/*<StyledLine/>*/}
+          <StyledFormItem className="form-line">
+            <p>Title:</p>
+            <StyledEditSpan>
+              <Input
+                type={InputEnum.text}
+                id={'title'}
+                isRequired={true}
+                placeholder={'Transaction title'}
+              />
+            </StyledEditSpan>
+          </StyledFormItem>
+          {/*<StyledLine/>*/}
+          <StyledFormItem  className="form-line" >
+            <p>Comment:</p>
+            <StyledEditSpan>
+              <Input
+                type={InputEnum.text}
+                id={'comment'}
+                isRequired={true}
+                placeholder={'Type your comment here'}
+              />
+            </StyledEditSpan>
+            {/*<label htmlFor={'comment'}>Comment:</label>*/}
+          </StyledFormItem>
+          {/*<StyledLine />*/}
+          <StyledFormItem className="form-line">
+            <p>Comment:</p>
+            <StyledEditSpan>
+              <select id="category" required={true} placeholder={'Select a category'}>
+                {/*<option value="">Select a category</option>*/}
+                {categoriesList.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </StyledEditSpan>
+            {/*<label htmlFor="category">Category:</label>*/}
+          </StyledFormItem>
+          {/*<StyledLine />*/}
+        </StyledFormContent>
+      </div>
 
       <StyledSendingForm>
         <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
@@ -523,32 +547,76 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
 
   const renderAddInvestment = () => (
     <StyledForm onSubmit={e => sendInvestmentForm(e)}>
-      <StyledFormContent>
-        <StyledFormItem >
-          <Input
-            type={InputEnum.number}
-            placeholder={'0'}
-            onChange={(e) => validateInput(e.target.value, 'number', 'count')}
-            id={'investCount'}
-          />
-          <StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</StyledLabel>
-        </StyledFormItem>
-        <StyledLine/>
-        <StyledFormItem>
-          <label htmlFor={'investmentName'}>
-            {investType === InvestmentType.stocks ? 'Select stock index' :
-              investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
-          </label>
-          <select id={'investmentName'}>
-            {investingTypes.map((type) => (
-              <option value={type.id}>{type.name}</option>
-            ))}
-          </select>
-          {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
-          
-        </StyledFormItem>
-        <StyledLine/>
-      </StyledFormContent>
+      <div>
+        <StyledFormContent className={'form_title'}>
+          <p className={'form_title-p'}>New Investment</p>
+          <div className={'form_title-img'}>
+            <img src={'https://cdn-icons-png.flaticon.com/512/679/679745.png'}/>
+          </div>
+        </StyledFormContent>
+        <StyledFormContent>
+          <p className={'form_info'}>Investment info</p>
+          <StyledFormItem className="form-line" >
+            <p>Value:</p>
+            <StyledEditSpan>
+              <Input
+                type={InputEnum.number}
+                placeholder={'0'}
+                min={0}
+                isRequired={true}
+                onChange={(e) => validateInput(e.target.value, 'number', 'count')}
+                id={'investCount'}
+              />
+              <p>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</p>
+            </StyledEditSpan>
+          </StyledFormItem>
+          <StyledFormItem  className="form-line" >
+            <p>
+              {investType === InvestmentType.stocks ? 'Select stock index' :
+                investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:
+            </p>
+            <StyledEditSpan>
+              <select id={'investmentName'}>
+                {investingTypes.map((type) => (
+                  <option value={type.id}>{type.name}</option>
+                ))}
+              </select>
+            </StyledEditSpan>
+            {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
+
+          </StyledFormItem>
+          {/*<StyledFormItem className="form-line">*/}
+          {/*  <StyledFormItem className="form-line" >*/}
+          {/*    <p>Amount:</p>*/}
+          {/*    <StyledEditSpan>*/}
+          {/*      <Input*/}
+          {/*        type={InputEnum.number}*/}
+          {/*        placeholder={'0'}*/}
+          {/*        min={0}*/}
+          {/*        isRequired={true}*/}
+          {/*        onChange={(e) => validateInput(e.target.value, 'number', 'count')}*/}
+          {/*        id={'investCount'}*/}
+          {/*      />*/}
+          {/*      <p>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</p>*/}
+          {/*    </StyledEditSpan>*/}
+          {/*  /!*<StyledLabel htmlFor={'investType'}>{investType === InvestmentType.metals ? 'oz' : 'pcs'}</StyledLabel>*!/*/}
+          {/*</StyledFormItem>*/}
+          {/*<StyledLine/>*/}
+          {/*<StyledFormItem>*/}
+          {/*  <label htmlFor={'investmentName'}>*/}
+          {/*    {investType === InvestmentType.stocks ? 'Select stock index' :*/}
+          {/*      investType === InvestmentType.metals ? 'Select metal name' : 'Select crypto index'}:*/}
+          {/*  </label>*/}
+          {/*  <select id={'investmentName'}>*/}
+          {/*    {investingTypes.map((type) => (*/}
+          {/*      <option value={type.id}>{type.name}</option>*/}
+          {/*    ))}*/}
+          {/*  </select>*/}
+          {/*  {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}*/}
+
+          {/*</StyledFormItem>*/}
+        </StyledFormContent>
+      </div>
 
       <StyledSendingForm>
         <StyledCancelButton onClick={(e: FormEvent<HTMLButtonElement>) => closePopUp(e)}>Cancel</StyledCancelButton>
@@ -686,7 +754,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
           <h2 className={'details_title-value'}>$ {transaction.value}</h2>
         </StyledDetailsContent>
         <StyledDetailsContent>
-          <p className={'details_info'}>Transaction Information</p>
+          <p className={'details_info'}>Transaction Details</p>
           <div className={'invest_info'}>
             <div className="invest_info-line">
               <p>Title</p>

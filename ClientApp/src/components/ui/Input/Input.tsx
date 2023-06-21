@@ -10,6 +10,8 @@ export enum InputEnum {
 export interface InputInterface {
   type: InputEnum,
   value?: string,
+  min?: number,
+  isRequired: boolean,
 }
 
 const Input:FC<InputInterface & HTMLAttributes<HTMLInputElement>> = ({
@@ -17,9 +19,11 @@ const Input:FC<InputInterface & HTMLAttributes<HTMLInputElement>> = ({
   placeholder,
   value,
   id,
+  isRequired,
+  min = 0.00,
 }) => {
   return (
-    <><StyledInput type={type} placeholder={placeholder} id={id} value={value}/></>
+    <><StyledInput type={type} required={isRequired} step={'0.01'}  min={min}  placeholder={placeholder} id={id} value={value}/></>
   );
 };
 

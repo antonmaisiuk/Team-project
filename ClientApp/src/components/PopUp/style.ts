@@ -46,14 +46,59 @@ export const StyledForm = styled.form`
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
-  border: none;  
+  border: none;
+
+  .form_title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 `;
 
 export const StyledFormContent = styled.div`
   background-color: #fff;
   padding: 20px 30px;  
   border-radius: 10px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);  
+  
+  .form_title-p {
+    text-align: center;
+  }
+
+  .form_title-img{
+    text-align: center;
+    margin: 7px 0;
+  }
+
+  .form_title-img img{
+    width: 48px;
+    height: 48px;
+  }
+
+  .form_info {
+    font-weight: bold;
+    font-size: 1.7em;
+  }
+
+  .form-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    font-size: 1em;
+
+    p:first-child {
+      color: rgba(0, 0, 0, 0.38);
+    }
+    p:last-child {
+      font-weight: bolder;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
 `;
 
 
@@ -115,15 +160,19 @@ export const StyledDetailsContent = styled.div`
     justify-content: space-between;
     margin: 15px 0;
 
-    p:first-child {
+    label{
       color: rgba(0, 0, 0, 0.38);
     }
     p:last-child {
       font-weight: bolder;
     }
-
-    p {
+    label {
       margin: 0;
+    }
+    input{
+      width: 60%;
+      margin-bottom: 0;
+      margin-right: 10px;
     }
   }
 
@@ -200,6 +249,20 @@ export const StyledSendingForm = styled.div`
 export const StyledEditSpan = styled.span`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  max-width: 300px;
+  
+  select{
+    padding: 2px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 0;
+    background-color: #fff;
+  }
 `;
 
 export const StyledErrorInfo = styled.p`

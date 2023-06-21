@@ -226,24 +226,28 @@ const Investments = () => {
       <Container type={ContainerType.transactions}>
         <Layout type={LayoutType.investments}>
           <Tile
+            style={{gridArea: 'stocksSum'}}
             className={"stocks_invest"}
             title={"Stocks"}
             type={TileType.investing_sum}
             investingSum={stocksSum}
           />
           <Tile
+            style={{gridArea: 'cryptoSum'}}
             className={"crypto_invest"}
             title={"Crypto"}
             type={TileType.investing_sum}
             investingSum={cryptoSum}
           />
           <Tile
+            style={{gridArea: 'metalsSum'}}
             className={"metals_invest"}
             title={"Metals"}
             type={TileType.investing_sum}
             investingSum={metalsSum}
           />
           <Tile
+            style={{gridArea: 'stocksList'}}
             className={"stocks_invest_list"}
             title={"Stocks balance"}
             investType={InvestmentType.stocks}
@@ -253,6 +257,7 @@ const Investments = () => {
             investingList={investStocksList}
           />
           <Tile
+            style={{gridArea: 'cryptoList'}}
             className={"crypto_invest_list"}
             title={"Crypto balance"}
             type={TileType.investing_list}
@@ -262,6 +267,7 @@ const Investments = () => {
             investingList={investCryptoList}
           />
           <Tile
+            style={{gridArea: 'metalsList'}}
             className={"metals_invest_list"}
             title={"Metals balance"}
             investType={InvestmentType.metals}

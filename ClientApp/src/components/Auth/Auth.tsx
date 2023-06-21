@@ -13,13 +13,12 @@ export enum AuthType {
 
 export interface AuthInterface {
   type: AuthType;
-  setIsLogged: Dispatch<SetStateAction<boolean>>
-
+  setIsLogged: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
   type,
-  setIsLogged,
+  setIsLogged = () => {},
   className = 'auth'
 }) => {
   const [name, setName] = useState('');
@@ -96,7 +95,7 @@ const Auth: FC<AuthInterface & HTMLAttributes<HTMLDivElement>> = ({
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPhone">
                 <Form.Label>Phone</Form.Label>
-                <Form.Control type={"phone"} required placeholder="Enter your phone" onChange={e => setPhone(e.target.value)}/>
+                <Form.Control type={"number"} min={0} required placeholder="Enter your phone" onChange={e => setPhone(e.target.value)}/>
               </Form.Group>
             </> : ``}
 

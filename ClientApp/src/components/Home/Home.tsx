@@ -54,7 +54,7 @@ const Home:FC<HomeInterface & HTMLAttributes<HTMLDivElement>> = ({
     console.log('### logout',);
     // setUserName('');
 
-    navigate('/');
+    navigate('/login');
   }
 
 

@@ -9,11 +9,17 @@ export const StyledLayout = styled.div<ContainerInterface>`
   //display: grid;
   ${props => props.type === LayoutType.investments &&`
     display:grid;
-    grid-template-columns: 30% 30% 30%;
-    grid-template-rows: 30% 60%;
+    
+    grid-template:
+    [main-left] "stocksSum cryptoSum metalsSum3" 250px [main-right]
+    [footer-left] "stocksList cryptoList metalsList" [footer-right]
+    / 30% 30% 30%;
+    
+    // grid-template-columns: 30% 30% 30%;
+    // grid-template-rows: 30% 60%;
     justify-content: space-between;
     gap: 3.33%;
-    height: 100%;
+    height: 80%;
   `}
 
   ${props => props.type === LayoutType.transactions &&`
