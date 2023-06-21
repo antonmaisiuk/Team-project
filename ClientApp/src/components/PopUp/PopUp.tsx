@@ -395,10 +395,21 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
   };
 
   const validateInput = (value: string, type:string, field: string) => {
+    let numericValue;
     switch (type){
       case 'number':
-        const numericValue = Number(value);
-        if (isNaN(numericValue) || value.trim() === '' || numericValue < 0){
+        numericValue = Number(value);
+        if (isNaN(numericValue) || value.trim() === '' || numericValue <= 0){
+          setValidationError(`Invalid ${field} input value`);
+          return false;
+        } else {
+          setValidationError('');
+          return true;
+        }
+        break;
+      case 'transNumber':
+        numericValue = Number(value);
+        if (isNaN(numericValue) || value.trim() === '' || numericValue === 0){
           setValidationError(`Invalid ${field} input value`);
           return false;
         } else {
@@ -407,7 +418,13 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
         }
         break;
       case 'text':
-        return false;
+        if (value.trim() === ''){
+          setValidationError(`Invalid ${field} input value`);
+          return false;
+        } else {
+          setValidationError('');
+          return true;
+        }
         break;
       default:
         return true;
@@ -582,7 +599,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                 ))}
               </select>
             </StyledEditSpan>
-            {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
+            {(validationError && isEditing) && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
 
           </StyledFormItem>
           {/*<StyledFormItem className="form-line">*/}
@@ -723,7 +740,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
               <p>$ {invest.priceTotal}</p>
             </div>
           </div>
-          {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
+          {(validationError && isEditing) && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
         </StyledDetailsContent>
       </StyledDetails>
       <StyledSendingForm>
@@ -765,6 +782,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                       type={'text'}
                       className={'details-edit details_input-title'}
                       value={titleValue}
+                      required
                       onChange={(e) => {
                         setTitleValue(e.target.value)
                         validateInput(e.target.value, 'text', 'title')
@@ -801,12 +819,14 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                   <StyledEditSpan>
                     <p>$ </p>
                     <StyledEditInput
-                      type={'text'}
+                      type={'number'}
+                      step={0.01}
+                      required={true}
                       className={'details-edit details_input-title'}
                       value={transactionValue}
                       onChange={(e) => {
                         setTransactionValue(Number(e.target.value))
-                        validateInput(e.target.value, 'number', 'value')
+                        validateInput(e.target.value, 'transNumber', 'value')
                       }}/>
                   </StyledEditSpan>
                 </>
@@ -821,12 +841,13 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
                   <StyledEditSpan>
                     <StyledEditSelect
                       id="category"
+                      required={true}
                       onChange={(e) => {
                         setCategoryValue(Number(e.target.value))
                       }}
                       value={categoryValue}
                     >
-                      <option value="">Select a category</option>
+                      {/*<option value="">Select a category</option>*/}
                       {categoriesList.map((category) => (
                         <option key={category.id} value={category.id}>
                           {category.name}
@@ -850,7 +871,7 @@ const PopUp:FC<PopUpInterface & HTMLAttributes<HTMLDivElement>> = ({
             {/*  <p>$ {invest.priceTotal}</p>*/}
             {/*</div>*/}
           </div>
-          {validationError && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
+          {(validationError && isEditing) && <StyledErrorInfo>{validationError}</StyledErrorInfo>}
         </StyledDetailsContent>
       </StyledDetails>
       <StyledSendingForm>
