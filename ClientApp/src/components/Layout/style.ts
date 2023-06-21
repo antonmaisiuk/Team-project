@@ -11,7 +11,7 @@ export const StyledLayout = styled.div<ContainerInterface>`
     display:grid;
     
     grid-template:
-    [main-left] "stocksSum cryptoSum metalsSum3" 250px [main-right]
+    [main-left] "stocksSum cryptoSum metalsSum3" 200px [main-right]
     [footer-left] "stocksList cryptoList metalsList" [footer-right]
     / 30% 30% 30%;
     
@@ -25,7 +25,7 @@ export const StyledLayout = styled.div<ContainerInterface>`
   ${props => props.type === LayoutType.transactions &&`
     display:grid;
     grid-template:
-    [main-left] "sum  trans" 250px [main-right]
+    [main-left] "sum  trans" 200px [main-right]
     [footer-left] "cat  trans" [footer-right]
     / 40% 56%;
     justify-content: space-between;
